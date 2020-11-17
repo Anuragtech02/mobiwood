@@ -1,0 +1,23 @@
+
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - staging
+jobs:
+  build:
+    name: Build and Deploy to Firebase Hosting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Deploy to Firebase
+        uses: lowply/deploy-firebase@v0.0.3
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE }}
+          FIREBASE_PROJECT: talent-e8b22
+          TARGET_BRANCH: staging

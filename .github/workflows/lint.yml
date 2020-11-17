@@ -1,0 +1,12 @@
+name: Lint
+on: pull_request
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: yarn && yarn add typescript
+    - name: Run ESLint
+      run: yarn run eslint . --ext .js
+      
