@@ -430,7 +430,7 @@ const About = ({
           />
           <OutNav>
             <Container>
-              <ContainerHeading>Register for Contest</ContainerHeading>
+              <ContainerHeading>About Us</ContainerHeading>
               <Page tw="block text-center mt-8">
                 <h1 class="underconstruction" tw="w-full">
                   This page is Under Construction, Please check back soon
