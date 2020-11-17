@@ -12,6 +12,7 @@ import ContestRegister from "./components/pages/Contest/ContestRegister";
 import UnderAgeContest from "./components/pages/Contest/UnderAgeContest";
 import Team from "./components/pages/Team";
 // import UserDashboard from "./components/pages/UserDashboard";
+import About from "./components/pages/About";
 
 export const routes = {
   "/": () => <Home />,
@@ -24,6 +25,8 @@ export const routes = {
 
 export const guestRoutes = {
   "/": () => <Home />,
+  "/about": () => <About />,
+
   // "/login": () => <Login />,
   // "/signup": () => <Signup />,
   // "/details": () => <PersonalDetails />,
