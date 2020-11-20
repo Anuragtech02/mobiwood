@@ -30,7 +30,7 @@ const SubmitButton = styled.button`
 const IllustrationContainer = tw.div`flex-1 border-t-2 flex justify-start sm:p-6`;
 const IllustratorContent = tw.div`block relative`;
 const IllustrationHeading = tw.div`text-lg pt-4 font-semibold`;
-const OL = tw.ul`pl-8 sm:pl-16 mt-4 list-disc font-light text-sm`;
+const OL = tw.ul`pl-8 mt-4 list-disc font-light text-sm`;
 const LI = tw.li`py-1`;
 
 const ErrorMessage = tw.div`text-red-600 -mb-2 mt-3`;
@@ -185,7 +185,7 @@ const UploadPage = () => {
 
   React.useEffect(() => {
     if (!localStorage.getItem("register")) {
-      alert("Fill in your details first");
+      //alert("Fill in your details first");
       navigate("/contest");
     }
   });
@@ -209,7 +209,7 @@ const UploadPage = () => {
                 <LI>The video can be of a maximum duration of 90 seconds</LI>
                 <LI>
                   The video must have original content and must not include any
-                  copy-write content
+                  copywrite content
                 </LI>
                 <LI>
                   The video must be self-shot or indicate the participant’s

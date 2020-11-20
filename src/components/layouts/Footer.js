@@ -57,6 +57,7 @@ export default () => {
           </SocialLinksContainer>
           <CopyrightText>
             &copy; Copyright {new Date().getFullYear()} &bull; Mobiwood - All Rights Reserved
+			<div>Powered By - <a href="https://samairawebsolutions.in/" target="_blank">Samaira Web Solutions</a></div>
           </CopyrightText>
         </Row>
       </Content>
