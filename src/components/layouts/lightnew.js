@@ -14,8 +14,8 @@ export const NavLinks = tw.div`inline-block`;
  */
 export const NavLink = tw.a`
   text-sm  my-0
-  font-semibold tracking-wide transition duration-300
-   border-b-2 border-transparent hover:border-primary-500 hocus:text-primary-500
+  font-semibold tracking-wide 
+    border-transparent hover:border-primary-500 focus:text-primary-500
 `;
 
 export const PrimaryLink = tw(NavLink)`

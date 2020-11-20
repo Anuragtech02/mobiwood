@@ -18,7 +18,7 @@ const MainContent = tw.div`mt-12 flex flex-col items-center`;
 const Heading = tw.h1`text-2xl xl:text-3xl font-extrabold`;
 const FormContainer = tw.div`w-full flex-1 mt-8`;
 
-const Form = tw.form`mx-auto max-w-xs`;
+const Form = tw.form`mx-auto`;
 const Input = tw.input`w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5 first:mt-0`;
 const SubmitButton = styled.button`
   ${tw`mt-5 tracking-wide font-semibold bg-button-200 text-gray-100 w-full py-4 rounded-lg hover:bg-button-100 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none`}

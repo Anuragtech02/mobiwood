@@ -62,23 +62,6 @@ const ModalContent = tw.div`relative w-auto my-auto mx-auto max-w-3xl`;
 
 const FormContainer = tw.div`w-full flex flex-col sm:flex-row`;
 
-// const SocialButtonsContainer = tw.div`flex flex-col items-center`;
-// const SocialButton = styled.a`
-//   ${tw`w-full max-w-xs font-semibold cursor-pointer rounded py-2 border text-gray-100 hover:opacity-75 hocus:border-gray-400 flex items-center justify-center transition-all duration-300 focus:outline-none focus:shadow-outline text-sm mt-3 first:mt-0`}
-//   .iconContainer {
-//     ${tw`p-2 rounded-full`}
-//   }
-//   .icon {
-//     ${tw`w-4`}
-//   }
-//   .text {
-//     ${tw`ml-4`}
-//   }
-// `;
-
-// const DividerTextContainer = tw.div`my-12 border-b text-center relative`;
-// const DividerText = tw.div`leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform -translate-y-1/2 absolute inset-x-0 top-1/2 bg-transparent`;
-
 const Form = tw.form`mx-auto`;
 const Input = tw.input`w-full p-4 rounded-sm shadow font-medium text-gray-900 bg-white border border-gray-400 placeholder-gray-900 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5 first:mt-0`;
 const SubmitButton = styled.button`
@@ -376,7 +359,9 @@ const Home = ({
                     firestore
                       .collection("user")
                       .doc(details.data().uid)
-                      .update({ last_login_datetime: new Date() }, {merge: true});
+                      .update({ last_login_datetime: new Date() }, 
+															  //{merge: true}
+					);
                     navigate("/contest");
                     setLoginModal(false);
                     setSignupModal(false);
@@ -404,6 +389,7 @@ const Home = ({
   }, []); //eslint-disable-line
 
   return (
+		  <div className="leftNav">
     <Sidebar
       sidebar={SideLinks}
       open={sidebarOpen}
@@ -551,35 +537,7 @@ const Home = ({
                       <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
                         <div tw="w-full">
                           <FormContainer>
-                            {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
-                              <SocialButtonsContainer>
-                                {socialButtons.map((socialButton, index) => (
-                                  <SocialButton
-                                    key={index}
-                                    onClick={socialButton.onclick}
-                                    style={{
-                                      backgroundColor: socialButton.bg,
-                                    }}
-                                  >
-                                    <span className="iconContainer">
-                                      <img
-                                        src={socialButton.iconImageSrc}
-                                        className="icon"
-                                        alt=""
-                                      />
-                                    </span>
-                                    <span className="text">
-                                      {socialButton.text}
-                                    </span>
-                                  </SocialButton>
-                                ))}
-                              </SocialButtonsContainer>
-                            </div>
-                            {isMobile && (
-                              <DividerTextContainer>
-                                <DividerText>Or Sign Up Using Mail</DividerText>
-                              </DividerTextContainer>
-                            )} */}
+                            {}
                             <div tw="w-full ">
                               {firebaseErrors.others ? (
                                 <ErrorMessage>
@@ -587,8 +545,9 @@ const Home = ({
                                 </ErrorMessage>
                               ) : null}
                               <Form onSubmit={formik.handleSubmit}>
-                                <div tw="flex flex-col">
-                                  <label tw="mb-1 cursor-pointer rounded p-2 bg-gray-300 text-gray-900 text-center font-semibold text-sm">
+                                <div tw="relative">
+                                  <div class="age-btns-b18">
+								  <label tw="cursor-pointer rounded block p-2 bg-gray-300 text-gray-900 text-center font-semibold text-sm">
                                     <input
                                       type="radio"
                                       name="age"
@@ -598,10 +557,12 @@ const Home = ({
                                     />
                                     Below 18 Years
                                   </label>
+								  </div>
                                   {radioValue === "b18" && (
-                                    <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
+                                    <span class="b18-circle"><CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" /></span>
                                   )}
-                                  <label tw="mt-1 p-2 cursor-pointer rounded bg-black text-white text-center font-semibold text-sm">
+								  <div class="age-btns-a18">
+                                  <label tw="p-2 cursor-pointer rounded block bg-black text-white text-center font-semibold text-sm">
                                     <input
                                       type="radio"
                                       name="age"
@@ -611,8 +572,9 @@ const Home = ({
                                     />
                                     Above 18 Years
                                   </label>
+								  </div>
                                   {radioValue === "a18" && (
-                                    <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
+                                    <span class="a18-circle"><CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" /></span>
                                   )}
                                 </div>
                                 {formik.errors.name ? (
@@ -688,8 +650,7 @@ const Home = ({
                         </div>
                       </div>
                       <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our Terms and Conditions and
-                        Privacy Policy
+                        By creating an account you are agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
                       </div>
                     </div>
                   </div>
@@ -714,7 +675,7 @@ const Home = ({
                       </button>
                     </div>
                     {/*body*/}
-                    <div tw="relative p-6 sm:p-10 flex-auto">
+                    <div tw="relative p-6 flex-auto">
                       <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
                         <div tw="w-full">
                           <FormContainer>
@@ -751,7 +712,7 @@ const Home = ({
                                 </DividerText>
                               </DividerTextContainer>
                             )} */}
-                            <div tw="w-full sm:pl-4">
+                            <div tw="w-full">
                               {firebaseErrors.others ? (
                                 <ErrorMessage>
                                   {firebaseErrors.others}
@@ -802,8 +763,7 @@ const Home = ({
                         </div>
                       </div>
                       <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our Terms and Conditions and
-                        Privacy Policy
+                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
                       </div>
                     </div>
                   </div>
@@ -815,7 +775,7 @@ const Home = ({
         </AnimationRevealPage>
       </Sidebar>
     </Sidebar>
-  );
+  </div>);
 };
 
 const AdImages = () => {

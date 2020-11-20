@@ -15,6 +15,7 @@ import { ReactComponent as UserAddIcon } from "feather-icons/dist/icons/user-plu
 import { ReactComponent as TargetIcon } from "feather-icons/dist/icons/target.svg";
 import {css} from "styled-components/macro"; //eslint-disable-line
 import { navigate } from "hookrouter";
+import styles from '../css/master.css'; 
 
 const SidebarContainer = tw.div`bg-prim-200 text-white`;
 const SidebarHeading = tw.div`bg-prim-200 p-6 flex pb-6 pt-4`;
@@ -34,7 +35,12 @@ const handleClick = () => {
   navigate("/contest");
 };
 
+const mystyle = {
+  
+    };
+
 export const SideLinks = (
+						  
   <SidebarContainer>
     <SidebarHeading>
       <HeadingText imageSrc={transLogo}></HeadingText>
@@ -46,6 +52,12 @@ export const SideLinks = (
           Home
         </SidebarContentFirst>
       </a>
+	  <a href="/trending">
+	  <SidebarContent>
+        <StarIcon height="20" width="20" tw="mr-4" />
+        Trending
+      </SidebarContent>
+	  </a>
       <div onClick={handleClick}>
         <SidebarContent>
           <FilmIcon height="20" width="20" tw="mr-4" />
@@ -58,10 +70,7 @@ export const SideLinks = (
           Profile
         </SidebarContent>
       </a>
-      <SidebarContent>
-        <StarIcon height="20" width="20" tw="mr-4" />
-        Dashboard
-      </SidebarContent>
+      
       <SidebarContent>
         <MusicIcon height="20" width="20" tw="mr-4" />
         Notifications
@@ -72,17 +81,21 @@ export const SideLinks = (
       </SidebarContent>
       <SidebarContent>
         <SettingsIcon height="20" width="20" tw="mr-4" />
-        Settings & Privacy{" "}
+        Settings
       </SidebarContent>
+	  <a href="/support" title="Help">
       <SidebarContent>
         <HelpIcon height="20" width="20" tw="mr-4" />
-        Help & Support
+        Support
       </SidebarContent>
+	  </a>
+	  <a href="/feedback">
       <SidebarContent>
         <SmileIcon height="20" width="20" tw="mr-4" />
         Feedback
       </SidebarContent>
-      <SidebarContent>
+	  </a>
+      <SidebarContent tw="hidden">
         <TargetIcon height="20" width="20" tw="mr-4" />
         Near by MobiWood user
       </SidebarContent>
@@ -101,6 +114,11 @@ export const SideLinksShort = (
           <HomeIcon height="20" width="20" />
         </SidebarContentFirst>
       </a>
+	  <a href="/dashboard" title="Trending">
+      <SidebarContent>
+        <StarIcon height="20" width="20" />
+      </SidebarContent>
+	  </a>
       <div onClick={handleClick} title="Contests">
         <SidebarContent>
           <FilmIcon height="20" width="20" />
@@ -111,11 +129,7 @@ export const SideLinksShort = (
           <UserIcon height="20" width="20" />
         </SidebarContent>
       </a>
-	  <a href="/dashboard" title="Dashboard">
-      <SidebarContent>
-        <StarIcon height="20" width="20" />
-      </SidebarContent>
-	  </a>
+	  
 	  <a href="/notification" title="Notification">
       <SidebarContent>
         <MusicIcon height="20" width="20" />
@@ -131,7 +145,7 @@ export const SideLinksShort = (
         <SettingsIcon height="20" width="20" />
       </SidebarContent>
 	  </a>
-	  <a href="/help" title="Help">
+	  <a href="/support" title="Help">
       <SidebarContent>
         <HelpIcon height="20" width="20" />
       </SidebarContent>
@@ -141,7 +155,7 @@ export const SideLinksShort = (
         <SmileIcon height="20" width="20" />
       </SidebarContent>
 	  </a>
-	  <a href="/nearby-friends" title="Nearby Mobiwood User">
+	  <a href="/nearby-friends" title="Nearby Mobiwood User" tw="hidden">
       <SidebarContent>
         <TargetIcon height="20" width="20" />
       </SidebarContent>

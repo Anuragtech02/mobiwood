@@ -29,14 +29,14 @@ const Line1 = tw.div`font-semibold`;
 const Line2 = tw.div``;
 
 const ProfileRight = tw.div`sm:m-2 flex flex-row`;
-const Button = tw.div`mx-2 text-white hocus:bg-button-200 cursor-pointer rounded-full p-2 bg-button-100 h-8 text-xs`;
+const Button = tw.div`mx-2 px-5 text-white hocus:bg-button-200 cursor-pointer rounded-full py-2 bg-button-100 h-8 text-xs`;
 
 const ProfileImage = styled.div((props) => [
   `background-image: url("${props.imageSrc}");`,
   tw`bg-cover bg-center h-28 w-28 rounded-full mx-2`,
 ]);
 
-const Flex = tw.div`flex flex-col lg:flex-row border-b border-gray-400 mx-4 last:border-b-0`;
+const Flex = tw.div`flex flex-col lg:flex-row border-b border-gray-400  last:border-b-0`;
 
 const Data = tw.div`py-5`;
 const DataHeading = tw.div`sm:mx-4 mb-4 mt-2 flex flex-row font-bold text-gray-900`;
@@ -67,8 +67,7 @@ const UserDashboard = () => {
               </OtherInfo>
             </ProfileLeft>
             <ProfileRight>
-              <Button>Edit Profile</Button>
-              <Button tw="bg-gray-600">Public View</Button>
+              <Button>Edit</Button>
             </ProfileRight>
           </ProfileInfo>
           <AwardInfo>

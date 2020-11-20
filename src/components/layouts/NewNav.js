@@ -10,6 +10,7 @@ import HeaderBase, {
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import firebase from "firebase";
 import { auth } from "../../firebase.config";
+import { navigate } from "hookrouter";
 
 const PrimaryBackgroundContainer = tw.div`mt-3 px-2 h-auto  bg-primary-900 text-gray-900 z-40 sticky top-0`;
 const Header = tw(HeaderBase)`-mt-4 py-3 mr-2 pl-2 sticky top-0`;
@@ -25,6 +26,7 @@ const PrimaryLink = tw(
 
 const logout = () => {
   localStorage.clear();
+  navigate('/');
 }
 
 const Nav = ({ onSetSidebarOpen, onClickSignup, onClickLogin }) => {
@@ -42,7 +44,7 @@ const Nav = ({ onSetSidebarOpen, onClickSignup, onClickLogin }) => {
     ]
     : [
         <NavLinks key={1}>
-          <NavLink href="#" onClick={onClickLogin} tw="w-12 inline-block">Login</NavLink>
+          <NavLink onClick={onClickLogin} tw="w-12 inline-block hover:no-underline">Login</NavLink>
           <PrimaryLink hred="#" onClick={onClickSignup}>Signup</PrimaryLink>
         </NavLinks>,
       ];

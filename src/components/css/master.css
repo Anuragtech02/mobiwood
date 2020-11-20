@@ -20,10 +20,7 @@
 .react-thumbnail-generator img{
     object-fit: cover;
 }
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent; /* make scrollbar transparent */
-}
+
 .underconstruction
 {
     margin-top:2rem;
@@ -38,4 +35,92 @@
     display: inline-block;
     border-radius: 5px;
     font-size: 13px;
+}
+.leftNav div:nth-child(1)::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+.lightnew__NavLink-sc-1q8vz2f-2:hover
+{
+	text-decoration:none !important;
+}
+.more-video-btn
+{
+	text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.more-video-btn a
+{
+    display: inline-block;
+    background: #0d8a84;
+    padding: 10px;
+    width: 200px;
+    border-radius: 5px;
+    color: white;
+}
+.video-like-count
+{
+    margin-top:3px;
+	font-size:14px;
+	margin-right:1rem;
+}
+.player div video
+{
+	outline:none;
+	border:none;
+}
+.video-follow-btn
+{
+	background: red;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-left: 0.4rem;
+}
+.video-actions 
+{
+	width:100%;
+	padding-right:0.5rem;
+}
+.video-actions a
+{
+ display: inline-block;
+ cursor:pointer;
+}
+.video-actions a svg
+{
+	float:left;
+}
+.reporttxt
+{
+	font-size:13px;
+}
+.report-video-link
+{
+	float:right;
+}
+.age-btns-b18
+{
+	float:left;
+	width:49%;
+}
+.age-btns-a18
+{
+	float:right;
+	width:49%;  
+}
+.b18-circle
+{
+	    position: absolute;
+    width: 50%;
+    text-align: center;
+	left:0px;
+}
+.a18-circle
+{
+	    position: absolute;
+    width: 50%;
+	right:0;
+    text-align: center;
 }

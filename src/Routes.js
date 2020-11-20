@@ -13,6 +13,9 @@ import UnderAgeContest from "./components/pages/Contest/UnderAgeContest";
 import Team from "./components/pages/Team";
 // import UserDashboard from "./components/pages/UserDashboard";
 import About from "./components/pages/About";
+import Support from "./components/pages/Support";
+import Feedback from "./components/pages/Feedback";
+import Trending from "./components/pages/Trending";
 
 export const routes = {
   "/": () => <Home />,
@@ -38,5 +41,8 @@ export const guestRoutes = {
   "/contest/upload": () => <UploadPage />,
   // "/upload": () => <UploadPage />,
   "/team": () => <Team />,
+  "/support": () => <Support />,
+  "/feedback": () => <Feedback />,
+  "/trending": () => <Trending />,
   // "/profile": () => <UserDashboard />
 };

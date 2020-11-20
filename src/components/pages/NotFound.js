@@ -357,6 +357,7 @@ const NotFound = ({
       // }
     },
   });
+  
 
   // Login Formik
 
@@ -388,7 +389,10 @@ const NotFound = ({
                     firestore
                       .collection("user")
                       .doc(details.data().uid)
-                      .update({ last_login_datetime: new Date() }, {merge: true});
+                      .update({ last_login_datetime: new Date() }, 
+															  //{merge: true}
+															  
+															  );
                     navigate("/contest");
                     setLoginModal(false);
                     setSignupModal(false);
@@ -675,8 +679,7 @@ const NotFound = ({
                         </div>
                       </div>
                       <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our Terms and Conditions and
-                        Privacy Policy
+                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
                       </div>
                     </div>
                   </div>
@@ -701,7 +704,7 @@ const NotFound = ({
                       </button>
                     </div>
                     {/*body*/}
-                    <div tw="relative p-6 sm:p-10 flex-auto">
+                    <div tw="relative p-6 pt-4 flex-auto">
                       <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
                         <div tw="w-full">
                           <FormContainer>
@@ -789,8 +792,7 @@ const NotFound = ({
                         </div>
                       </div>
                       <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our Terms and Conditions and
-                        Privacy Policy
+                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
                       </div>
                     </div>
                   </div>

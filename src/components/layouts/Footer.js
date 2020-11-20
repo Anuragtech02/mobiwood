@@ -9,7 +9,7 @@ import InstagramIcon from "../../images/instagram-icon.png";
 import TwitterIcon from "../../images/twitter-icon.png";
 
 const Container = tw(ContainerBase)`max-w-screen bg-primary-900 text-gray-100`;
-const Content = tw.div`max-w-screen-xl mx-auto py-8 mt-12`;
+const Content = tw.div`max-w-screen-xl mx-auto py-8`;
 
 const Row = tw.div`flex items-center justify-center flex-col px-8`;
 
@@ -42,7 +42,7 @@ export default () => {
             <Link href="/news">News</Link>
             <Link href="/advertising">Advertising</Link>
             <Link href="/privacy">Privacy</Link>
-            <Link href="/settings">Settings</Link>
+            <Link href="/support">Support</Link>
           </LinksContainer>
           <SocialLinksContainer>
             <SocialLink href="https://www.facebook.com/MobiWood-Entertainment-107346937756581" target="_blank">

@@ -15,6 +15,7 @@ const Team = () => {
   }
 
   return (
+		  <div className="leftNav">
     <Sidebar
       sidebar={SideLinks}
       open={sidebarOpen}
@@ -40,7 +41,7 @@ const Team = () => {
         </AnimationRevealPage>
       </Sidebar>
     </Sidebar>
-  );
+  </div>);
 };
 
 export default Team;

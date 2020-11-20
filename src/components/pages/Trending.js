@@ -8,6 +8,7 @@ import Nav from "../layouts/NewNav";
 import Footer from "../layouts/Footer";
 import { useFormik } from "formik";
 import Video from "../../videos/video.mp4";
+import ImageGrid from "../layouts/ImageGridLong";
 import ReactPlayer from "react-player";
 import Sidebar from "react-sidebar";
 import { isBrowser, isMobile, isTablet } from "react-device-detect"; //eslint-disable-line
@@ -66,7 +67,7 @@ const validate = (values) => {
     if (!auth.currentUser) {
       errors.others = "You need to login or signup first";
     }
-	
+
     if (!values.name) {
       errors.name = "Name Required";
     }
@@ -355,7 +356,7 @@ const About = ({
       // }
     },
   });
-
+  
   // Formik
 
   const formik = useFormik({
@@ -438,7 +439,7 @@ const About = ({
       // }
     },
   });
-  
+
   // Login Formik
 
   const Loginformik = useFormik({
@@ -494,12 +495,16 @@ const About = ({
 
   return (
 		  <div className="leftNav">
-		  
     <Sidebar
       sidebar={SideLinks}
+	  
       open={sidebarOpen}
       onSetOpen={onSetSidebarOpen}
-      styles={ isBrowser ? { sidebar: { background: "#111", zIndex: 40 } } : { sidebar: { background: "#111", zIndex: 50 } }}
+      styles={
+        isBrowser
+          ? { sidebar: { background: "#111", zIndex: 50  } }
+          : { sidebar: { background: "#111", zIndex: 50 } }
+      }
       docked={isBrowser ? sidebarOpen : false}
     >
       <Sidebar
@@ -517,25 +522,13 @@ const About = ({
           />
           <OutNav>
             <Container>
-              <ContainerHeading tw="pl-8 pt-8 text-3xl">About Us</ContainerHeading>
+              
               <Page tw="block pl-6 mt-4 px-5">
-                <div class="underconstruction" tw="w-full">
-                  <p>"Hide not your talents, they for use were made,
-What's a sundial in the shade?"
-- Benjamin Franklin. </p>
+                <div class="underconstruction" tw="w-full pl-2">
+                
+                <ImageGrid />
 
-<p tw="pt-4">Talent is not something that should be kept under the veil. Your abilities deserve to be recognized by the world. All of us are passionate about one or the other thing and desire to turn our passion into something that is valued by the world. </p>
 
-<p tw="mt-3">Mobiwood is a place where real talent is valued. If you have been looking for a platform to showcase your talent, Mobiwood is just the right place for you. We are calling artists from the whole world to exhibit their best and gain recognition for the same. </p>
-
-<p tw="mt-3">You do not have to sit at home and wonder anymore. We assure you that your talent wont go in vain. </p>
-                </div>
-                <div tw="mt-6">
-				<h3 tw="font-bold  mb-3">Our Vision</h3> 
-<p>Our motto is to make artists believe in themselves. We are here to help them in gaining self-confidence and step outside their boundaries. We believe that without recognition talent is a barren field. We are happy to create a platform that is established worldwide. </p>
-
-<h3 tw="mt-6 font-bold  mb-3">Our Mission</h3>
-<p>We consider mobile as a stage and a platform is all that is required by an artist to express themselves. We appreciate real talent in the utmost possible way by helping people to gain recognition.</p>
 
 				</div>
               </Page>
@@ -868,10 +861,7 @@ What's a sundial in the shade?"
         </AnimationRevealPage>
       </Sidebar>
     </Sidebar>
-  
-  
-  </div>
-  );
+  </div>);
 };
 
 export default About;

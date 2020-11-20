@@ -66,7 +66,7 @@ const validate = (values) => {
     if (!auth.currentUser) {
       errors.others = "You need to login or signup first";
     }
-	
+
     if (!values.name) {
       errors.name = "Name Required";
     }
@@ -274,88 +274,7 @@ const About = ({
       console.log("LOGGED IN: ", u.displayName);
     }
   };
-
-  // Formik
-
-  const Signupformik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      username: "",
-    },
-    validate,
-    onSubmit: (values) => {
-      auth
-        .createUserWithEmailAndPassword(values.email, values.password)
-        .then(function ({ user }) {
-          auth.currentUser
-            .updateProfile({
-              displayName: values.name,
-            })
-            .then(function () {
-              if (user && user.uid) {
-                const data = {
-                  name: values.name,
-                  email: user.email,
-                  username: values.username,
-                  account_creation_datetime: user.metadata.creationTime,
-                  last_login_datetime: user.metadata.creationTime,
-                };
-                firestore
-                  .collection("user")
-                  .doc(user.uid)
-                  .set(data, { merge: true })
-                  .then(function () {
-                    const usernamedata = {
-                      uid: user.uid,
-                    };
-                    firestore
-                      .collection("username")
-                      .doc(values.username)
-                      .set(usernamedata, { merge: true })
-                      .then(function () {
-                        asyncLocalStorage.setItem("username", values.username);
-                        setLoginModal(false);
-                        setSignupModal(false);
-                      })
-                      .catch(function (error) {
-                        handleErrors("others", error.message);
-                      });
-                  })
-                  .catch(function (error) {
-                    handleErrors("others", error.message);
-                  });
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        })
-        .catch(function (error) {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          if (errorCode === "auth/weak-password") {
-            handleErrors("password", "The password is too weak");
-          } else if (errorCode === "auth/email-already-in-use") {
-            handleErrors("email", "Email already exists");
-          } else if (errorCode === "auth/invalid-email") {
-            handleErrors("email", "Invalid email");
-          } else {
-            handleErrors("others", errorMessage);
-          }
-        });
-      // if (underAge) {
-      //   navigate("/contest/underage");
-      // } else {
-      //   navigate("/contest/upload");
-      // }
-    },
-  });
-
+  
   // Formik
 
   const formik = useFormik({
@@ -438,7 +357,88 @@ const About = ({
       // }
     },
   });
-  
+
+  // Formik
+
+  const Signupformik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      username: "",
+    },
+    validate,
+    onSubmit: (values) => {
+      auth
+        .createUserWithEmailAndPassword(values.email, values.password)
+        .then(function ({ user }) {
+          auth.currentUser
+            .updateProfile({
+              displayName: values.name,
+            })
+            .then(function () {
+              if (user && user.uid) {
+                const data = {
+                  name: values.name,
+                  email: user.email,
+                  username: values.username,
+                  account_creation_datetime: user.metadata.creationTime,
+                  last_login_datetime: user.metadata.creationTime,
+                };
+                firestore
+                  .collection("user")
+                  .doc(user.uid)
+                  .set(data, { merge: true })
+                  .then(function () {
+                    const usernamedata = {
+                      uid: user.uid,
+                    };
+                    firestore
+                      .collection("username")
+                      .doc(values.username)
+                      .set(usernamedata, { merge: true })
+                      .then(function () {
+                        asyncLocalStorage.setItem("username", values.username);
+                        setLoginModal(false);
+                        setSignupModal(false);
+                      })
+                      .catch(function (error) {
+                        handleErrors("others", error.message);
+                      });
+                  })
+                  .catch(function (error) {
+                    handleErrors("others", error.message);
+                  });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        })
+        .catch(function (error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode === "auth/weak-password") {
+            handleErrors("password", "The password is too weak");
+          } else if (errorCode === "auth/email-already-in-use") {
+            handleErrors("email", "Email already exists");
+          } else if (errorCode === "auth/invalid-email") {
+            handleErrors("email", "Invalid email");
+          } else {
+            handleErrors("others", errorMessage);
+          }
+        });
+      // if (underAge) {
+      //   navigate("/contest/underage");
+      // } else {
+      //   navigate("/contest/upload");
+      // }
+    },
+  });
+
   // Login Formik
 
   const Loginformik = useFormik({
@@ -494,12 +494,16 @@ const About = ({
 
   return (
 		  <div className="leftNav">
-		  
     <Sidebar
       sidebar={SideLinks}
+	  
       open={sidebarOpen}
       onSetOpen={onSetSidebarOpen}
-      styles={ isBrowser ? { sidebar: { background: "#111", zIndex: 40 } } : { sidebar: { background: "#111", zIndex: 50 } }}
+      styles={
+        isBrowser
+          ? { sidebar: { background: "#111", zIndex: 50  } }
+          : { sidebar: { background: "#111", zIndex: 50 } }
+      }
       docked={isBrowser ? sidebarOpen : false}
     >
       <Sidebar
@@ -517,25 +521,12 @@ const About = ({
           />
           <OutNav>
             <Container>
-              <ContainerHeading tw="pl-8 pt-8 text-3xl">About Us</ContainerHeading>
+              <ContainerHeading tw="pl-8 pt-8 text-3xl">Support</ContainerHeading>
               <Page tw="block pl-6 mt-4 px-5">
-                <div class="underconstruction" tw="w-full">
-                  <p>"Hide not your talents, they for use were made,
-What's a sundial in the shade?"
-- Benjamin Franklin. </p>
+                <div class="underconstruction" tw="w-full pl-2">
+                  <p>In case you have a query you can freely contact us at <a href="mailto:support@mobiwood.net" tw="font-bold">support@mobiwood.net</a></p>
 
-<p tw="pt-4">Talent is not something that should be kept under the veil. Your abilities deserve to be recognized by the world. All of us are passionate about one or the other thing and desire to turn our passion into something that is valued by the world. </p>
 
-<p tw="mt-3">Mobiwood is a place where real talent is valued. If you have been looking for a platform to showcase your talent, Mobiwood is just the right place for you. We are calling artists from the whole world to exhibit their best and gain recognition for the same. </p>
-
-<p tw="mt-3">You do not have to sit at home and wonder anymore. We assure you that your talent wont go in vain. </p>
-                </div>
-                <div tw="mt-6">
-				<h3 tw="font-bold  mb-3">Our Vision</h3> 
-<p>Our motto is to make artists believe in themselves. We are here to help them in gaining self-confidence and step outside their boundaries. We believe that without recognition talent is a barren field. We are happy to create a platform that is established worldwide. </p>
-
-<h3 tw="mt-6 font-bold  mb-3">Our Mission</h3>
-<p>We consider mobile as a stage and a platform is all that is required by an artist to express themselves. We appreciate real talent in the utmost possible way by helping people to gain recognition.</p>
 
 				</div>
               </Page>
@@ -868,10 +859,7 @@ What's a sundial in the shade?"
         </AnimationRevealPage>
       </Sidebar>
     </Sidebar>
-  
-  
-  </div>
-  );
+  </div>);
 };
 
 export default About;

@@ -44,11 +44,11 @@ const ModalContainer = tw.div`justify-center m-4 items-center flex overflow-x-hi
 const OutModal = tw.div`opacity-75 fixed inset-0 z-40 bg-black`;
 const ModalContent = tw.div`relative w-auto my-auto mx-auto max-w-3xl`;
 
-const IllustrationContainer = tw.div`flex-1 border-t-2 flex justify-start sm:p-6`;
+const IllustrationContainer = tw.div`flex-1 border-t-2 flex justify-start lg:pl-0 sm:p-6`;
 const IllustratorContent = tw.div`block relative`;
 
-const RadioInput = tw.input`m-4 mt-1`;
-const ErrorMessage = tw.div`text-red-600 -mb-2 mt-3`;
+const RadioInput = tw.input`mr-2 mt-1`;
+const ErrorMessage = tw.div`text-red-600 -mb-2 mt-1 text-xs`;
 const RadioFlex = tw.div`flex`;
 
 // const SocialButtonsContainer = tw.div`flex flex-col items-center`;
@@ -70,7 +70,7 @@ const RadioFlex = tw.div`flex`;
 
 const FormContainer = tw.div`w-full flex flex-col sm:flex-row`;
 
-const Form = tw.form`mx-auto max-w-xs`;
+const Form = tw.form`mx-auto`;
 const Input = tw.input`w-full p-4 rounded-sm shadow font-medium text-gray-900 bg-white border border-gray-400 placeholder-gray-900 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5 first:mt-0`;
 const SubmitButton = styled.button`
   ${tw`mt-5 tracking-wide bg-black text-sm text-white w-full py-4 rounded hover:opacity-75 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none`}
@@ -545,7 +545,7 @@ const ContestRegister = ({
     }
   });
 
-  return (
+  return (<div className="leftNav">
     <Sidebar
       sidebar={SideLinks}
       open={sidebarOpen}
@@ -730,8 +730,7 @@ const ContestRegister = ({
                         defaultChecked
                       />
                       <Label htmlFor="mt18" tw="font-normal text-xs">
-                        I am 18 or above and I agree to the Terms {"&"}{" "}
-                        conditions and Privacy policy.
+                        I am 18 years or above.
                       </Label>
                     </RadioFlex>
                     <RadioFlex tw="sm:flex-row">
@@ -781,7 +780,7 @@ const ContestRegister = ({
                       </button>
                     </div>
                     {/*body*/}
-                    <div tw="relative p-6 sm:p-10 flex-auto">
+                    <div tw="relative p-6 pt-4 flex-auto">
                       <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
                         <div tw="w-full">
                           <FormContainer>
@@ -925,8 +924,7 @@ const ContestRegister = ({
                         </div>
                       </div>
                       <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our Terms and Conditions and
-                        Privacy Policy
+                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
                       </div>
                     </div>
                   </div>
@@ -951,7 +949,7 @@ const ContestRegister = ({
                       </button>
                     </div>
                     {/*body*/}
-                    <div tw="relative p-6 sm:p-10 flex-auto">
+                    <div tw="relative p-6 flex-auto">
                       <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
                         <div tw="w-full">
                           <FormContainer>
@@ -981,14 +979,14 @@ const ContestRegister = ({
                                 )}
                               </SocialButtonsContainer>
                             </div>
-                            {isMobile && !isTablet && (
+                            {isMobile && (
                               <DividerTextContainer>
                                 <DividerText>
                                   Or Log In Using Username
                                 </DividerText>
                               </DividerTextContainer>
                             )} */}
-                            <div tw="w-full sm:pl-4">
+                            <div tw="w-full">
                               {firebaseErrors.others ? (
                                 <ErrorMessage>
                                   {firebaseErrors.others}
@@ -1027,10 +1025,9 @@ const ContestRegister = ({
                                 />
                                 <SubmitButton
                                   type="submit"
-                                  onClick={() => {
-                                    Signupformik.values.signup = 0;
-                                    Loginformik.values.login = 1;
-                                  }}
+                                  onClick={() =>
+                                    (Loginformik.values.signup = 0)
+                                  }
                                 >
                                   <span className="text">Log In</span>
                                 </SubmitButton>
@@ -1040,8 +1037,7 @@ const ContestRegister = ({
                         </div>
                       </div>
                       <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our Terms and Conditions and
-                        Privacy Policy
+                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
                       </div>
                     </div>
                   </div>
@@ -1066,7 +1062,7 @@ const ContestRegister = ({
                       </button>
                     </div>
                     {/*body*/}
-                    <div tw="relative p-6 sm:p-10 flex-auto">
+                    <div tw="relative p-6 pt-4 flex-auto">
                       <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
                         <div tw="w-full">
                           <IllustrationHeading>
@@ -1156,7 +1152,7 @@ const ContestRegister = ({
         </AnimationRevealPage>
       </Sidebar>
     </Sidebar>
-  );
+  </div>);
 };
 
 export default ContestRegister;
