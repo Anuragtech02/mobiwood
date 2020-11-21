@@ -356,7 +356,7 @@ const About = ({
       // }
     },
   });
-  
+
   // Formik
 
   const formik = useFormik({
@@ -467,13 +467,10 @@ const About = ({
                   )
                   .then(function () {
                     asyncLocalStorage.setItem("username", values.username);
-                    firestore
-                      .collection("user")
-                      .doc(details.data().uid)
-                      .update(
-                        { last_login_datetime: new Date() },
-                        //{ merge: true }
-                      );
+                    firestore.collection("user").doc(details.data().uid).update(
+                      { last_login_datetime: new Date() }
+                      //{ merge: true }
+                    );
                     navigate("/contest");
                     setLoginModal(false);
                     setSignupModal(false);
@@ -494,47 +491,41 @@ const About = ({
   });
 
   return (
-		  <div className="leftNav">
-    <Sidebar
-      sidebar={SideLinks}
-	  
-      open={sidebarOpen}
-      onSetOpen={onSetSidebarOpen}
-      styles={
-        isBrowser
-          ? { sidebar: { background: "#111", zIndex: 50  } }
-          : { sidebar: { background: "#111", zIndex: 50 } }
-      }
-      docked={isBrowser ? sidebarOpen : false}
-    >
+    <div className="leftNav">
       <Sidebar
-        sidebar={SideLinksShort}
-        open={isBrowser ? !sidebarOpen : false}
+        sidebar={SideLinks}
+        open={sidebarOpen}
         onSetOpen={onSetSidebarOpen}
-        styles={{ sidebar: { background: "#111", zIndex: 30 } }}
-        docked={isBrowser ? !sidebarOpen : false}
+        styles={
+          isBrowser
+            ? { sidebar: { background: "#111", zIndex: 50 } }
+            : { sidebar: { background: "#111", zIndex: 50 } }
+        }
+        docked={isBrowser ? sidebarOpen : false}
       >
-        <AnimationRevealPage disabled>
-          <Nav
-            onSetSidebarOpen={onSetSidebarOpen}
-            onClickLogin={onClickLogin}
-            onClickSignup={onClickSignup}
-          />
-          <OutNav>
-            <Container>
-              
-              <Page tw="block pl-6 mt-4 px-5">
-                <div class="underconstruction" tw="w-full pl-2">
-                
-                <ImageGrid />
+        <Sidebar
+          sidebar={SideLinksShort}
+          open={isBrowser ? !sidebarOpen : false}
+          onSetOpen={onSetSidebarOpen}
+          styles={{ sidebar: { background: "#111", zIndex: 30 } }}
+          docked={isBrowser ? !sidebarOpen : false}
+        >
+          <AnimationRevealPage disabled>
+            <Nav
+              onSetSidebarOpen={onSetSidebarOpen}
+              onClickLogin={onClickLogin}
+              onClickSignup={onClickSignup}
+            />
+            <OutNav>
+              <Container>
+                <Page tw="block pl-6 mt-4 px-5">
+                  <div tw="w-full pl-2">
+                    <ImageGrid />
+                  </div>
+                </Page>
+              </Container>
 
-
-
-				</div>
-              </Page>
-            </Container>
-
-            {/* <BottomNavigation>
+              {/* <BottomNavigation>
           <a href="/contest">
             <NavLink>Contest</NavLink>
           </a>
@@ -546,226 +537,236 @@ const About = ({
           </a>
           <NavLink>Profile</NavLink>
         </BottomNavigation> */}
-          </OutNav>
-          <Footer />
+            </OutNav>
+            <Footer />
 
-          {signupModal ? (
-            <>
-              <ModalContainer>
-                <ModalContent ref={wrapperRef}>
-                  <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                      <h3 tw="text-xl font-semibold">Categories</h3>
-                      <button
-                        onClick={() => setShowModal(false)}
-                        tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                      >
-                        <CloseIcon tw="cursor-pointer text-black h-5  w-6 text-xl block outline-none focus:outline-none" />
-                      </button>
-                    </div>
-                    {/*body*/}
-                    <div tw="relative p-6 flex-auto">
-                      <div tw="my-4 text-gray-600 text-lg leading-relaxed">
-                        <GridContent>
-                          <ThreeColumn>
-                            <Column>
-                              <Card>Acting</Card>
-                            </Column>
-                            <Column>
-                              <Card>Singing</Card>
-                            </Column>
-                            <Column>
-                              <Card>Dancing</Card>
-                            </Column>
-                            <Column>
-                              <Card>Comedy</Card>
-                            </Column>
-                            <Column>
-                              <Card>Music</Card>
-                            </Column>
-                            <Column>
-                              <Card>Magic</Card>
-                            </Column>
-                            <Column>
-                              <Card>Acrobatics</Card>
-                            </Column>
-                            <Column>
-                              <Card>Others</Card>
-                            </Column>
-                          </ThreeColumn>
-                        </GridContent>
+            {signupModal ? (
+              <>
+                <ModalContainer>
+                  <ModalContent ref={wrapperRef}>
+                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
+                        <h3 tw="text-xl font-semibold">Categories</h3>
+                        <button
+                          onClick={() => setShowModal(false)}
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                        >
+                          <CloseIcon tw="cursor-pointer text-black h-5  w-6 text-xl block outline-none focus:outline-none" />
+                        </button>
                       </div>
-                    </div>
-                  </div>
-                </ModalContent>
-              </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-          {signupModal ? (
-            <>
-              <ModalContainer>
-                <ModalContent ref={wrapperRef}>
-                  <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                      <h3 tw="text-xl font-semibold">Create New Account</h3>
-                      <button
-                        onClick={() => setSignupModal(false)}
-                        tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                      >
-                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
-                      </button>
-                    </div>
-                    {/*body*/}
-                    <div tw="relative p-6 pt-4 flex-auto">
-                      <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
-                        <div tw="w-full">
-                          <FormContainer>
-                            {}
-                            <div tw="w-full ">
-                              {firebaseErrors.others ? (
-                                <ErrorMessage>
-                                  {firebaseErrors.others}
-                                </ErrorMessage>
-                              ) : null}
-                              <Form onSubmit={formik.handleSubmit}>
-                                <div tw="relative">
-                                  <div class="age-btns-b18">
-								  <label tw="cursor-pointer rounded block p-2 bg-gray-300 text-gray-900 text-center font-semibold text-sm">
-                                    <input
-                                      type="radio"
-                                      name="age"
-                                      tw="invisible"
-                                      value="b18"
-                                      onClick={() => setRadioValue("b18")}
-                                    />
-                                    Below 18 Years
-                                  </label>
-								  </div>
-                                  {radioValue === "b18" && (
-                                    <span class="b18-circle"><CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" /></span>
-                                  )}
-								  <div class="age-btns-a18">
-                                  <label tw="p-2 cursor-pointer rounded block bg-black text-white text-center font-semibold text-sm">
-                                    <input
-                                      type="radio"
-                                      name="age"
-                                      tw="invisible"
-                                      value="a18"
-                                      onClick={() => setRadioValue("a18")}
-                                    />
-                                    Above 18 Years
-                                  </label>
-								  </div>
-                                  {radioValue === "a18" && (
-                                    <span class="a18-circle"><CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" /></span>
-                                  )}
-                                </div>
-                                {formik.errors.name ? (
-                                  <ErrorMessage>
-                                    {formik.errors.name}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="text"
-                                  placeholder="Name"
-                                  name="name"
-                                  autoComplete="name"
-                                  onChange={formik.handleChange}
-                                  value={formik.values.name}
-                                />
-                                {formik.errors.email ? (
-                                  <ErrorMessage>
-                                    {formik.errors.email}
-                                  </ErrorMessage>
-                                ) : null}
-                                {firebaseErrors.email ? (
-                                  <ErrorMessage>
-                                    {firebaseErrors.email}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="email"
-                                  placeholder="Email"
-                                  name="email"
-                                  autoComplete="email"
-                                  onChange={formik.handleChange}
-                                  value={formik.values.email}
-                                />
-                                {formik.errors.username ? (
-                                  <ErrorMessage>
-                                    {formik.errors.username}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="text"
-                                  placeholder="Username"
-                                  name="username"
-                                  onChange={formik.handleChange}
-                                  value={formik.values.username}
-                                />
-                                {formik.errors.password ? (
-                                  <ErrorMessage>
-                                    {formik.errors.password}
-                                  </ErrorMessage>
-                                ) : null}
-                                {firebaseErrors.password ? (
-                                  <ErrorMessage>
-                                    {firebaseErrors.password}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="password"
-                                  name="password"
-                                  placeholder="Password"
-                                  autoComplete="new-password"
-                                  onChange={formik.handleChange}
-                                  value={formik.values.password}
-                                />
-                                <SubmitButton
-                                  type="submit"
-                                  onClick={() => (formik.values.signup = 1)}
-                                >
-                                  <span className="text">Create Account</span>
-                                </SubmitButton>
-                              </Form>
-                            </div>
-                          </FormContainer>
+                      {/*body*/}
+                      <div tw="relative p-6 flex-auto">
+                        <div tw="my-4 text-gray-600 text-lg leading-relaxed">
+                          <GridContent>
+                            <ThreeColumn>
+                              <Column>
+                                <Card>Acting</Card>
+                              </Column>
+                              <Column>
+                                <Card>Singing</Card>
+                              </Column>
+                              <Column>
+                                <Card>Dancing</Card>
+                              </Column>
+                              <Column>
+                                <Card>Comedy</Card>
+                              </Column>
+                              <Column>
+                                <Card>Music</Card>
+                              </Column>
+                              <Column>
+                                <Card>Magic</Card>
+                              </Column>
+                              <Column>
+                                <Card>Acrobatics</Card>
+                              </Column>
+                              <Column>
+                                <Card>Others</Card>
+                              </Column>
+                            </ThreeColumn>
+                          </GridContent>
                         </div>
                       </div>
-                      <div tw="mt-4 -mb-2 text-center text-xs">
-                        By creating an account you are agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
+                    </div>
+                  </ModalContent>
+                </ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {signupModal ? (
+              <>
+                <ModalContainer>
+                  <ModalContent ref={wrapperRef}>
+                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
+                        <h3 tw="text-xl font-semibold">Create New Account</h3>
+                        <button
+                          onClick={() => setSignupModal(false)}
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                        >
+                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div tw="relative p-6 pt-4 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                          <div tw="w-full">
+                            <FormContainer>
+                              {}
+                              <div tw="w-full ">
+                                {firebaseErrors.others ? (
+                                  <ErrorMessage>
+                                    {firebaseErrors.others}
+                                  </ErrorMessage>
+                                ) : null}
+                                <Form onSubmit={formik.handleSubmit}>
+                                  <div tw="relative">
+                                    <div class="age-btns-b18">
+                                      <label tw="cursor-pointer rounded block p-2 bg-gray-300 text-gray-900 text-center font-semibold text-sm">
+                                        <input
+                                          type="radio"
+                                          name="age"
+                                          tw="invisible"
+                                          value="b18"
+                                          onClick={() => setRadioValue("b18")}
+                                        />
+                                        Below 18 Years
+                                      </label>
+                                    </div>
+                                    {radioValue === "b18" && (
+                                      <span class="b18-circle">
+                                        <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
+                                      </span>
+                                    )}
+                                    <div class="age-btns-a18">
+                                      <label tw="p-2 cursor-pointer rounded block bg-black text-white text-center font-semibold text-sm">
+                                        <input
+                                          type="radio"
+                                          name="age"
+                                          tw="invisible"
+                                          value="a18"
+                                          onClick={() => setRadioValue("a18")}
+                                        />
+                                        Above 18 Years
+                                      </label>
+                                    </div>
+                                    {radioValue === "a18" && (
+                                      <span class="a18-circle">
+                                        <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
+                                      </span>
+                                    )}
+                                  </div>
+                                  {formik.errors.name ? (
+                                    <ErrorMessage>
+                                      {formik.errors.name}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="text"
+                                    placeholder="Name"
+                                    name="name"
+                                    autoComplete="name"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.name}
+                                  />
+                                  {formik.errors.email ? (
+                                    <ErrorMessage>
+                                      {formik.errors.email}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  {firebaseErrors.email ? (
+                                    <ErrorMessage>
+                                      {firebaseErrors.email}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="email"
+                                    placeholder="Email"
+                                    name="email"
+                                    autoComplete="email"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.email}
+                                  />
+                                  {formik.errors.username ? (
+                                    <ErrorMessage>
+                                      {formik.errors.username}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="text"
+                                    placeholder="Username"
+                                    name="username"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.username}
+                                  />
+                                  {formik.errors.password ? (
+                                    <ErrorMessage>
+                                      {formik.errors.password}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  {firebaseErrors.password ? (
+                                    <ErrorMessage>
+                                      {firebaseErrors.password}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    autoComplete="new-password"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.password}
+                                  />
+                                  <SubmitButton
+                                    type="submit"
+                                    onClick={() => (formik.values.signup = 1)}
+                                  >
+                                    <span className="text">Create Account</span>
+                                  </SubmitButton>
+                                </Form>
+                              </div>
+                            </FormContainer>
+                          </div>
+                        </div>
+                        <div tw="mt-4 -mb-2 text-center text-xs">
+                          By creating an account you are agree to our{" "}
+                          <a href="/terms-and-conditions">
+                            Terms and Conditions
+                          </a>{" "}
+                          and <a href="/policy">Privacy Policy</a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </ModalContent>
-              </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-          {loginModal ? (
-            <>
-              <ModalContainer>
-                <ModalContent ref={wrapperRef}>
-                  <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                      <h3 tw="text-xl font-semibold">Log In to Your Account</h3>
-                      <button
-                        onClick={() => setLoginModal(false)}
-                        tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                      >
-                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
-                      </button>
-                    </div>
-                    {/*body*/}
-                    <div tw="relative p-6 flex-auto">
-                      <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
-                        <div tw="w-full">
-                          <FormContainer>
-                            {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
+                  </ModalContent>
+                </ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {loginModal ? (
+              <>
+                <ModalContainer>
+                  <ModalContent ref={wrapperRef}>
+                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
+                        <h3 tw="text-xl font-semibold">
+                          Log In to Your Account
+                        </h3>
+                        <button
+                          onClick={() => setLoginModal(false)}
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                        >
+                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div tw="relative p-6 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                          <div tw="w-full">
+                            <FormContainer>
+                              {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
                               <SocialButtonsContainer>
                                 {LoginsocialButtons.map(
                                   (socialButton, index) => (
@@ -798,70 +799,75 @@ const About = ({
                                 </DividerText>
                               </DividerTextContainer>
                             )} */}
-                            <div tw="w-full">
-                              {firebaseErrors.others ? (
-                                <ErrorMessage>
-                                  {firebaseErrors.others}
-                                </ErrorMessage>
-                              ) : null}
-                              <Form onSubmit={Loginformik.handleSubmit}>
-                                {Loginformik.errors.loginUsername ? (
+                              <div tw="w-full">
+                                {firebaseErrors.others ? (
                                   <ErrorMessage>
-                                    {Loginformik.errors.loginUsername}
+                                    {firebaseErrors.others}
                                   </ErrorMessage>
                                 ) : null}
-                                {firebaseErrors.username ? (
-                                  <ErrorMessage>
-                                    {firebaseErrors.username}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="text"
-                                  placeholder="Username"
-                                  name="username"
-                                  value={Loginformik.values.username}
-                                  onChange={Loginformik.handleChange}
-                                />
-                                {Loginformik.errors.loginPassword ? (
-                                  <ErrorMessage>
-                                    {Loginformik.errors.loginPassword}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="password"
-                                  name="password"
-                                  placeholder="Password"
-                                  autoComplete="new-password"
-                                  value={Loginformik.values.password}
-                                  onChange={Loginformik.handleChange}
-                                />
-                                <SubmitButton
-                                  type="submit"
-                                  onClick={() =>
-                                    (Loginformik.values.signup = 0)
-                                  }
-                                >
-                                  <span className="text">Log In</span>
-                                </SubmitButton>
-                              </Form>
-                            </div>
-                          </FormContainer>
+                                <Form onSubmit={Loginformik.handleSubmit}>
+                                  {Loginformik.errors.loginUsername ? (
+                                    <ErrorMessage>
+                                      {Loginformik.errors.loginUsername}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  {firebaseErrors.username ? (
+                                    <ErrorMessage>
+                                      {firebaseErrors.username}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="text"
+                                    placeholder="Username"
+                                    name="username"
+                                    value={Loginformik.values.username}
+                                    onChange={Loginformik.handleChange}
+                                  />
+                                  {Loginformik.errors.loginPassword ? (
+                                    <ErrorMessage>
+                                      {Loginformik.errors.loginPassword}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    autoComplete="new-password"
+                                    value={Loginformik.values.password}
+                                    onChange={Loginformik.handleChange}
+                                  />
+                                  <SubmitButton
+                                    type="submit"
+                                    onClick={() =>
+                                      (Loginformik.values.signup = 0)
+                                    }
+                                  >
+                                    <span className="text">Log In</span>
+                                  </SubmitButton>
+                                </Form>
+                              </div>
+                            </FormContainer>
+                          </div>
+                        </div>
+                        <div tw="mt-4 -mb-2 text-center text-xs">
+                          By logging in you agree to our{" "}
+                          <a href="/terms-and-conditions">
+                            Terms and Conditions
+                          </a>{" "}
+                          and <a href="/policy">Privacy Policy</a>
                         </div>
                       </div>
-                      <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
-                      </div>
                     </div>
-                  </div>
-                </ModalContent>
-              </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-        </AnimationRevealPage>
+                  </ModalContent>
+                </ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+          </AnimationRevealPage>
+        </Sidebar>
       </Sidebar>
-    </Sidebar>
-  </div>);
+    </div>
+  );
 };
 
 export default About;

@@ -8,12 +8,17 @@ import Nav from "../../layouts/NewNav";
 import Footer from "../../layouts/Footer";
 import { useFormik } from "formik";
 import { auth, firestore, storage } from "../../../firebase.config";
+import Sidebar from "react-sidebar";
+import { SideLinks, SideLinksShort } from "../../layouts/SideLinks";
+import { isBrowser, isMobile, isTablet } from "react-device-detect"; //eslint-disable-line
 
 const Container = tw.div`relative bg-purple-100 text-gray-900 font-medium flex flex-col justify-center mt-0 pb-5`;
 const ContainerHeading = tw.div`px-4 sm:px-10 pt-4 text-2xl font-normal`;
 const Content = tw.div`m-4 sm:m-8 mt-2 sm:mt-2 bg-purple-100 text-gray-900 flex justify-center flex-1 flex-col lg:flex-row`;
 const MainContainer = tw.div`w-full lg:w-1/2 p-2 sm:p-6 lg:border-t-2`;
 const FormContainer = tw.div`w-full flex-1 mt-2`;
+
+const OutNav = tw.div`font-display text-secondary-500 block overflow-hidden`;
 
 const Form = tw.form`mx-auto`;
 const InputContainer = tw.div`first:mt-0 mt-5 flex flex-col`;
@@ -106,7 +111,7 @@ const UploadPage = () => {
         (snapshot) => {
           var progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadPercent(progress);
+          setUploadPercent(progress);
           console.log("Upload is " + progress + "% done");
         },
         (err) => {
@@ -122,7 +127,8 @@ const UploadPage = () => {
               socialMedia: values.socialMedia,
               followerCount: values.followerCount,
               groupCheck: checked ? "yes" : "no",
-              otherTalent: values.talent === "others" ? values.otherTalent : "none",
+              otherTalent:
+                values.talent === "others" ? values.otherTalent : "none",
               uploadTime: new Date(),
             };
             firestore
@@ -194,223 +200,280 @@ const UploadPage = () => {
     if (localStorage.getItem("underage") === "true") {
       navigate("/contest/underage");
     }
-  })
+  });
+
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  function onSetSidebarOpen(open) {
+    setSidebarOpen(!sidebarOpen);
+  }
+
+  const [loginModal, setLoginModal] = React.useState(false);
+  function onClickLogin() {
+    setLoginModal(true);
+  }
+
+  const [signupModal, setSignupModal] = React.useState(false);
+  function onClickSignup() {
+    setSignupModal(true);
+  }
 
   return (
-    <AnimationRevealPage disabled>
-      <Nav />
-      <Container>
-        <ContainerHeading>Upload Your Video</ContainerHeading>
-        <Content>
-          <IllustrationContainer>
-            <IllustratorContent>
-              <IllustrationHeading>Rules for the video</IllustrationHeading>
-              <OL>
-                <LI>The video can be of a maximum duration of 90 seconds</LI>
-                <LI>
-                  The video must have original content and must not include any
-                  copywrite content
-                </LI>
-                <LI>
-                  The video must be self-shot or indicate the participant’s
-                  presence
-                </LI>
-                <LI>
-                  The video must be centered only on humans and any other living
-                  or non-living thing can just be used as supporting assets
-                </LI>
-                <LI>
-                  Previously shot videos can be used after removing any other
-                  platform’s watermark(if exists)
-                </LI>
-                <LI>Any harm to animals is strictly prohibited</LI>
-                <LI>Environmental harm is strictly prohibited</LI>
-              </OL>
-              <IllustrationHeading>Rules for the contest</IllustrationHeading>
-              <OL>
-                <LI>
-                  By entering the competition entrants warrant that all
-                  information submitted by them is true, current, and complete.
-                </LI>
-                <LI>
-                  Multiple entries from a single participant are allowed for
-                  each round 80% of participants from a particular round will go
-                  to the further rounds
-                </LI>
-                <LI>
-                  Only G-rated content is allowed (R rated content is strictly
-                  prohibited)
-                </LI>
-                <LI>
-                  Participants under 18 years of age must fill this parent
-                  consent form
-                </LI>
-                <LI>
-                  All rights are reserved by the T{"&"}C of WTL and any breach
-                  of the above rules will result in the debarment of the
-                  participant from the contest
-                </LI>
-                <LI>
-                  Entries submitted through agents or third parties or in bulk
-                  (i.e. more entries than a human being could submit in the time
-                  available without the use of software or other devices
-                  designed to make automated entries or, in the case of postal
-                  entries, more than one entry submitted under the same postage
-                  stamp) will not be accepted.
-                </LI>
-                <LI>
-                  Mobiwood holds all the rights for changing the rules,
-                  rejecting the videos or disqualifying any participants
-                </LI>
-                <LI>
-                  The participants will be informed via email for the same.
-                </LI>
-                <LI> All rights reserved with Mobiwood.</LI>
-              </OL>
-            </IllustratorContent>
-          </IllustrationContainer>
-          <MainContainer>
-            <FormContainer>
-              <Form onSubmit={formik.handleSubmit}>
-                <InputContainer>
-                  <Label htmlFor="talent">Talent</Label>
-                  <select
-                    defaultValue={formik.values.talent}
-                    onChange={formik.handleChange}
-                    value={formik.values.talent}
-                    name="talent"
-                    tw="w-full p-3 bg-white rounded-md font-medium border border-gray-500 text-sm focus:outline-none focus:border-gray-400"
-                  >
-                    <option value="default" disabled>
-                      Your Talent
-                    </option>
-                    <option value="acting">Acting</option>
-                    <option value="singing">Singing</option>
-                    <option value="dancing">Dancing</option>
-                    <option value="comedy">Comedy</option>
-                    <option value="music">Music</option>
-                    <option value="magic">Magic</option>
-                    <option value="acrobatics">Acrobatics</option>
-                    <option value="others">Others</option>
-                  </select>
-                  {formik.errors.talent ? (
-                    <ErrorMessage>{formik.errors.talent}</ErrorMessage>
-                  ) : null}
-                </InputContainer>
-                {formik.values.talent === "others" && (
-                  <InputContainer>
-                    <Label htmlFor="others">What's Your Talent</Label>
-                    <Input
-                      type="text"
-                      name="otherTalent"
-                      onChange={formik.handleChange}
-                      value={formik.values.otherTalent}
-                    />
-                    {formik.errors.others ? (
-                      <ErrorMessage>{formik.errors.others}</ErrorMessage>
-                    ) : null}
-                  </InputContainer>
-                )}
-                <InputContainer>
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    type="text"
-                    name="title"
-                    onChange={formik.handleChange}
-                    value={formik.values.title}
-                  />
-                  {formik.errors.title ? (
-                    <ErrorMessage>{formik.errors.title}</ErrorMessage>
-                  ) : null}
-                </InputContainer>
-                <InputContainer>
-                  <Label htmlFor="description">
-                    Write Something About the Video
-                  </Label>
-                  <InputArea
-                    type="text"
-                    name="description"
-                    onChange={formik.handleChange}
-                    value={formik.values.description}
-                  />
-                  {formik.errors.description ? (
-                    <ErrorMessage>{formik.errors.description}</ErrorMessage>
-                  ) : null}
-                </InputContainer>
-                <InputContainer>
-                  <Label htmlFor="file">Upload Video</Label>
-                  <Input
-                    type="file"
-                    name="file"
-                    onChange={uploadVideo}
-                    accept="video/mp4, video/x-m4v, video/*"
-                  />
-                  {formik.errors.file ? (
-                    <ErrorMessage>{formik.errors.file}</ErrorMessage>
-                  ) : null}
-                  {uploadPercent ? (
-                    <span>
-                      Video Upload Progress: {uploadPercent}
-                      {"%"}
-                    </span>
-                  ) : null}
-                </InputContainer>
-                <InputContainer>
-                  <Label htmlFor="socialMedia">
-                    Social Media With Highest Followers
-                  </Label>
-                  <Input
-                    type="text"
-                    name="socialMedia"
-                    onChange={formik.handleChange}
-                    value={formik.values.socialMedia}
-                  />
-                  {formik.errors.socialMedia ? (
-                    <ErrorMessage>{formik.errors.socialMedia}</ErrorMessage>
-                  ) : null}
-                </InputContainer>
-                <InputContainer>
-                  <Label htmlFor="followerCount">
-                    Follower Count on the Platform
-                  </Label>
-                  <Input
-                    type="number"
-                    name="followerCount"
-                    onChange={formik.handleChange}
-                    value={formik.values.followerCount}
-                  />
-                  {formik.errors.followerCount ? (
-                    <ErrorMessage>{formik.errors.followerCount}</ErrorMessage>
-                  ) : null}
-                </InputContainer>
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  onChange={handleCheckBox}
-                  tw="m-2 mt-4"
-                />
-                <span tw="m-2">Are you applying as a group?</span>
-                <br />
-                <span tw="font-normal text-xs">
-                  By registering, you agree to our{" "}
-                  <span tw="text-blue-500 hover:text-black hover:underline transition duration-500">
-                    Terms and Conditions{" "}
-                  </span>
-                  and{" "}
-                  <span tw="text-blue-500 hover:text-black hover:underline transition duration-500">
-                    Privacy Policy
-                  </span>
-                </span>
-                <SubmitButton type="submit">
-                  <span className="text">Register</span>
-                </SubmitButton>
-              </Form>
-            </FormContainer>
-          </MainContainer>
-        </Content>
-      </Container>
-      <Footer />
-    </AnimationRevealPage>
+    <Sidebar
+      sidebar={SideLinks}
+      open={sidebarOpen}
+      onSetOpen={onSetSidebarOpen}
+      styles={
+        isBrowser
+          ? { sidebar: { background: "#111", zIndex: 50 } }
+          : { sidebar: { background: "#111", zIndex: 50 } }
+      }
+      docked={isBrowser ? sidebarOpen : false}
+    >
+      <Sidebar
+        sidebar={SideLinksShort}
+        open={isBrowser ? !sidebarOpen : false}
+        onSetOpen={onSetSidebarOpen}
+        styles={{ sidebar: { background: "#111", zIndex: 30 } }}
+        docked={isBrowser ? !sidebarOpen : false}
+      >
+        <AnimationRevealPage disabled>
+          <Nav
+            onSetSidebarOpen={onSetSidebarOpen}
+            onClickLogin={onClickLogin}
+            onClickSignup={onClickSignup}
+          />
+          <OutNav>
+            <Container>
+              <ContainerHeading>Upload Your Video</ContainerHeading>
+              <Content>
+                <IllustrationContainer>
+                  <IllustratorContent>
+                    <IllustrationHeading>
+                      Rules for the video
+                    </IllustrationHeading>
+                    <OL>
+                      <LI>
+                        The video can be of a maximum duration of 90 seconds
+                      </LI>
+                      <LI>
+                        The video must have original content and must not
+                        include any copywrite content
+                      </LI>
+                      <LI>
+                        The video must be self-shot or indicate the
+                        participant’s presence
+                      </LI>
+                      <LI>
+                        The video must be centered only on humans and any other
+                        living or non-living thing can just be used as
+                        supporting assets
+                      </LI>
+                      <LI>
+                        Previously shot videos can be used after removing any
+                        other platform’s watermark(if exists)
+                      </LI>
+                      <LI>Any harm to animals is strictly prohibited</LI>
+                      <LI>Environmental harm is strictly prohibited</LI>
+                    </OL>
+                    <IllustrationHeading>
+                      Rules for the contest
+                    </IllustrationHeading>
+                    <OL>
+                      <LI>
+                        By entering the competition entrants warrant that all
+                        information submitted by them is true, current, and
+                        complete.
+                      </LI>
+                      <LI>
+                        Multiple entries from a single participant are allowed
+                        for each round 80% of participants from a particular
+                        round will go to the further rounds
+                      </LI>
+                      <LI>
+                        Only G-rated content is allowed (R rated content is
+                        strictly prohibited)
+                      </LI>
+                      <LI>
+                        Participants under 18 years of age must fill this parent
+                        consent form
+                      </LI>
+                      <LI>
+                        All rights are reserved by the T{"&"}C of WTL and any
+                        breach of the above rules will result in the debarment
+                        of the participant from the contest
+                      </LI>
+                      <LI>
+                        Entries submitted through agents or third parties or in
+                        bulk (i.e. more entries than a human being could submit
+                        in the time available without the use of software or
+                        other devices designed to make automated entries or, in
+                        the case of postal entries, more than one entry
+                        submitted under the same postage stamp) will not be
+                        accepted.
+                      </LI>
+                      <LI>
+                        Mobiwood holds all the rights for changing the rules,
+                        rejecting the videos or disqualifying any participants
+                      </LI>
+                      <LI>
+                        The participants will be informed via email for the
+                        same.
+                      </LI>
+                      <LI> All rights reserved with Mobiwood.</LI>
+                    </OL>
+                  </IllustratorContent>
+                </IllustrationContainer>
+                <MainContainer>
+                  <FormContainer>
+                    <Form onSubmit={formik.handleSubmit}>
+                      <InputContainer>
+                        <Label htmlFor="talent">Talent</Label>
+                        <select
+                          defaultValue={formik.values.talent}
+                          onChange={formik.handleChange}
+                          value={formik.values.talent}
+                          name="talent"
+                          tw="w-full p-3 bg-white rounded-md font-medium border border-gray-500 text-sm focus:outline-none focus:border-gray-400"
+                        >
+                          <option value="default" disabled>
+                            Your Talent
+                          </option>
+                          <option value="acting">Acting</option>
+                          <option value="singing">Singing</option>
+                          <option value="dancing">Dancing</option>
+                          <option value="comedy">Comedy</option>
+                          <option value="music">Music</option>
+                          <option value="magic">Magic</option>
+                          <option value="acrobatics">Acrobatics</option>
+                          <option value="others">Others</option>
+                        </select>
+                        {formik.errors.talent ? (
+                          <ErrorMessage>{formik.errors.talent}</ErrorMessage>
+                        ) : null}
+                      </InputContainer>
+                      {formik.values.talent === "others" && (
+                        <InputContainer>
+                          <Label htmlFor="others">What's Your Talent</Label>
+                          <Input
+                            type="text"
+                            name="otherTalent"
+                            onChange={formik.handleChange}
+                            value={formik.values.otherTalent}
+                          />
+                          {formik.errors.others ? (
+                            <ErrorMessage>{formik.errors.others}</ErrorMessage>
+                          ) : null}
+                        </InputContainer>
+                      )}
+                      <InputContainer>
+                        <Label htmlFor="title">Title</Label>
+                        <Input
+                          type="text"
+                          name="title"
+                          onChange={formik.handleChange}
+                          value={formik.values.title}
+                        />
+                        {formik.errors.title ? (
+                          <ErrorMessage>{formik.errors.title}</ErrorMessage>
+                        ) : null}
+                      </InputContainer>
+                      <InputContainer>
+                        <Label htmlFor="description">
+                          Write Something About the Video
+                        </Label>
+                        <InputArea
+                          type="text"
+                          name="description"
+                          onChange={formik.handleChange}
+                          value={formik.values.description}
+                        />
+                        {formik.errors.description ? (
+                          <ErrorMessage>
+                            {formik.errors.description}
+                          </ErrorMessage>
+                        ) : null}
+                      </InputContainer>
+                      <InputContainer>
+                        <Label htmlFor="file">Upload Video</Label>
+                        <Input
+                          type="file"
+                          name="file"
+                          onChange={uploadVideo}
+                          accept="video/mp4, video/x-m4v, video/*"
+                        />
+                        {formik.errors.file ? (
+                          <ErrorMessage>{formik.errors.file}</ErrorMessage>
+                        ) : null}
+                        {uploadPercent ? (
+                          <span>
+                            Video Upload Progress: {uploadPercent}
+                            {"%"}
+                          </span>
+                        ) : null}
+                      </InputContainer>
+                      <InputContainer>
+                        <Label htmlFor="socialMedia">
+                          Social Media With Highest Followers
+                        </Label>
+                        <Input
+                          type="text"
+                          name="socialMedia"
+                          onChange={formik.handleChange}
+                          value={formik.values.socialMedia}
+                        />
+                        {formik.errors.socialMedia ? (
+                          <ErrorMessage>
+                            {formik.errors.socialMedia}
+                          </ErrorMessage>
+                        ) : null}
+                      </InputContainer>
+                      <InputContainer>
+                        <Label htmlFor="followerCount">
+                          Follower Count on the Platform
+                        </Label>
+                        <Input
+                          type="number"
+                          name="followerCount"
+                          onChange={formik.handleChange}
+                          value={formik.values.followerCount}
+                        />
+                        {formik.errors.followerCount ? (
+                          <ErrorMessage>
+                            {formik.errors.followerCount}
+                          </ErrorMessage>
+                        ) : null}
+                      </InputContainer>
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={handleCheckBox}
+                        tw="m-2 mt-4"
+                      />
+                      <span tw="m-2">Are you applying as a group?</span>
+                      <br />
+                      <span tw="font-normal text-xs">
+                        By registering, you agree to our{" "}
+                        <span tw="text-blue-500 hover:text-black hover:underline transition duration-500">
+                          Terms and Conditions{" "}
+                        </span>
+                        and{" "}
+                        <span tw="text-blue-500 hover:text-black hover:underline transition duration-500">
+                          Privacy Policy
+                        </span>
+                      </span>
+                      <SubmitButton type="submit">
+                        <span className="text">Register</span>
+                      </SubmitButton>
+                    </Form>
+                  </FormContainer>
+                </MainContainer>
+              </Content>
+            </Container>
+          </OutNav>
+          <Footer />
+        </AnimationRevealPage>
+      </Sidebar>
+    </Sidebar>
   );
 };
 
