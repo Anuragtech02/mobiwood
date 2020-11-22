@@ -16,6 +16,9 @@ import About from "./components/pages/About";
 import Support from "./components/pages/Support";
 import Feedback from "./components/pages/Feedback";
 import Trending from "./components/pages/Trending";
+import Terms from "./components/pages/Terms";
+import Privacy from "./components/pages/Privacy";
+import Advertising from "./components/pages/Advertising";
 
 export const routes = {
   "/": () => <Home />,
@@ -44,5 +47,8 @@ export const guestRoutes = {
   "/support": () => <Support />,
   "/feedback": () => <Feedback />,
   "/trending": () => <Trending />,
+  "/terms": () => <Terms />,
+  "/privacy": () => <Privacy />,
+  "/advertising": () => <Advertising />,
   // "/profile": () => <UserDashboard />
 };

@@ -1,10 +1,10 @@
 import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
-import {css} from "styled-components/macro"; //eslint-disable-line
+import { css } from "styled-components/macro"; //eslint-disable-line
 import { Container as ContainerBase } from "./Layouts.js";
 import logo from "../../images/logo_black.jpg";
-import FacebookIcon from "../../images/facebook-icon.png"
+import FacebookIcon from "../../images/facebook-icon.png";
 import InstagramIcon from "../../images/instagram-icon.png";
 import TwitterIcon from "../../images/twitter-icon.png";
 
@@ -41,23 +41,36 @@ export default () => {
             <Link href="/about">About</Link>
             <Link href="/news">News</Link>
             <Link href="/advertising">Advertising</Link>
+            <Link href="/terms">Terms</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/support">Support</Link>
           </LinksContainer>
           <SocialLinksContainer>
-            <SocialLink href="https://www.facebook.com/MobiWood-Entertainment-107346937756581" target="_blank">
+            <SocialLink
+              href="https://www.facebook.com/MobiWood-Entertainment-107346937756581"
+              target="_blank"
+            >
               <img src={FacebookIcon} alt="Facebook" tw="h-5" />
             </SocialLink>
-            <SocialLink href="https://www.instagram.com/mobiwoodentertainment" target="_blank">
+            <SocialLink
+              href="https://www.instagram.com/mobiwoodentertainment"
+              target="_blank"
+            >
               <img src={InstagramIcon} alt="Instagram" tw="h-5" />
             </SocialLink>
-			<SocialLink href="https://twitter.com/MobiwoodE" target="_blank">
+            <SocialLink href="https://twitter.com/MobiwoodE" target="_blank">
               <img src={TwitterIcon} alt="Twitter" tw="h-5" />
             </SocialLink>
           </SocialLinksContainer>
           <CopyrightText>
-            &copy; Copyright {new Date().getFullYear()} &bull; Mobiwood - All Rights Reserved
-			<div>Powered By - <a href="https://samairawebsolutions.in/" target="_blank">Samaira Web Solutions</a></div>
+            &copy; Copyright {new Date().getFullYear()} &bull; Mobiwood - All
+            Rights Reserved
+            <div>
+              Powered By -{" "}
+              <a href="https://samairawebsolutions.in/" target="_blank">
+                Samaira Web Solutions
+              </a>
+            </div>
           </CopyrightText>
         </Row>
       </Content>
