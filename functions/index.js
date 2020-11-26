@@ -6,6 +6,9 @@ const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const path = require("path");
 const os = require("os");
 const fs = require("fs-extra");
+
+const { Firestore } = require("@google-cloud/firestore");
+
 // const ffmpeg = require("@ffmpeg-installer/ffmpeg");
 
 const THUMB_MAX_WIDTH = 300;
@@ -314,6 +317,17 @@ const THUMB_MAX_WIDTH = 300;
 //     );
 //   });
 
+const updateDb = async (filename) => {
+  const firestore = new Firestore();
+
+  const url = `https://firebasestorage.googleapis.com/v0/b/talent-e8b22.appspot.com/o/users%2Fthumb-${filename}.jpg?alt=media&token=${filename}`;
+
+  await firestore.doc(`contest/${filename}`).update({
+    thumbnail: url,
+  });
+  console.log("Thumbnail Saved Successfully :) ");
+};
+
 exports.extractThumbnail = functions.storage
   .object()
   .onFinalize(async (object) => {
@@ -353,7 +367,7 @@ exports.extractThumbnail = functions.storage
       "-vframes",
       "1",
       "-vf",
-      "scale=320:-1",
+      "scale=450:-1",
       thumbPath,
     ]).then(() => {
       destBucket
@@ -366,7 +380,8 @@ exports.extractThumbnail = functions.storage
           },
         })
         .then(() => {
-          fs.unlinkSync(workingDir);
-        });
+          updateDb(fileName);
+        })
+        .catch((err) => console.error(err));
     });
   });

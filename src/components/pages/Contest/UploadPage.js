@@ -130,6 +130,7 @@ const UploadPage = () => {
               otherTalent:
                 values.talent === "others" ? values.otherTalent : "none",
               uploadTime: new Date(),
+              thumbnail: null,
             };
             firestore
               .collection("user")
