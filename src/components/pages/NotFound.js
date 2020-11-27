@@ -28,7 +28,6 @@ import sampleImage4 from "../../images/image4.jpeg";
 import sampleImage5 from "../../images/image2.jpeg";
 import underconstuction from "../../images/underconstruction.png";
 
-
 const GridContent = tw.div` mx-auto pb-4`;
 const ThreeColumn = tw.div`flex items-center flex-row flex-wrap`;
 const Column = tw.div`flex mt-5 w-full sm:w-1/3 justify-center`;
@@ -147,10 +146,11 @@ const validate = (values) => {
 const NotFounds = () => {
   return (
     <div>
-      This is a work in progress. Why dont you check <a href = "login"> login </a> out!
+      This is a work in progress. Why dont you check <a href="login"> login </a>{" "}
+      out!
     </div>
   );
-}
+};
 
 const NotFound = ({
   socialButtons = [
@@ -357,7 +357,6 @@ const NotFound = ({
       // }
     },
   });
-  
 
   // Login Formik
 
@@ -386,13 +385,10 @@ const NotFound = ({
                   )
                   .then(function () {
                     asyncLocalStorage.setItem("username", values.username);
-                    firestore
-                      .collection("user")
-                      .doc(details.data().uid)
-                      .update({ last_login_datetime: new Date() }, 
-															  //{merge: true}
-															  
-															  );
+                    firestore.collection("user").doc(details.data().uid).update(
+                      { last_login_datetime: new Date() }
+                      //{merge: true}
+                    );
                     navigate("/contest");
                     setLoginModal(false);
                     setSignupModal(false);
@@ -435,10 +431,10 @@ const NotFound = ({
         sidebar={SideLinksShort}
         open={!isTablet && !isMobile ? !sidebarOpen : false}
         onSetOpen={onSetSidebarOpen}
-		styles={{ sidebar: { background: "#111",  zIndex: 30 } }}
+        styles={{ sidebar: { background: "#111", zIndex: 30 } }}
         docked={!isTablet && !isMobile ? !sidebarOpen : false}
       >
-        <AnimationRevealPage disabled>	
+        <AnimationRevealPage disabled>
           <Nav
             onSetSidebarOpen={onSetSidebarOpen}
             onClickLogin={onClickLogin}
@@ -446,13 +442,17 @@ const NotFound = ({
           />
           <OutNav>
             <Page tw="block text-center mt-8">
-              <h1 class="underconstruction" tw="w-full">This page is Under Construction, Please check back soon</h1>
-			  <div><a href="/" class="backtohome">Back to Home</a>
-			  </div>
+              <h1 class="underconstruction" tw="w-full">
+                This page is Under Construction, Please check back soon
+              </h1>
+              <div>
+                <a href="/" class="backtohome">
+                  Back to Home
+                </a>
+              </div>
             </Page>
-            
-            <Content>
-            </Content>
+
+            <Content></Content>
 
             {/* <BottomNavigation>
           <a href="/contest">
@@ -679,7 +679,9 @@ const NotFound = ({
                         </div>
                       </div>
                       <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
+                        By logging in you agree to our{" "}
+                        <a href="/terms-and-conditions">Terms and Conditions</a>{" "}
+                        and <a href="/policy">Privacy Policy</a>
                       </div>
                     </div>
                   </div>
@@ -792,7 +794,9 @@ const NotFound = ({
                         </div>
                       </div>
                       <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
+                        By logging in you agree to our{" "}
+                        <a href="/terms-and-conditions">Terms and Conditions</a>{" "}
+                        and <a href="/policy">Privacy Policy</a>
                       </div>
                     </div>
                   </div>

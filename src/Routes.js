@@ -27,6 +27,9 @@ export const routes = {
   "/contest/underage": () => <UnderAgeContest />,
   "/contest/upload": () => <UploadPage />,
   "/team": () => <Team />,
+  "/about": () => <About />,
+  "/privacy": () => <Privacy />,
+  "/policy": () => <Privacy />,
 };
 
 export const guestRoutes = {
@@ -49,6 +52,7 @@ export const guestRoutes = {
   "/trending": () => <Trending />,
   "/terms": () => <Terms />,
   "/privacy": () => <Privacy />,
+  "/policy": () => <Privacy />,
   "/advertising": () => <Advertising />,
   // "/profile": () => <UserDashboard />
 };

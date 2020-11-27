@@ -180,6 +180,20 @@ const validate = (values) => {
   return errors;
 };
 
+const validateLogin = (values) => {
+  const errors = {};
+  if (values.login) {
+    if (!values.username) {
+      errors.loginUsername = "Username is required";
+    }
+
+    if (!values.password) {
+      errors.loginPassword = "Password is required";
+    }
+  }
+  return errors;
+};
+
 const ContestRegister = ({
   socialButtons = [
     {
@@ -264,16 +278,16 @@ const ContestRegister = ({
         .doc(auth.currentUser.uid)
         .collection("videos")
         .doc(vid)
-        .set(data).then(() => {
+        .set(data)
+        .then(() => {
           if (underAge) {
             asyncLocalStorage.setItem("underage", "true");
             navigate("/contest/upload");
           } else {
-            asyncLocalStorage.setItem("underage", "false")
+            asyncLocalStorage.setItem("underage", "false");
             navigate("/contest/upload");
           }
-        }
-        )
+        });
     },
   });
 
@@ -467,7 +481,7 @@ const ContestRegister = ({
       password: "",
       username: "",
     },
-    validate,
+    validateLogin,
     onSubmit: (values) => {
       firestore
         .collection("username")
@@ -487,24 +501,13 @@ const ContestRegister = ({
                   )
                   .then(function () {
                     asyncLocalStorage.setItem("username", values.username);
-                    firestore
-                      .collection("user")
-                      .doc(details.data().uid)
-                      .update({ last_login_datetime: new Date() });
+                    firestore.collection("user").doc(details.data().uid).update(
+                      { last_login_datetime: new Date() }
+                      //{merge: true}
+                    );
+                    navigate("/contest");
                     setLoginModal(false);
                     setSignupModal(false);
-                    firestore
-                      .collection("user")
-                      .doc(details.data().uid)
-                      .collection("videos")
-                      .get()
-                      .then(function (vidData) {
-                        if (vidData.docs.length > 0) {
-                          localStorage.setItem("vid", uuidv4());
-                          localStorage.setItem("register", "true");
-                          navigate("/contest/upload");
-                        }
-                      });
                   })
                   .catch(function (e) {
                     console.log("Signin Error: ", e.message);
@@ -525,7 +528,7 @@ const ContestRegister = ({
     localStorage.removeItem("underage");
     const sub = auth.onAuthStateChanged(handleAuthStateChange);
     return sub;
-  });
+  }, []); //eslint-disable-line
 
   React.useEffect(() => {
     if (auth.currentUser) {
@@ -545,246 +548,249 @@ const ContestRegister = ({
     }
   });
 
-  return (<div className="leftNav">
-    <Sidebar
-      sidebar={SideLinks}
-      open={sidebarOpen}
-      onSetOpen={onSetSidebarOpen}
-      styles={
-        isBrowser
-          ? { sidebar: { background: "#111", zIndex: 40 } }
-          : { sidebar: { background: "#111", zIndex: 50 } }
-      }
-      docked={isBrowser ? sidebarOpen : false}
-    >
+  return (
+    <div className="leftNav">
       <Sidebar
-        sidebar={SideLinksShort}
-        open={isBrowser ? !sidebarOpen : false}
+        sidebar={SideLinks}
+        open={sidebarOpen}
         onSetOpen={onSetSidebarOpen}
-        styles={{ sidebar: { background: "#111", zIndex: 30 } }}
-        docked={isBrowser ? !sidebarOpen : false}
+        styles={
+          isBrowser
+            ? { sidebar: { background: "#111", zIndex: 40 } }
+            : { sidebar: { background: "#111", zIndex: 50 } }
+        }
+        docked={isBrowser ? sidebarOpen : false}
       >
-        <AnimationRevealPage disabled>
-          <Nav
-            onSetSidebarOpen={onSetSidebarOpen}
-            onClickLogin={onClickLogin}
-            onClickSignup={onClickSignup}
-          />
-          <Container>
-            <ContainerHeading>Register for Contest</ContainerHeading>
-            <Content>
-              <IllustrationContainer>
-                <IllustratorContent tw="text-center">
-                  <ReactPlayer
-                    width={widthFactor}
-                    height={heightFactor}
-                    url={Video}
-                    controls={true}
-                    className="background-grey pt"
-                  />
-                  <br />
-                  <span tw="font-bold sm:text-3xl">
-                    Watch this video to know more about World Talent League
-                  </span>
-                </IllustratorContent>
-              </IllustrationContainer>
-              <MainContainer>
-                <MainFormContainer>
-                  {formik.errors.others ? (
-                    <ErrorMessage tw="pb-10">
-                      {formik.errors.others}
-                    </ErrorMessage>
-                  ) : null}
-                  <MainForm onSubmit={formik.handleSubmit}>
-                    <InputContainer>
-                      <Label htmlFor="name">Name</Label>
-                      <MainInput
-                        type="text"
-                        name="name"
-                        onChange={formik.handleChange}
-                        value={formik.values.name}
-                      />
-                      {formik.errors.name ? (
-                        <ErrorMessage>{formik.errors.name}</ErrorMessage>
-                      ) : null}
-                    </InputContainer>
-                    <Flex>
-                      <FlexInputContainer>
-                        <Label htmlFor="username">Username</Label>
-                        <MainInput
-                          type="text"
-                          name="username"
-                          onChange={formik.handleChange}
-                          value={formik.values.username}
-                        />
-                        {formik.errors.username ? (
-                          <ErrorMessage>{formik.errors.username}</ErrorMessage>
-                        ) : null}
-                      </FlexInputContainer>
-                      <FlexInputContainer>
-                        <Label htmlFor="email">Email</Label>
-                        <MainInput
-                          type="email"
-                          name="email"
-                          onChange={formik.handleChange}
-                          value={formik.values.email}
-                        />
-                        {formik.errors.email ? (
-                          <ErrorMessage>{formik.errors.email}</ErrorMessage>
-                        ) : null}
-                      </FlexInputContainer>
-                    </Flex>
-                    <Flex>
-                      <FlexInputContainer>
-                        <Label htmlFor="number">Mobile</Label>
-                        <MainInput
-                          type="tel"
-                          name="number"
-                          onChange={formik.handleChange}
-                          value={formik.values.number}
-                        />
-                        {formik.errors.number ? (
-                          <ErrorMessage>{formik.errors.number}</ErrorMessage>
-                        ) : null}
-                      </FlexInputContainer>
-                      <FlexInputContainer>
-                        <Label htmlFor="dob">Date of Birth</Label>
-                        <MainInput
-                          type="date"
-                          name="dob"
-                          onChange={formik.handleChange}
-                          value={formik.values.dob}
-                        />
-                        {formik.errors.dob ? (
-                          <ErrorMessage>{formik.errors.dob}</ErrorMessage>
-                        ) : null}
-                      </FlexInputContainer>
-                    </Flex>
-                    <Flex>
-                      <FlexInputContainer>
-                        <Label htmlFor="gender">Gender</Label>
-                        <select
-                          type="date"
-                          name="gender"
-                          onChange={formik.handleChange}
-                          value={formik.values.gender}
-                          tw="w-full p-3 bg-white rounded-md font-medium border border-gray-500 text-sm focus:outline-none focus:border-gray-400"
-                        >
-                          <option disabled value="default">
-                            Select One
-                          </option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                          <option value="others">Others</option>
-                        </select>
-                        {formik.errors.gender ? (
-                          <ErrorMessage>{formik.errors.gender}</ErrorMessage>
-                        ) : null}
-                      </FlexInputContainer>
-                      <FlexInputContainer>
-                        <Label htmlFor="city">City</Label>
-                        <MainInput
-                          type="text"
-                          name="city"
-                          onChange={formik.handleChange}
-                          value={formik.values.city}
-                        />
-                        {formik.errors.city ? (
-                          <ErrorMessage>{formik.errors.city}</ErrorMessage>
-                        ) : null}
-                      </FlexInputContainer>
-                    </Flex>
-                    <Flex>
-                      <FlexInputContainer>
-                        <Label htmlFor="country">Country</Label>
-                        <MainInput
-                          type="text"
-                          name="country"
-                          onChange={formik.handleChange}
-                          value={formik.values.country}
-                        />
-                        {formik.errors.country ? (
-                          <ErrorMessage>{formik.errors.country}</ErrorMessage>
-                        ) : null}
-                      </FlexInputContainer>
-                      <FlexInputContainer>
-                        <Label htmlFor="pin">Pincode</Label>
-                        <MainInput
-                          type="number"
-                          name="pin"
-                          onChange={formik.handleChange}
-                          value={formik.values.pin}
-                        />
-                        {formik.errors.pin ? (
-                          <ErrorMessage>{formik.errors.pin}</ErrorMessage>
-                        ) : null}
-                      </FlexInputContainer>
-                    </Flex>
-                    <RadioFlex tw="mt-4">
-                      <RadioInput
-                        onClick={handleAgeChange}
-                        type="radio"
-                        name="ageconf"
-                        value="mt18"
-                        id="mt18"
-                        defaultChecked
-                      />
-                      <Label htmlFor="mt18" tw="font-normal text-xs">
-                        I am 18 years or above.
-                      </Label>
-                    </RadioFlex>
-                    <RadioFlex tw="sm:flex-row">
-                      <RadioInput
-                        onClick={handleAgeChange}
-                        type="radio"
-                        name="ageconf"
-                        value="lt18"
-                        id="lt18"
-                      />
-                      <Label htmlFor="lt18" tw="font-normal text-xs">
-                        I am below 18 years old.
-                      </Label>
-                    </RadioFlex>
-                    <span tw="font-normal text-xs">
-                      By registering, you agree to our{" "}
-                      <span
-                        onClick={onClickTerms}
-                        tw="cursor-pointer text-blue-500 hover:text-black hover:underline transition duration-500"
-                      >
-                        Terms and Conditions{" "}
-                      </span>
+        <Sidebar
+          sidebar={SideLinksShort}
+          open={isBrowser ? !sidebarOpen : false}
+          onSetOpen={onSetSidebarOpen}
+          styles={{ sidebar: { background: "#111", zIndex: 30 } }}
+          docked={isBrowser ? !sidebarOpen : false}
+        >
+          <AnimationRevealPage disabled>
+            <Nav
+              onSetSidebarOpen={onSetSidebarOpen}
+              onClickLogin={onClickLogin}
+              onClickSignup={onClickSignup}
+            />
+            <Container>
+              <ContainerHeading>Register for Contest</ContainerHeading>
+              <Content>
+                <IllustrationContainer>
+                  <IllustratorContent tw="text-center">
+                    <ReactPlayer
+                      width={widthFactor}
+                      height={heightFactor}
+                      url={Video}
+                      controls={true}
+                      className="background-grey pt"
+                    />
+                    <br />
+                    <span tw="font-bold sm:text-3xl">
+                      Watch this video to know more about World Talent League
                     </span>
-                    <MainSubmitButton type="submit">
-                      <span className="text">Next</span>
-                    </MainSubmitButton>
-                  </MainForm>
-                </MainFormContainer>
-              </MainContainer>
-            </Content>
-          </Container>
-          <Footer />
+                  </IllustratorContent>
+                </IllustrationContainer>
+                <MainContainer>
+                  <MainFormContainer>
+                    {formik.errors.others ? (
+                      <ErrorMessage tw="pb-10">
+                        {formik.errors.others}
+                      </ErrorMessage>
+                    ) : null}
+                    <MainForm onSubmit={formik.handleSubmit}>
+                      <InputContainer>
+                        <Label htmlFor="name">Name</Label>
+                        <MainInput
+                          type="text"
+                          name="name"
+                          onChange={formik.handleChange}
+                          value={formik.values.name}
+                        />
+                        {formik.errors.name ? (
+                          <ErrorMessage>{formik.errors.name}</ErrorMessage>
+                        ) : null}
+                      </InputContainer>
+                      <Flex>
+                        <FlexInputContainer>
+                          <Label htmlFor="username">Username</Label>
+                          <MainInput
+                            type="text"
+                            name="username"
+                            onChange={formik.handleChange}
+                            value={formik.values.username}
+                          />
+                          {formik.errors.username ? (
+                            <ErrorMessage>
+                              {formik.errors.username}
+                            </ErrorMessage>
+                          ) : null}
+                        </FlexInputContainer>
+                        <FlexInputContainer>
+                          <Label htmlFor="email">Email</Label>
+                          <MainInput
+                            type="email"
+                            name="email"
+                            onChange={formik.handleChange}
+                            value={formik.values.email}
+                          />
+                          {formik.errors.email ? (
+                            <ErrorMessage>{formik.errors.email}</ErrorMessage>
+                          ) : null}
+                        </FlexInputContainer>
+                      </Flex>
+                      <Flex>
+                        <FlexInputContainer>
+                          <Label htmlFor="number">Mobile</Label>
+                          <MainInput
+                            type="tel"
+                            name="number"
+                            onChange={formik.handleChange}
+                            value={formik.values.number}
+                          />
+                          {formik.errors.number ? (
+                            <ErrorMessage>{formik.errors.number}</ErrorMessage>
+                          ) : null}
+                        </FlexInputContainer>
+                        <FlexInputContainer>
+                          <Label htmlFor="dob">Date of Birth</Label>
+                          <MainInput
+                            type="date"
+                            name="dob"
+                            onChange={formik.handleChange}
+                            value={formik.values.dob}
+                          />
+                          {formik.errors.dob ? (
+                            <ErrorMessage>{formik.errors.dob}</ErrorMessage>
+                          ) : null}
+                        </FlexInputContainer>
+                      </Flex>
+                      <Flex>
+                        <FlexInputContainer>
+                          <Label htmlFor="gender">Gender</Label>
+                          <select
+                            type="date"
+                            name="gender"
+                            onChange={formik.handleChange}
+                            value={formik.values.gender}
+                            tw="w-full p-3 bg-white rounded-md font-medium border border-gray-500 text-sm focus:outline-none focus:border-gray-400"
+                          >
+                            <option disabled value="default">
+                              Select One
+                            </option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="others">Others</option>
+                          </select>
+                          {formik.errors.gender ? (
+                            <ErrorMessage>{formik.errors.gender}</ErrorMessage>
+                          ) : null}
+                        </FlexInputContainer>
+                        <FlexInputContainer>
+                          <Label htmlFor="city">City</Label>
+                          <MainInput
+                            type="text"
+                            name="city"
+                            onChange={formik.handleChange}
+                            value={formik.values.city}
+                          />
+                          {formik.errors.city ? (
+                            <ErrorMessage>{formik.errors.city}</ErrorMessage>
+                          ) : null}
+                        </FlexInputContainer>
+                      </Flex>
+                      <Flex>
+                        <FlexInputContainer>
+                          <Label htmlFor="country">Country</Label>
+                          <MainInput
+                            type="text"
+                            name="country"
+                            onChange={formik.handleChange}
+                            value={formik.values.country}
+                          />
+                          {formik.errors.country ? (
+                            <ErrorMessage>{formik.errors.country}</ErrorMessage>
+                          ) : null}
+                        </FlexInputContainer>
+                        <FlexInputContainer>
+                          <Label htmlFor="pin">Pincode</Label>
+                          <MainInput
+                            type="number"
+                            name="pin"
+                            onChange={formik.handleChange}
+                            value={formik.values.pin}
+                          />
+                          {formik.errors.pin ? (
+                            <ErrorMessage>{formik.errors.pin}</ErrorMessage>
+                          ) : null}
+                        </FlexInputContainer>
+                      </Flex>
+                      <RadioFlex tw="mt-4">
+                        <RadioInput
+                          onClick={handleAgeChange}
+                          type="radio"
+                          name="ageconf"
+                          value="mt18"
+                          id="mt18"
+                          defaultChecked
+                        />
+                        <Label htmlFor="mt18" tw="font-normal text-xs">
+                          I am 18 years or above.
+                        </Label>
+                      </RadioFlex>
+                      <RadioFlex tw="sm:flex-row">
+                        <RadioInput
+                          onClick={handleAgeChange}
+                          type="radio"
+                          name="ageconf"
+                          value="lt18"
+                          id="lt18"
+                        />
+                        <Label htmlFor="lt18" tw="font-normal text-xs">
+                          I am below 18 years old.
+                        </Label>
+                      </RadioFlex>
+                      <span tw="font-normal text-xs">
+                        By registering, you agree to our{" "}
+                        <span
+                          onClick={onClickTerms}
+                          tw="cursor-pointer text-blue-500 hover:text-black hover:underline transition duration-500"
+                        >
+                          Terms and Conditions{" "}
+                        </span>
+                      </span>
+                      <MainSubmitButton type="submit">
+                        <span className="text">Next</span>
+                      </MainSubmitButton>
+                    </MainForm>
+                  </MainFormContainer>
+                </MainContainer>
+              </Content>
+            </Container>
+            <Footer />
 
-          {signupModal ? (
-            <>
-              <ModalContainer>
-                <ModalContent ref={wrapperRef}>
-                  <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                      <h3 tw="text-xl font-semibold">Create New Account</h3>
-                      <button
-                        onClick={() => setSignupModal(false)}
-                        tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                      >
-                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
-                      </button>
-                    </div>
-                    {/*body*/}
-                    <div tw="relative p-6 pt-4 flex-auto">
-                      <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
-                        <div tw="w-full">
-                          <FormContainer>
-                            {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
+            {signupModal ? (
+              <>
+                <ModalContainer>
+                  <ModalContent ref={wrapperRef}>
+                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
+                        <h3 tw="text-xl font-semibold">Create New Account</h3>
+                        <button
+                          onClick={() => setSignupModal(false)}
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                        >
+                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div tw="relative p-6 pt-4 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                          <div tw="w-full">
+                            <FormContainer>
+                              {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
                               <SocialButtonsContainer>
                                 {socialButtons.map((socialButton, index) => (
                                   <SocialButton
@@ -813,346 +819,364 @@ const ContestRegister = ({
                                 <DividerText>Or Sign Up Using Mail</DividerText>
                               </DividerTextContainer>
                             )} */}
-                            <div tw="w-full sm:pl-4">
-                              {firebaseErrors.others ? (
-                                <ErrorMessage>
-                                  {firebaseErrors.others}
-                                </ErrorMessage>
-                              ) : null}
-                              <Form onSubmit={Signupformik.handleSubmit}>
-                                <div tw="flex flex-col">
-                                  <label tw="mb-1 cursor-pointer rounded p-2 bg-gray-300 text-gray-900 text-center font-semibold text-sm">
-                                    <input
-                                      type="radio"
-                                      name="age"
-                                      tw="invisible"
-                                      value="b18"
-                                      onClick={() => setRadioValue("b18")}
-                                    />
-                                    Below 18 Years
-                                  </label>
-                                  {radioValue === "b18" && (
-                                    <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
-                                  )}
-                                  <label tw="mt-1 p-2 cursor-pointer rounded bg-black text-white text-center font-semibold text-sm">
-                                    <input
-                                      type="radio"
-                                      name="age"
-                                      tw="invisible"
-                                      value="a18"
-                                      onClick={() => setRadioValue("a18")}
-                                    />
-                                    Above 18 Years
-                                  </label>
-                                  {radioValue === "a18" && (
-                                    <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
-                                  )}
-                                </div>
-                                {Signupformik.errors.name ? (
+                              <div tw="w-full sm:pl-4">
+                                {firebaseErrors.others ? (
                                   <ErrorMessage>
-                                    {Signupformik.errors.name}
+                                    {firebaseErrors.others}
                                   </ErrorMessage>
                                 ) : null}
-                                <Input
-                                  type="text"
-                                  placeholder="Name"
-                                  name="name"
-                                  autoComplete="name"
-                                  onChange={Signupformik.handleChange}
-                                  value={Signupformik.values.name}
-                                />
-                                {Signupformik.errors.email ? (
-                                  <ErrorMessage>
-                                    {Signupformik.errors.email}
-                                  </ErrorMessage>
-                                ) : null}
-                                {firebaseErrors.email ? (
-                                  <ErrorMessage>
-                                    {firebaseErrors.email}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="email"
-                                  placeholder="Email"
-                                  name="email"
-                                  autoComplete="email"
-                                  onChange={Signupformik.handleChange}
-                                  value={Signupformik.values.email}
-                                />
-                                {Signupformik.errors.username ? (
-                                  <ErrorMessage>
-                                    {Signupformik.errors.username}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="text"
-                                  placeholder="Username"
-                                  name="username"
-                                  onChange={Signupformik.handleChange}
-                                  value={Signupformik.values.username}
-                                />
-                                {Signupformik.errors.password ? (
-                                  <ErrorMessage>
-                                    {Signupformik.errors.password}
-                                  </ErrorMessage>
-                                ) : null}
-                                {firebaseErrors.password ? (
-                                  <ErrorMessage>
-                                    {firebaseErrors.password}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="password"
-                                  name="password"
-                                  placeholder="Password"
-                                  autoComplete="new-password"
-                                  onChange={Signupformik.handleChange}
-                                  value={Signupformik.values.password}
-                                />
-                                <SubmitButton
-                                  type="submit"
-                                  onClick={() => {
-                                    Signupformik.values.signup = 1;
-                                    Loginformik.values.login = 0;
-                                  }}
-                                >
-                                  <span className="text">Create Account</span>
-                                </SubmitButton>
-                              </Form>
-                            </div>
-                          </FormContainer>
+                                <Form onSubmit={Signupformik.handleSubmit}>
+                                  <div tw="flex flex-col">
+                                    <label tw="mb-1 cursor-pointer rounded p-2 bg-gray-300 text-gray-900 text-center font-semibold text-sm">
+                                      <input
+                                        type="radio"
+                                        name="age"
+                                        tw="invisible"
+                                        value="b18"
+                                        onClick={() => setRadioValue("b18")}
+                                      />
+                                      Below 18 Years
+                                    </label>
+                                    {radioValue === "b18" && (
+                                      <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
+                                    )}
+                                    <label tw="mt-1 p-2 cursor-pointer rounded bg-black text-white text-center font-semibold text-sm">
+                                      <input
+                                        type="radio"
+                                        name="age"
+                                        tw="invisible"
+                                        value="a18"
+                                        onClick={() => setRadioValue("a18")}
+                                      />
+                                      Above 18 Years
+                                    </label>
+                                    {radioValue === "a18" && (
+                                      <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
+                                    )}
+                                  </div>
+                                  {Signupformik.errors.name ? (
+                                    <ErrorMessage>
+                                      {Signupformik.errors.name}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="text"
+                                    placeholder="Name"
+                                    name="name"
+                                    autoComplete="name"
+                                    onChange={Signupformik.handleChange}
+                                    value={Signupformik.values.name}
+                                  />
+                                  {Signupformik.errors.email ? (
+                                    <ErrorMessage>
+                                      {Signupformik.errors.email}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  {firebaseErrors.email ? (
+                                    <ErrorMessage>
+                                      {firebaseErrors.email}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="email"
+                                    placeholder="Email"
+                                    name="email"
+                                    autoComplete="email"
+                                    onChange={Signupformik.handleChange}
+                                    value={Signupformik.values.email}
+                                  />
+                                  {Signupformik.errors.username ? (
+                                    <ErrorMessage>
+                                      {Signupformik.errors.username}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="text"
+                                    placeholder="Username"
+                                    name="username"
+                                    onChange={Signupformik.handleChange}
+                                    value={Signupformik.values.username}
+                                  />
+                                  {Signupformik.errors.password ? (
+                                    <ErrorMessage>
+                                      {Signupformik.errors.password}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  {firebaseErrors.password ? (
+                                    <ErrorMessage>
+                                      {firebaseErrors.password}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    autoComplete="new-password"
+                                    onChange={Signupformik.handleChange}
+                                    value={Signupformik.values.password}
+                                  />
+                                  <SubmitButton
+                                    type="submit"
+                                    onClick={() => {
+                                      Signupformik.values.signup = 1;
+                                      Loginformik.values.login = 0;
+                                    }}
+                                  >
+                                    <span className="text">Create Account</span>
+                                  </SubmitButton>
+                                </Form>
+                              </div>
+                            </FormContainer>
+                          </div>
                         </div>
-                      </div>
-                      <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
-                      </div>
-                    </div>
-                  </div>
-                </ModalContent>
-              </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-          {loginModal ? (
-            <>
-              <ModalContainer>
-                <ModalContent ref={wrapperRef}>
-                  <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                      <h3 tw="text-xl font-semibold">Log In to Your Account</h3>
-                      <button
-                        onClick={() => setLoginModal(false)}
-                        tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                      >
-                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
-                      </button>
-                    </div>
-                    {/*body*/}
-                    <div tw="relative p-6 flex-auto">
-                      <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
-                        <div tw="w-full">
-                          <FormContainer>
-                            {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
-                              <SocialButtonsContainer>
-                                {LoginsocialButtons.map(
-                                  (socialButton, index) => (
-                                    <SocialButton
-                                      key={index}
-                                      onClick={socialButton.onclick}
-                                      style={{
-                                        backgroundColor: socialButton.bg,
-                                      }}
-                                    >
-                                      <span className="iconContainer">
-                                        <img
-                                          src={socialButton.iconImageSrc}
-                                          className="icon"
-                                          alt=""
-                                        />
-                                      </span>
-                                      <span className="text">
-                                        {socialButton.text}
-                                      </span>
-                                    </SocialButton>
-                                  )
-                                )}
-                              </SocialButtonsContainer>
-                            </div>
-                            {isMobile && (
-                              <DividerTextContainer>
-                                <DividerText>
-                                  Or Log In Using Username
-                                </DividerText>
-                              </DividerTextContainer>
-                            )} */}
-                            <div tw="w-full">
-                              {firebaseErrors.others ? (
-                                <ErrorMessage>
-                                  {firebaseErrors.others}
-                                </ErrorMessage>
-                              ) : null}
-                              <Form onSubmit={Loginformik.handleSubmit}>
-                                {Loginformik.errors.loginUsername ? (
-                                  <ErrorMessage>
-                                    {Loginformik.errors.loginUsername}
-                                  </ErrorMessage>
-                                ) : null}
-                                {firebaseErrors.username ? (
-                                  <ErrorMessage>
-                                    {firebaseErrors.username}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="text"
-                                  placeholder="Username"
-                                  name="username"
-                                  value={Loginformik.values.username}
-                                  onChange={Loginformik.handleChange}
-                                />
-                                {Loginformik.errors.loginPassword ? (
-                                  <ErrorMessage>
-                                    {Loginformik.errors.loginPassword}
-                                  </ErrorMessage>
-                                ) : null}
-                                <Input
-                                  type="password"
-                                  name="password"
-                                  placeholder="Password"
-                                  autoComplete="new-password"
-                                  value={Loginformik.values.password}
-                                  onChange={Loginformik.handleChange}
-                                />
-                                <SubmitButton
-                                  type="submit"
-                                  onClick={() =>
-                                    (Loginformik.values.signup = 0)
-                                  }
-                                >
-                                  <span className="text">Log In</span>
-                                </SubmitButton>
-                              </Form>
-                            </div>
-                          </FormContainer>
-                        </div>
-                      </div>
-                      <div tw="mt-4 -mb-2 text-center text-xs">
-                        By logging in you agree to our <a href="/terms-and-conditions">Terms and Conditions</a> and <a href="/policy">Privacy Policy</a>
-                      </div>
-                    </div>
-                  </div>
-                </ModalContent>
-              </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-          {termsModal ? (
-            <>
-              <ModalContainer>
-                <ModalContent ref={wrapperRef}>
-                  <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    {/*header*/}
-                    <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                      <h3 tw="text-xl font-semibold">Terms {"&"} Conditions</h3>
-                      <button
-                        onClick={() => setTermsModal(false)}
-                        tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                      >
-                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
-                      </button>
-                    </div>
-                    {/*body*/}
-                    <div tw="relative p-6 pt-4 flex-auto">
-                      <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
-                        <div tw="w-full">
-                          <IllustrationHeading>
-                            Rules for the video
-                          </IllustrationHeading>
-                          <OL>
-                            <LI>
-                              The video can be of a maximum duration of 90
-                              seconds
-                            </LI>
-                            <LI>
-                              The video must have original content and must not
-                              include any copy-write content
-                            </LI>
-                            <LI>
-                              The video must be self-shot or indicate the
-                              participant’s presence
-                            </LI>
-                            <LI>
-                              The video must be centered only on humans and any
-                              other living or non-living thing can just be used
-                              as supporting assets
-                            </LI>
-                            <LI>
-                              Previously shot videos can be used after removing
-                              any other platform’s watermark(if exists)
-                            </LI>
-                            <LI>Any harm to animals is strictly prohibited</LI>
-                            <LI>Environmental harm is strictly prohibited</LI>
-                          </OL>
-                          <IllustrationHeading>
-                            Rules for the contest
-                          </IllustrationHeading>
-                          <OL>
-                            <LI>
-                              By entering the competition entrants warrant that
-                              all information submitted by them is true,
-                              current, and complete.
-                            </LI>
-                            <LI>
-                              Multiple entries from a single participant are
-                              allowed for each round 80% of participants from a
-                              particular round will go to the further rounds
-                            </LI>
-                            <LI>
-                              Only G-rated content is allowed (R rated content
-                              is strictly prohibited)
-                            </LI>
-                            <LI>
-                              Participants under 18 years of age must fill this
-                              parent consent form
-                            </LI>
-                            <LI>
-                              All rights are reserved by the T{"&"}C of WTL and
-                              any breach of the above rules will result in the
-                              debarment of the participant from the contest
-                            </LI>
-                            <LI>
-                              Entries submitted through agents or third parties
-                              or in bulk (i.e. more entries than a human being
-                              could submit in the time available without the use
-                              of software or other devices designed to make
-                              automated entries or, in the case of postal
-                              entries, more than one entry submitted under the
-                              same postage stamp) will not be accepted.
-                            </LI>
-                            <LI>
-                              Mobiwood holds all the rights for changing the
-                              rules, rejecting the videos or disqualifying any
-                              participants
-                            </LI>
-                            <LI>
-                              The participants will be informed via email for
-                              the same.
-                            </LI>
-                            <LI> All rights reserved with Mobiwood.</LI>
-                          </OL>
+                        <div tw="mt-4 -mb-2 text-center text-xs">
+                          By logging in you agree to our{" "}
+                          <a href="/terms-and-conditions">
+                            Terms and Conditions
+                          </a>{" "}
+                          and <a href="/policy">Privacy Policy</a>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </ModalContent>
-              </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-        </AnimationRevealPage>
+                  </ModalContent>
+                </ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {loginModal ? (
+              <>
+                <ModalContainer>
+                  <ModalContent ref={wrapperRef}>
+                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
+                        <h3 tw="text-xl font-semibold">
+                          Log In to Your Account
+                        </h3>
+                        <button
+                          onClick={() => setLoginModal(false)}
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                        >
+                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div tw="relative p-6 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                          <div tw="w-full">
+                            <FormContainer>
+                              {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
+                            <SocialButtonsContainer>
+                              {LoginsocialButtons.map(
+                                (socialButton, index) => (
+                                  <SocialButton
+                                    key={index}
+                                    onClick={socialButton.onclick}
+                                    style={{
+                                      backgroundColor: socialButton.bg,
+                                    }}
+                                  >
+                                    <span className="iconContainer">
+                                      <img
+                                        src={socialButton.iconImageSrc}
+                                        className="icon"
+                                        alt=""
+                                      />
+                                    </span>
+                                    <span className="text">
+                                      {socialButton.text}
+                                    </span>
+                                  </SocialButton>
+                                )
+                              )}
+                            </SocialButtonsContainer>
+                          </div>
+                          {isMobile && (
+                            <DividerTextContainer>
+                              <DividerText>
+                                Or Log In Using Username
+                              </DividerText>
+                            </DividerTextContainer>
+                          )} */}
+                              <div tw="w-full">
+                                {firebaseErrors.others ? (
+                                  <ErrorMessage>
+                                    {firebaseErrors.others}
+                                  </ErrorMessage>
+                                ) : null}
+                                <Form onSubmit={Loginformik.handleSubmit}>
+                                  {Loginformik.errors.loginUsername ? (
+                                    <ErrorMessage>
+                                      {Loginformik.errors.loginUsername}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  {firebaseErrors.username ? (
+                                    <ErrorMessage>
+                                      {firebaseErrors.username}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="text"
+                                    placeholder="Username"
+                                    name="username"
+                                    value={Loginformik.values.username}
+                                    onChange={Loginformik.handleChange}
+                                  />
+                                  {Loginformik.errors.loginPassword ? (
+                                    <ErrorMessage>
+                                      {Loginformik.errors.loginPassword}
+                                    </ErrorMessage>
+                                  ) : null}
+                                  <Input
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    autoComplete="new-password"
+                                    value={Loginformik.values.password}
+                                    onChange={Loginformik.handleChange}
+                                  />
+                                  <SubmitButton
+                                    type="submit"
+                                    onClick={() =>
+                                      (Loginformik.values.signup = 0)
+                                    }
+                                  >
+                                    <span className="text">Log In</span>
+                                  </SubmitButton>
+                                </Form>
+                              </div>
+                            </FormContainer>
+                          </div>
+                        </div>
+                        <div tw="mt-4 -mb-2 text-center text-xs">
+                          By logging in you agree to our{" "}
+                          <a href="/terms-and-conditions">
+                            Terms and Conditions
+                          </a>{" "}
+                          and <a href="/policy">Privacy Policy</a>
+                        </div>
+                      </div>
+                    </div>
+                  </ModalContent>
+                </ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {termsModal ? (
+              <>
+                <ModalContainer>
+                  <ModalContent ref={wrapperRef}>
+                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
+                        <h3 tw="text-xl font-semibold">
+                          Terms {"&"} Conditions
+                        </h3>
+                        <button
+                          onClick={() => setTermsModal(false)}
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                        >
+                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div tw="relative p-6 pt-4 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                          <div tw="w-full">
+                            <IllustrationHeading>
+                              Rules for the video
+                            </IllustrationHeading>
+                            <OL>
+                              <LI>
+                                The video can be of a maximum duration of 90
+                                seconds
+                              </LI>
+                              <LI>
+                                The video must have original content and must
+                                not include any copy-write content
+                              </LI>
+                              <LI>
+                                The video must be self-shot or indicate the
+                                participant’s presence
+                              </LI>
+                              <LI>
+                                The video must be centered only on humans and
+                                any other living or non-living thing can just be
+                                used as supporting assets
+                              </LI>
+                              <LI>
+                                Previously shot videos can be used after
+                                removing any other platform’s watermark(if
+                                exists)
+                              </LI>
+                              <LI>
+                                Any harm to animals is strictly prohibited
+                              </LI>
+                              <LI>Environmental harm is strictly prohibited</LI>
+                            </OL>
+                            <IllustrationHeading>
+                              Rules for the contest
+                            </IllustrationHeading>
+                            <OL>
+                              <LI>
+                                By entering the competition entrants warrant
+                                that all information submitted by them is true,
+                                current, and complete.
+                              </LI>
+                              <LI>
+                                Multiple entries from a single participant are
+                                allowed for each round 80% of participants from
+                                a particular round will go to the further rounds
+                              </LI>
+                              <LI>
+                                Only G-rated content is allowed (R rated content
+                                is strictly prohibited)
+                              </LI>
+                              <LI>
+                                Participants under 18 years of age must fill
+                                this parent consent form
+                              </LI>
+                              <LI>
+                                All rights are reserved by the T{"&"}C of WTL
+                                and any breach of the above rules will result in
+                                the debarment of the participant from the
+                                contest
+                              </LI>
+                              <LI>
+                                Entries submitted through agents or third
+                                parties or in bulk (i.e. more entries than a
+                                human being could submit in the time available
+                                without the use of software or other devices
+                                designed to make automated entries or, in the
+                                case of postal entries, more than one entry
+                                submitted under the same postage stamp) will not
+                                be accepted.
+                              </LI>
+                              <LI>
+                                Mobiwood holds all the rights for changing the
+                                rules, rejecting the videos or disqualifying any
+                                participants
+                              </LI>
+                              <LI>
+                                The participants will be informed via email for
+                                the same.
+                              </LI>
+                              <LI> All rights reserved with Mobiwood.</LI>
+                            </OL>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ModalContent>
+                </ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+          </AnimationRevealPage>
+        </Sidebar>
       </Sidebar>
-    </Sidebar>
-  </div>);
+    </div>
+  );
 };
 
 export default ContestRegister;
