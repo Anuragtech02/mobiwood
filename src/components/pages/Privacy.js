@@ -62,61 +62,13 @@ const ErrorMessage = tw.div`text-red-600 -mb-2 mt-3`;
 
 const validate = (values) => {
   const errors = {};
-  if (!values.signup && !values.login) {
-    if (!auth.currentUser) {
-      errors.others = "You need to login or signup first";
-    }
-
+  if (values.signup) {
     if (!values.name) {
-      errors.name = "Name Required";
-    }
-
-    if (!values.username) {
-      errors.username = "Username Required";
-    } else if (values.username !== localStorage.getItem("username")) {
-      errors.username = "Use the username used to sign in";
+      errors.name = "Please Enter Name";
     }
 
     if (!values.email) {
-      errors.email = "Email Required";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-      errors.email = "Invalid email address";
-    }
-
-    if (!values.dob) {
-      errors.dob = "Date of Birth Required";
-    }
-
-    if (!values.gender) {
-      errors.gender = "Gender Required";
-    }
-
-    if (!values.number) {
-      errors.number = "Phone Number Required";
-    } else if (!values.number.match(/^\d{10}$/)) {
-      errors.number = "Invalid Phone Number. 10 Digits Required";
-    }
-
-    if (!values.city) {
-      errors.city = "City Required";
-    }
-
-    if (!values.country) {
-      errors.country = "Country Required";
-    }
-
-    if (!values.pin) {
-      errors.pin = "Pin Required";
-    }
-  } else if (values.signup) {
-    if (!values.name) {
-      errors.name = "Name Required";
-    }
-
-    if (!values.email) {
-      errors.email = "Email Required";
+      errors.email = "Please Enter Email";
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
     ) {
@@ -124,7 +76,7 @@ const validate = (values) => {
     }
 
     if (!values.username) {
-      errors.username = "Username is required";
+      errors.username = "Please Enter Username";
     } else {
       firestore
         .collection("username")
@@ -138,17 +90,18 @@ const validate = (values) => {
     }
 
     if (!values.password) {
-      errors.password = "Password is required";
+      errors.password = "Please Enter Password";
     }
-  } else if (values.login) {
+  } else {
     if (!values.username) {
-      errors.loginUsername = "Username is required";
+      errors.loginUsername = "Please Enter Username";
     }
 
     if (!values.password) {
-      errors.loginPassword = "Password is required";
+      errors.loginPassword = "Please Enter Password";
     }
   }
+
   return errors;
 };
 
