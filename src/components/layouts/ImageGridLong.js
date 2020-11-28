@@ -155,20 +155,22 @@ export default (props) => {
               <ModalContent ref={wrapperRef}>
                 <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
-                  <div tw="flex items-start justify-between py-3 px-5  border-gray-300 rounded-t hidden">
+                  <div tw="flex items-start justify-between px-5  border-gray-300 rounded-t">
                     <h3 tw="text-xl font-semibold hidden">
                       {cardDetails.title}
                     </h3>
-                    <button
-                      onClick={() => {
-                        setShowModal(false);
-                        setCardDetails({});
-                        setAuthor(null);
-                      }}
-                      tw="p-1 ml-auto hidden bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                    >
-                      <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
-                    </button>
+                    <span class="vid-close-btn">
+                      <button
+                        onClick={() => {
+                          setShowModal(false);
+                          setCardDetails({});
+                          setAuthor(null);
+                        }}
+                        tw="p-1 ml-auto  bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                      >
+                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                      </button>
+                    </span>
                   </div>
                   {/*body*/}
                   <div tw="relative p-2 flex-auto">
