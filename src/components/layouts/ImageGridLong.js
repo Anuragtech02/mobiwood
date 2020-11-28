@@ -10,6 +10,7 @@ import { ReactComponent as DisLikeIcon } from "feather-icons/dist/icons/thumbs-d
 import { ReactComponent as Share } from "feather-icons/dist/icons/share.svg";
 import { ReactComponent as Comment } from "feather-icons/dist/icons/message-square.svg";
 import { ReactComponent as Report } from "feather-icons/dist/icons/flag.svg";
+import "../../ImageGrid.css";
 
 import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
@@ -58,9 +59,8 @@ export default (props) => {
     let ids = [];
     const vidRef = firestore
       .collection("contest")
-      .orderBy("uploadTime", "desc")
-      //.limit(16)
-	  ;
+      .orderBy("uploadTime", "desc");
+    //.limit(16)
     const activeref = await vidRef.get();
     activeref.forEach((collection) => {
       tmp.push(collection.data());
@@ -93,14 +93,18 @@ export default (props) => {
   }
 
   // function addLike(index) {
-    // firestore.collection("contest").doc(id[index]).update({
-    //   views: firebase.firestore.FieldValue.increment(1)
-    // });
+  // firestore.collection("contest").doc(id[index]).update({
+  //   views: firebase.firestore.FieldValue.increment(1)
+  // });
   // }
 
   function handleCardClick(post) {
     setCardDetails(post);
-    firestore.collection("user").doc(post.userid).get().then((vals) => setAuthor(vals.data().name));
+    firestore
+      .collection("user")
+      .doc(post.userid)
+      .get()
+      .then((vals) => setAuthor(vals.data().name));
   }
 
   return (
@@ -121,8 +125,24 @@ export default (props) => {
                   }}
                 >
                   <Image>
-				  
-				  <VideoThumbnail videoUrl={post.videoUrl}  snapshotAtTime={3}  />
+                    {post.thumbnail ? (
+                      <>
+                        {/* <div
+                        className="thumbnail-container"
+                        style={{ backgroundImage: `url(${post.thumbnail})` }}
+                      ></div> */}
+                        <img
+                          className="thumbnail"
+                          src={post.thumbnail}
+                          alt={post.title}
+                        />
+                      </>
+                    ) : (
+                      <VideoThumbnail
+                        videoUrl={post.videoUrl}
+                        snapshotAtTime={3}
+                      />
+                    )}
                   </Image>
                   {/* const Image = tw.div`bg-cover bg-center h-40width sm:h-28width lg:h-24width xl:h-18width rounded overflow-hidden`; */}
                 </Card>
@@ -136,7 +156,9 @@ export default (props) => {
                 <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
                   <div tw="flex items-start justify-between py-3 px-5  border-gray-300 rounded-t hidden">
-                    <h3 tw="text-xl font-semibold hidden">{cardDetails.title}</h3>
+                    <h3 tw="text-xl font-semibold hidden">
+                      {cardDetails.title}
+                    </h3>
                     <button
                       onClick={() => {
                         setShowModal(false);
@@ -151,21 +173,49 @@ export default (props) => {
                   {/*body*/}
                   <div tw="relative p-2 flex-auto">
                     <div tw="text-gray-600 text-lg leading-relaxed bg-black">
-					<div class="player">
-                      <ReactPlayer 
-					   config={{ file: { attributes: {  controlsList: 'nodownload' } } }}
-					   
-                        url={cardDetails.videoUrl}
-                        controls={true}
-                        playing={true}
-                        width={vw < 730 ? vw - 60 : 640}
-                        height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
-                      />
-					  </div>
-                      <div tw="pl-5 pb-4 text-base text-white"><a href="#" class="author-link">{author}</a> <a href="#" class="video-follow-btn">Follow</a></div>
-                     
+                      <div class="player">
+                        <ReactPlayer
+                          config={{
+                            file: {
+                              attributes: { controlsList: "nodownload" },
+                            },
+                          }}
+                          url={cardDetails.videoUrl}
+                          controls={true}
+                          playing={true}
+                          width={vw < 730 ? vw - 60 : 640}
+                          height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
+                        />
+                      </div>
+                      <div tw="pl-5 pb-4 text-base text-white">
+                        <a href="#" class="author-link">
+                          {author}
+                        </a>{" "}
+                        <a href="#" class="video-follow-btn">
+                          Follow
+                        </a>
+                      </div>
                     </div>
-					 <div tw="flex mt-2 pl-2"><div class="video-actions"><a><LikeIcon tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a><Comment tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a><Share tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a class="report-video-link"><Report tw="w-4 mr-1"/> <span class="reporttxt">Report</span></a></div></div>
+                    <div tw="flex mt-2 pl-2">
+                      <div class="video-actions">
+                        <a>
+                          <LikeIcon tw="w-4 mr-1" />{" "}
+                          <span class="video-like-count">0</span>
+                        </a>{" "}
+                        <a>
+                          <Comment tw="w-4 mr-1" />{" "}
+                          <span class="video-like-count">0</span>
+                        </a>{" "}
+                        <a>
+                          <Share tw="w-4 mr-1" />{" "}
+                          <span class="video-like-count">0</span>
+                        </a>{" "}
+                        <a class="report-video-link">
+                          <Report tw="w-4 mr-1" />{" "}
+                          <span class="reporttxt">Report</span>
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </ModalContent>
@@ -173,7 +223,6 @@ export default (props) => {
             <OutModal></OutModal>
           </>
         ) : null}
-		
       </Content>
     </Container>
   );
