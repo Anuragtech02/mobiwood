@@ -15,6 +15,7 @@ import { auth, firestore } from "../../firebase.config";
 import googleIconImageSrc from "../../images/google-icon.png";
 import twitterIconImageSrc from "../../images/twitter-icon.png";
 import facebookIconImageSrc from "../../images/facebook-icon.png";
+
 import { isBrowser, isMobile, isTablet } from "react-device-detect";
 import { SideLinks, SideLinksShort } from "../layouts/SideLinks";
 import { useFormik } from "formik";

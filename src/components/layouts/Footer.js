@@ -1,12 +1,13 @@
 import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
-import { css } from "styled-components/macro"; //eslint-disable-line
+import { css } from "styled-components/macro"; //eslint-disable-line 
 import { Container as ContainerBase } from "./Layouts.js";
 import logo from "../../images/logo_black.jpg";
 import FacebookIcon from "../../images/facebook-icon.png";
 import InstagramIcon from "../../images/instagram-icon.png";
 import TwitterIcon from "../../images/twitter-icon.png";
+import YoutubeIcon from "../../images/youtube-icon.png";
 
 const Container = tw(ContainerBase)`max-w-screen bg-primary-900 text-gray-100`;
 const Content = tw.div`max-w-screen-xl mx-auto py-8`;
@@ -60,6 +61,9 @@ export default () => {
             </SocialLink>
             <SocialLink href="https://twitter.com/MobiwoodE" target="_blank">
               <img src={TwitterIcon} alt="Twitter" tw="h-5" />
+            </SocialLink>
+			<SocialLink href="https://www.youtube.com/channel/UCHIDY2PMNb7Czfck_dARl-w" target="_blank">
+              <img src={YoutubeIcon} alt="Youtube" tw="h-5" />
             </SocialLink>
           </SocialLinksContainer>
           <CopyrightText>

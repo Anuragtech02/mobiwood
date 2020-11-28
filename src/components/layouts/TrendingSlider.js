@@ -10,6 +10,15 @@ import Image3 from "../../images/slider3.jpg";
 import Image4 from "../../images/slider4.jpg";
 import Image5 from "../../images/slider5.jpg";
 import Image6 from "../../images/slider6.jpg";
+import Image8 from "../../images/slider8.jpg";
+import Image9 from "../../images/slider9.jpg";
+import Image10 from "../../images/slider10.jpg";
+import Image11 from "../../images/slider11.jpg";
+import Image12 from "../../images/slider12.jpg";
+import Image13 from "../../images/slider13.jpg";
+import Image14 from "../../images/slider14.jpg";
+import Image15 from "../../images/slider15.jpg";
+
 import "../css/slider.css";
 
 const Container = tw.div`relative overflow-hidden`;
@@ -69,63 +78,90 @@ const VideoGrid = ({ gridHeading = (props) => props.gridHeading }) => {
       postId: "1",
       postImageSrc: Image7,
       title: "Enjoying the beach life while on a vacation",
-      description:
-        "Lorem ipsum dolor sit amet, consecteturious adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua now ele.",
-      authorName: "Adam Cuppy",
       url: "/v",
     },
     {
       postId: "2",
       postImageSrc: Image2,
       title: "Getting the most out of your vacation",
-      description:
-        "Lorem ipsum dolor sit amet, consecteturious adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua now ele.",
-      authorName: "Aaron Patterson",
       url: "/v",
     },
     {
       postId: "3",
       postImageSrc: Image3,
       title: "Choosing the perfect Safaris in Africa",
-      description:
-        "Lorem ipsum dolor sit amet, consecteturious adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua now ele.",
-      authorName: "Sam Phipphen",
       url: "/v",
     },
     {
       postId: "4",
       postImageSrc: Image4,
       title: "Hiking during the monsoon in Asia",
-      description:
-        "Lorem ipsum dolor sit amet, consecteturious adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua now ele.",
-      authorName: "Tony Hawk",
       url: "/v",
     },
     {
       postId: "5",
       postImageSrc: Image5,
       title: "Must carry items while travelling to Thailand",
-      description:
-        "Lorem ipsum dolor sit amet, consecteturious adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua now ele.",
-      authorName: "Himali Turn",
       url: "/v",
     },
     {
       postId: "6",
       postImageSrc: Image6,
       title: "Hiking during the monsoon in Asia",
-      description:
-        "Lorem ipsum dolor sit amet, consecteturious adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua now ele.",
-      authorName: "Tony Hawk",
       url: "/v",
     },
 	{
-      postId: "6",
-      postImageSrc: Image6,
+      postId: "7",
+      postImageSrc: Image7,
       title: "Hiking during the monsoon in Asia",
-      description:
-        "Lorem ipsum dolor sit amet, consecteturious adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua now ele.",
-      authorName: "Tony Hawk",
+      url: "/v",
+    },
+	{
+      postId: "8",
+      postImageSrc: Image8,
+      title: "Hiking during the monsoon in Asia",
+      url: "/v",
+    },
+	{
+      postId: "9",
+      postImageSrc: Image9,
+      title: "Hiking during the monsoon in Asia",
+      url: "/v",
+    },
+	{
+      postId: "10",
+      postImageSrc: Image10,
+      title: "Hiking during the monsoon in Asia",
+      url: "/v",
+    },
+	{
+      postId: "11",
+      postImageSrc: Image11,
+      title: "Hiking during the monsoon in Asia",
+      url: "/v",
+    },
+	{
+      postId: "12",
+      postImageSrc: Image12,
+      title: "Hiking during the monsoon in Asia",
+      url: "/v",
+    },
+	{
+      postId: "13",
+      postImageSrc: Image13,
+      title: "Hiking during the monsoon in Asia",
+      url: "/v",
+    },
+	{
+      postId: "14",
+      postImageSrc: Image14,
+      title: "Hiking during the monsoon in Asia",
+      url: "/v",
+    },
+	{
+      postId: "15",
+      postImageSrc: Image15,
+      title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
   ];

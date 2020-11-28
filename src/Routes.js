@@ -11,7 +11,7 @@ import UploadPage from "./components/pages/Contest/UploadPage";
 import ContestRegister from "./components/pages/Contest/ContestRegister";
 import UnderAgeContest from "./components/pages/Contest/UnderAgeContest";
 import Team from "./components/pages/Team";
-// import UserDashboard from "./components/pages/UserDashboard";
+import UserDashboard from "./components/pages/UserDashboard";
 import About from "./components/pages/About";
 import Support from "./components/pages/Support";
 import Feedback from "./components/pages/Feedback";
@@ -54,5 +54,5 @@ export const guestRoutes = {
   "/privacy": () => <Privacy />,
   "/policy": () => <Privacy />,
   "/advertising": () => <Advertising />,
-  // "/profile": () => <UserDashboard />
+   "/profile": () => <UserDashboard />
 };

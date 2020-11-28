@@ -10,6 +10,7 @@ import { ReactComponent as DisLikeIcon } from "feather-icons/dist/icons/thumbs-d
 import { ReactComponent as Share } from "feather-icons/dist/icons/share.svg";
 import { ReactComponent as Comment } from "feather-icons/dist/icons/message-square.svg";
 import { ReactComponent as Report } from "feather-icons/dist/icons/flag.svg";
+import { ReactComponent as EyeIcon } from "feather-icons/dist/icons/eye.svg";
 import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
 import "../../ImageGrid.css";
@@ -207,6 +208,10 @@ export default (props) => {
                         </a>{" "}
                         <a>
                           <Share tw="w-4 mr-1" />{" "}
+                          <span class="video-like-count">0</span>
+                        </a>{" "}
+						<a>
+                          <EyeIcon tw="w-4 mr-1" />{" "}
                           <span class="video-like-count">0</span>
                         </a>{" "}
                         <a class="report-video-link">

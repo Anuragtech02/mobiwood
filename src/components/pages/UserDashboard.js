@@ -10,6 +10,7 @@ import { ReactComponent as DollarIcon } from "feather-icons/dist/icons/dollar-si
 import { ReactComponent as EyeIcon } from "feather-icons/dist/icons/eye.svg";
 import { ReactComponent as ShareIcon } from "feather-icons/dist/icons/send.svg";
 import { ReactComponent as GraphIcon } from "feather-icons/dist/icons/trending-up.svg";
+import { ReactComponent as Comment } from "feather-icons/dist/icons/message-square.svg";
 import Footer from "../layouts/Footer";
 import { css } from "styled-components/macro"; //eslint-disable-line
 
@@ -24,7 +25,7 @@ const Location = tw.div`flex flex-row text-sm -ml-1`;
 const Age = tw.div`text-sm m-2 ml-1`;
 const AwardInfo = tw.div`my-2 w-full flex flex-col sm:flex-row justify-between border-b border-gray-400`;
 const Award = tw.div`sm:w-1/3 my-3 flex flex-row justify-between sm:justify-start`;
-const AwardText = tw.div`mr-2 text-right sm:text-left sm:ml-12`;
+const AwardText = tw.div`mr-2 text-right sm:text-left sm:ml-4`;
 const Line1 = tw.div`font-semibold`;
 const Line2 = tw.div``;
 
@@ -36,11 +37,11 @@ const ProfileImage = styled.div((props) => [
   tw`bg-cover bg-center h-28 w-28 rounded-full mx-2`,
 ]);
 
-const Flex = tw.div`flex flex-col lg:flex-row border-b border-gray-400  last:border-b-0`;
+const Flex = tw.div`flex flex-col lg:flex-row border-gray-400  last:border-b-0`;
 
 const Data = tw.div`py-5`;
 const DataHeading = tw.div`sm:mx-4 mb-4 mt-2 flex flex-row font-bold text-gray-900`;
-const DataTable = tw.div`bg-white flex flex-col shadow sm:mx-4`;
+const DataTable = tw.div` flex flex-col shadow sm:mx-4`;
 const Row = tw.div`p-3 flex first:border-t border-b flex-row justify-between`;
 const Col = tw.div`text-xs`;
 
@@ -165,20 +166,20 @@ const UserDashboard = () => {
             <RightContent>
               <Data>
                 <DataHeading>
-                  <GraphIcon />
-                  &nbsp; Position on Chart
+                  <Comment />
+                  &nbsp; Comments
                 </DataHeading>
                 <DataTable>
                   <Row>
-                    <Col>Video 1</Col>
+                    <Col>This Month</Col>
                     <Col>700</Col>
                   </Row>
                   <Row>
-                    <Col>Video 2</Col>
+                    <Col>Previous Month</Col>
                     <Col>400</Col>
                   </Row>
                   <Row>
-                    <Col>Video 3</Col>
+                    <Col>Two Month Ago</Col>
                     <Col>100</Col>
                   </Row>
                 </DataTable>
@@ -254,6 +255,28 @@ const UserDashboard = () => {
                 </DataTable>
               </Data>
             </LeftContent>
+			<RightContent>
+              <Data>
+                <DataHeading>
+                  <GraphIcon />
+                  &nbsp; Position on Chart
+                </DataHeading>
+                <DataTable>
+                  <Row>
+                    <Col>Video 1</Col>
+                    <Col>700</Col>
+                  </Row>
+                  <Row>
+                    <Col>Video 2</Col>
+                    <Col>400</Col>
+                  </Row>
+                  <Row>
+                    <Col>Video 3</Col>
+                    <Col>100</Col>
+                  </Row>
+                </DataTable>
+              </Data>
+            </RightContent>
           </Flex>
         </RightContent>
       </Content>
