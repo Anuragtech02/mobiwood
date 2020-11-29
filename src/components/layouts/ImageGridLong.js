@@ -10,14 +10,10 @@ import { ReactComponent as DisLikeIcon } from "feather-icons/dist/icons/thumbs-d
 import { ReactComponent as Share } from "feather-icons/dist/icons/share.svg";
 import { ReactComponent as Comment } from "feather-icons/dist/icons/message-square.svg";
 import { ReactComponent as Report } from "feather-icons/dist/icons/flag.svg";
-<<<<<<< HEAD
 import { ReactComponent as EyeIcon } from "feather-icons/dist/icons/eye.svg";
-=======
-import "../../ImageGrid.css";
->>>>>>> 4aa2412e2ec119367400bc3b4c5cb3cd8d531903
-
 import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
+import "../../ImageGrid.css";
 
 const Container = tw.div`relative`;
 const Content = tw.div` -mx-2 py-2`;
@@ -63,8 +59,9 @@ export default (props) => {
     let ids = [];
     const vidRef = firestore
       .collection("contest")
-      .orderBy("uploadTime", "desc");
-    //.limit(16)
+      .orderBy("uploadTime", "desc")
+      //.limit(16)
+	  ;
     const activeref = await vidRef.get();
     activeref.forEach((collection) => {
       tmp.push(collection.data());
@@ -97,18 +94,14 @@ export default (props) => {
   }
 
   // function addLike(index) {
-  // firestore.collection("contest").doc(id[index]).update({
-  //   views: firebase.firestore.FieldValue.increment(1)
-  // });
+    // firestore.collection("contest").doc(id[index]).update({
+    //   views: firebase.firestore.FieldValue.increment(1)
+    // });
   // }
 
   function handleCardClick(post) {
     setCardDetails(post);
-    firestore
-      .collection("user")
-      .doc(post.userid)
-      .get()
-      .then((vals) => setAuthor(vals.data().name));
+    firestore.collection("user").doc(post.userid).get().then((vals) => setAuthor(vals.data().name));
   }
 
   return (
@@ -129,24 +122,8 @@ export default (props) => {
                   }}
                 >
                   <Image>
-                    {post.thumbnail ? (
-                      <>
-                        {/* <div
-                        className="thumbnail-container"
-                        style={{ backgroundImage: `url(${post.thumbnail})` }}
-                      ></div> */}
-                        <img
-                          className="thumbnail"
-                          src={post.thumbnail}
-                          alt={post.title}
-                        />
-                      </>
-                    ) : (
-                      <VideoThumbnail
-                        videoUrl={post.videoUrl}
-                        snapshotAtTime={3}
-                      />
-                    )}
+				  
+				  <VideoThumbnail videoUrl={post.videoUrl}  snapshotAtTime={3}  />
                   </Image>
                   {/* const Image = tw.div`bg-cover bg-center h-40width sm:h-28width lg:h-24width xl:h-18width rounded overflow-hidden`; */}
                 </Card>
@@ -160,72 +137,38 @@ export default (props) => {
                 <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
                   <div tw="flex items-start justify-between px-5  border-gray-300 rounded-t">
-                    <h3 tw="text-xl font-semibold hidden">
-                      {cardDetails.title}
-                    </h3>
+                    <h3 tw="text-xl font-semibold hidden">{cardDetails.title}</h3>
                     <span class="vid-close-btn">
-                      <button
-                        onClick={() => {
-                          setShowModal(false);
-                          setCardDetails({});
-                          setAuthor(null);
-                        }}
-                        tw="p-1 ml-auto  bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                      >
-                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
-                      </button>
-                    </span>
+					<button
+                      onClick={() => {
+                        setShowModal(false);
+                        setCardDetails({});
+                        setAuthor(null);
+                      }}
+                      tw="p-1 ml-auto  bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                    >
+                      <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                    </button>
+					</span>
                   </div>
                   {/*body*/}
                   <div tw="relative p-2 flex-auto">
                     <div tw="text-gray-600 text-lg leading-relaxed bg-black">
-                      <div class="player">
-                        <ReactPlayer
-                          config={{
-                            file: {
-                              attributes: { controlsList: "nodownload" },
-                            },
-                          }}
-                          url={cardDetails.videoUrl}
-                          controls={true}
-                          playing={true}
-                          width={vw < 730 ? vw - 60 : 640}
-                          height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
-                        />
-                      </div>
-                      <div tw="pl-5 pb-4 text-base text-white">
-                        <a href="#" class="author-link">
-                          {author}
-                        </a>{" "}
-                        <a href="#" class="video-follow-btn">
-                          Follow
-                        </a>
-                      </div>
+					<div class="player">
+                      <ReactPlayer 
+					   config={{ file: { attributes: {  controlsList: 'nodownload' } } }}
+					   
+                        url={cardDetails.videoUrl}
+                        controls={true}
+                        playing={true}
+                        width={vw < 730 ? vw - 60 : 640}
+                        height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
+                      />
+					  </div>
+                      <div tw="pl-5 pb-4 text-base text-white"><a href="#" class="author-link">{author}</a> <a href="#" class="video-follow-btn">Follow</a></div>
+                     
                     </div>
-                    <div tw="flex mt-2 pl-2">
-                      <div class="video-actions">
-                        <a>
-                          <LikeIcon tw="w-4 mr-1" />{" "}
-                          <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a>
-                          <Comment tw="w-4 mr-1" />{" "}
-                          <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a>
-                          <Share tw="w-4 mr-1" />{" "}
-                          <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a class="report-video-link">
-                          <Report tw="w-4 mr-1" />{" "}
-                          <span class="reporttxt">Report</span>
-                        </a>
-                      </div>
-                    </div>
-<<<<<<< HEAD
 					 <div tw="flex mt-2 pl-2"><div class="video-actions"><a><LikeIcon tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a><Comment tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a><Share tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a><EyeIcon tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a class="report-video-link"><Report tw="w-4 mr-1"/> <span class="reporttxt">Report</span></a></div></div>
-=======
->>>>>>> 4aa2412e2ec119367400bc3b4c5cb3cd8d531903
                   </div>
                 </div>
               </ModalContent>
@@ -233,6 +176,7 @@ export default (props) => {
             <OutModal></OutModal>
           </>
         ) : null}
+		
       </Content>
     </Container>
   );

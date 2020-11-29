@@ -15,7 +15,7 @@ import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
 import "../../ImageGrid.css";
 
-const Container = tw.div`relative`;
+const Container = tw.div`relative`; 
 const Content = tw.div` -mx-2 py-2`;
 const ThreeColumn = tw.div`flex items-center flex-row flex-wrap`;
 const Column = tw.div`mb-2 w-1/2 sm:w-1/3 xl:w-1/4`;
@@ -126,17 +126,10 @@ export default (props) => {
                 >
                   <Image>
                     {post.thumbnail ? (
-                      <>
-                        {/* <div
+                      <div
                         className="thumbnail-container"
                         style={{ backgroundImage: `url(${post.thumbnail})` }}
-                      ></div> */}
-                        <img
-                          className="thumbnail"
-                          src={post.thumbnail}
-                          alt={post.title}
-                        />
-                      </>
+                      ></div>
                     ) : (
                       <VideoThumbnail
                         videoUrl={post.videoUrl}
@@ -161,18 +154,18 @@ export default (props) => {
                     <h3 tw="text-xl font-semibold hidden">
                       {cardDetails.title}
                     </h3>
-                    <span class="vid-close-btn">
-                      <button
-                        onClick={() => {
-                          setShowModal(false);
-                          setCardDetails({});
-                          setAuthor(null);
-                        }}
-                        tw="p-1 ml-auto bg-transparent  border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                      >
-                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none border-solid focus:outline-none" />
-                      </button>
-                    </span>
+					<span class="vid-close-btn">
+                    <button
+                      onClick={() => {
+                        setShowModal(false);
+                        setCardDetails({});
+                        setAuthor(null);
+                      }}
+                      tw="p-1 ml-auto bg-transparent  border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                    >
+                      <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none border-solid focus:outline-none" />
+                    </button>
+					</span>
                   </div>
                   {/*body*/}
                   <div tw="relative p-2 flex-auto">
