@@ -5,3 +5,20 @@
   object-fit: cover;
   border: 1px solid black;
 }
+.video-actions,
+.icon-container {
+  display: flex;
+  align-items: center;
+}
+.report-video-link {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+.clicked {
+  fill: black !important;
+}
+.icon-btn {
+  outline: none !important;
+  border: none !important;
+}

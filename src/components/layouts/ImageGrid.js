@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import tw from "twin.macro";
 import ReactPlayer from "react-player";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -14,6 +14,10 @@ import { ReactComponent as EyeIcon } from "feather-icons/dist/icons/eye.svg";
 import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
 import "../../ImageGrid.css";
+import { auth } from "firebase";
+import { IconButton } from "@material-ui/core";
+import { UserContext } from "../../contexts/UserContext";
+import AuthContext from "../../contexts/AuthContext";
 
 const Container = tw.div`relative`;
 const Content = tw.div` -mx-2 py-2`;
@@ -35,6 +39,14 @@ export default (props) => {
   const [vids, setVids] = useState(null);
   const [id, setId] = useState(null); //eslint-disable-line
   const [author, setAuthor] = useState(null);
+  const [likes, setLikes] = useState(0);
+  const [comments, setComments] = useState(0);
+  const [disabled, setDisabled] = useState(true);
+  const [likeBtn, setLikeBtn] = useState("");
+  const [views, setViews] = useState(0);
+
+  const { likedVideos, updateLikes } = useContext(UserContext);
+  const { userDetails } = useContext(AuthContext);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -98,14 +110,67 @@ export default (props) => {
   // });
   // }
 
+  useEffect(() => {
+    if (!auth().currentUser) setDisabled(true);
+    else setDisabled(false);
+  }, [userDetails]);
+
   function handleCardClick(post) {
+    const videoId = id[vids.indexOf(post)];
     setCardDetails(post);
+    post.likes ? setLikes(post.likes) : setLikes(0);
+    setViews(post.views ? post.views + 1 : 1);
+    post.views = post.views ? post.views + 1 : 1;
+    // console.log(post);
     firestore
       .collection("user")
       .doc(post.userid)
       .get()
-      .then((vals) => setAuthor(vals.data().name));
+      .then((vals) => {
+        setAuthor(vals.data().name);
+      })
+      .then(() => {
+        firestore.collection("contest").doc(videoId).update({
+          views: post.views,
+        });
+      });
+    if (auth().currentUser) {
+      likedVideos.indexOf(videoId) !== -1
+        ? setLikeBtn("clicked")
+        : setLikeBtn("");
+    }
   }
+
+  const handleClickLike = () => {
+    const videoId = id[vids.indexOf(cardDetails)];
+    let newLikes = 0;
+    if (likedVideos.indexOf(videoId) === -1) {
+      newLikes = parseInt(cardDetails.likes + 1) || 1;
+      setLikeBtn("clicked");
+      updateLikes(videoId, "like");
+    } else {
+      newLikes = cardDetails.likes >= 1 ? cardDetails.likes - 1 : 0;
+      setLikeBtn("");
+      updateLikes(videoId, "unlike");
+    }
+    // if (likedVideos.indexOf(videoId) === -1) {
+    //   const newLikes = parseInt(cardDetails.likes + 1) || 1;
+    //   setLikes(newLikes);
+    //   updateLikes(videoId);
+    //   cardDetails.likes = newLikes;
+    //   setLikeBtn("clicked");
+    //   // console.log({ cardDetails, id, index: vids.indexOf(cardDetails) });
+    //   firestore.collection("contest").doc(videoId).update({
+    //     likes: newLikes,
+    //   });
+    // }
+    setLikes(newLikes);
+    cardDetails.likes = newLikes;
+    // console.log({ cardDetails, id, index: vids.indexOf(cardDetails) });
+    firestore.collection("contest").doc(videoId).update({
+      likes: newLikes,
+    });
+  };
 
   return (
     <Container>
@@ -205,26 +270,40 @@ export default (props) => {
                     </div>
                     <div tw="flex mt-2 pl-2">
                       <div class="video-actions">
-                        <a>
-                          <LikeIcon tw="w-4 mr-1" />{" "}
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <IconButton
+                            disabled={disabled}
+                            onClick={handleClickLike}
+                            className="icon-btn"
+                          >
+                            <LikeIcon className={likeBtn} tw="w-4 mr-1" />{" "}
+                          </IconButton>
+                          <span class="video-like-count">{likes}</span>
+                        </div>
+                        <div className="icon-container">
+                          <IconButton className="icon-btn">
+                            <Comment tw="w-4 mr-1" />{" "}
+                          </IconButton>
+                          <span class="video-like-count">{comments}</span>
+                        </div>{" "}
+                        <div className="icon-container">
+                          <IconButton className="icon-btn">
+                            <Share tw="w-4 mr-1" />{" "}
+                          </IconButton>
                           <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a>
-                          <Comment tw="w-4 mr-1" />{" "}
-                          <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a>
-                          <Share tw="w-4 mr-1" />{" "}
-                          <span class="video-like-count">0</span>
-                        </a>{" "}
-						<a>
-                          <EyeIcon tw="w-4 mr-1" />{" "}
-                          <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a class="report-video-link">
-                          <Report tw="w-4 mr-1" />{" "}
+                        </div>{" "}
+                        <div className="icon-container">
+                          <IconButton className="icon-btn">
+                            <EyeIcon tw="w-4 mr-1" />{" "}
+                          </IconButton>
+                          <span class="video-like-count">{views}</span>
+                        </div>{" "}
+                        <div class="report-video-link">
+                          <IconButton className="icon-btn">
+                            <Report tw="w-4 mr-1" />{" "}
+                          </IconButton>
                           <span class="reporttxt">Report</span>
-                        </a>
+                        </div>
                       </div>
                     </div>
                   </div>

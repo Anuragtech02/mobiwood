@@ -10,11 +10,7 @@ import { ReactComponent as DisLikeIcon } from "feather-icons/dist/icons/thumbs-d
 import { ReactComponent as Share } from "feather-icons/dist/icons/share.svg";
 import { ReactComponent as Comment } from "feather-icons/dist/icons/message-square.svg";
 import { ReactComponent as Report } from "feather-icons/dist/icons/flag.svg";
-<<<<<<< HEAD
-import { ReactComponent as EyeIcon } from "feather-icons/dist/icons/eye.svg";
-=======
 import "../../ImageGrid.css";
->>>>>>> 4aa2412e2ec119367400bc3b4c5cb3cd8d531903
 
 import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
@@ -222,10 +218,6 @@ export default (props) => {
                         </a>
                       </div>
                     </div>
-<<<<<<< HEAD
-					 <div tw="flex mt-2 pl-2"><div class="video-actions"><a><LikeIcon tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a><Comment tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a><Share tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a><EyeIcon tw="w-4 mr-1"/> <span class="video-like-count">0</span></a> <a class="report-video-link"><Report tw="w-4 mr-1"/> <span class="reporttxt">Report</span></a></div></div>
-=======
->>>>>>> 4aa2412e2ec119367400bc3b4c5cb3cd8d531903
                   </div>
                 </div>
               </ModalContent>

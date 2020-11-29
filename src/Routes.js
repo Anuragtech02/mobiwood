@@ -30,6 +30,7 @@ export const routes = {
   "/about": () => <About />,
   "/privacy": () => <Privacy />,
   "/policy": () => <Privacy />,
+  "/profile": () => <UserDashboard />,
 };
 
 export const guestRoutes = {
@@ -54,5 +55,5 @@ export const guestRoutes = {
   "/privacy": () => <Privacy />,
   "/policy": () => <Privacy />,
   "/advertising": () => <Advertising />,
-   "/profile": () => <UserDashboard />
+  // "/profile": () => <UserDashboard />,
 };
