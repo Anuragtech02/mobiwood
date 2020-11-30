@@ -374,6 +374,7 @@ exports.extractThumbnail = functions.storage
         .upload(thumbPath, {
           destination: path.join(bucketDir, thumbName),
           metadata: {
+            cacheControl: "public,max-age=259200",
             metadata: {
               firebaseStorageDownloadTokens: fileName.split(".")[0],
             },

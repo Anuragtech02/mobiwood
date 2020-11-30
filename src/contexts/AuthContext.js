@@ -6,12 +6,21 @@ const AuthContext = React.createContext();
 
 export const AuthProvider = (props) => {
   const [user, setUser] = React.useState({});
-  const [uid, setUid] = React.useState('');
+  const [uid, setUid] = React.useState("");
+  const [userDetails, setUserDetails] = React.useState({});
 
-  const onAuthStateChanged = (u) => {
+  const db = firebase.firestore().collection("user");
+
+  const onAuthStateChanged = async (u) => {
     if (u) {
       setUser(u);
       setUid(u.uid);
+      await db
+        .doc(u.uid)
+        .get()
+        .then((vals) => {
+          setUserDetails(vals.data());
+        });
     }
   };
 
@@ -23,7 +32,7 @@ export const AuthProvider = (props) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, uid, setUid }}>
+    <AuthContext.Provider value={{ user, setUser, uid, setUid, userDetails }}>
       {props.children}
     </AuthContext.Provider>
   );
