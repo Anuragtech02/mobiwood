@@ -325,6 +325,8 @@ export default (props) => {
               </ModalContent>
               {Boolean(anchorEl) ? (
                 <ShareModal
+                  title={cardDetails.title}
+                  description={cardDetails.description}
                   setShareFlag={setShareFlag}
                   anchorEl={anchorEl}
                   setAnchorEl={setAnchorEl}
@@ -351,7 +353,14 @@ export default (props) => {
   );
 };
 
-const ShareModal = ({ shareUrl, setAnchorEl, anchorEl, setShareFlag }) => {
+const ShareModal = ({
+  shareUrl,
+  setAnchorEl,
+  anchorEl,
+  setShareFlag,
+  title,
+  description,
+}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -361,6 +370,8 @@ const ShareModal = ({ shareUrl, setAnchorEl, anchorEl, setShareFlag }) => {
   const twitterRef = useRef(null);
   const linkedinRef = useRef(null);
   const telegramRef = useRef(null);
+
+  let capitalizedTitle = title.charAt().toUpperCase() + title.slice(1);
 
   const handleItemClick = (e) => {
     setShareFlag(true);
@@ -385,6 +396,7 @@ const ShareModal = ({ shareUrl, setAnchorEl, anchorEl, setShareFlag }) => {
           ref={whatsappRef}
           url={shareUrl}
           openShareDialogOnClick
+          title={capitalizedTitle}
         >
           <WhatsappIcon size={32} round={true} />
         </WhatsappShareButton>
@@ -399,6 +411,7 @@ const ShareModal = ({ shareUrl, setAnchorEl, anchorEl, setShareFlag }) => {
           ref={facebookRef}
           url={shareUrl}
           openShareDialogOnClick
+          quote={`${capitalizedTitle} | ${description}`}
         >
           <FacebookIcon size={32} round={true} />
         </FacebookShareButton>
@@ -413,6 +426,7 @@ const ShareModal = ({ shareUrl, setAnchorEl, anchorEl, setShareFlag }) => {
           ref={twitterRef}
           url={shareUrl}
           openShareDialogOnClick
+          title={capitalizedTitle}
         >
           <TwitterIcon size={32} round={true} />
         </TwitterShareButton>
@@ -427,6 +441,8 @@ const ShareModal = ({ shareUrl, setAnchorEl, anchorEl, setShareFlag }) => {
           ref={linkedinRef}
           url={shareUrl}
           openShareDialogOnClick
+          title={capitalizedTitle}
+          summary={description}
         >
           <LinkedinIcon size={32} round={true} />
         </LinkedinShareButton>
@@ -441,6 +457,7 @@ const ShareModal = ({ shareUrl, setAnchorEl, anchorEl, setShareFlag }) => {
           ref={telegramRef}
           url={shareUrl}
           openShareDialogOnClick
+          title={capitalizedTitle}
         >
           <TelegramIcon size={32} round={true} />
         </TelegramShareButton>
