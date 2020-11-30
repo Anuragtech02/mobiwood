@@ -283,7 +283,7 @@ export default (props) => {
                             <span class="video-like-count">{likes}</span>
                           </div>
                         </Tooltip>
-                        <div className="icon-container">
+                        <div className="icon-container comments-icon">
                           <IconButton className="icon-btn">
                             <Comment tw="w-4 mr-1" />{" "}
                           </IconButton>
