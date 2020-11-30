@@ -30,6 +30,7 @@ export const routes = {
   "/about": () => <About />,
   "/privacy": () => <Privacy />,
   "/policy": () => <Privacy />,
+  "/trending": () => <Trending />,
   "/profile": () => <UserDashboard />,
 };
 

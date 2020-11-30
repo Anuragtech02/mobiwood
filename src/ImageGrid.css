@@ -21,4 +21,16 @@
 .icon-btn {
   outline: none !important;
   border: none !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+.tooltip-top {
+  z-index: 1 !important;
+}
+.share-modal {
+  z-index: 1000000 !important;
+}
+.flex-share-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
