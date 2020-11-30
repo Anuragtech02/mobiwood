@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import tw from "twin.macro";
 import ReactPlayer from "react-player";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -11,9 +11,15 @@ import { ReactComponent as Share } from "feather-icons/dist/icons/share.svg";
 import { ReactComponent as Comment } from "feather-icons/dist/icons/message-square.svg";
 import { ReactComponent as Report } from "feather-icons/dist/icons/flag.svg";
 import "../../ImageGrid.css";
+import { ReactComponent as EyeIcon } from "feather-icons/dist/icons/eye.svg";
+import { Button, IconButton, Tooltip } from "@material-ui/core";
 
 import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
+import { auth } from "firebase";
+import { UserContext } from "../../contexts/UserContext";
+import { VideosContext } from "../../contexts/VideosContext";
+import AuthContext from "../../contexts/AuthContext";
 
 const Container = tw.div`relative`;
 const Content = tw.div` -mx-2 py-2`;
@@ -32,9 +38,17 @@ const ModalContent = tw.div`relative w-auto my-6 mx-auto max-w-3xl`;
 
 export default (props) => {
   const [showModal, setShowModal] = useState(false);
-  const [vids, setVids] = useState(null);
-  const [id, setId] = useState(null); //eslint-disable-line
+  // const [vids, setVids] = useState(null);
+  // const [id, setId] = useState(null); //eslint-disable-line
   const [author, setAuthor] = useState(null);
+  const [likes, setLikes] = useState(0);
+  const [comments, setComments] = useState(0);
+  const [disabled, setDisabled] = useState(true);
+  const [likeBtn, setLikeBtn] = useState("");
+  const [views, setViews] = useState(0);
+
+  const { likedVideos, updateLikes } = useContext(UserContext);
+  const { userDetails } = useContext(AuthContext);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -53,26 +67,27 @@ export default (props) => {
   }
 
   const [cardDetails, setCardDetails] = useState({});
+  const { videos, id } = useContext(VideosContext);
 
-  async function getVidData() {
-    let tmp = [];
-    let ids = [];
-    const vidRef = firestore
-      .collection("contest")
-      .orderBy("uploadTime", "desc");
-    //.limit(16)
-    const activeref = await vidRef.get();
-    activeref.forEach((collection) => {
-      tmp.push(collection.data());
-      ids.push(collection.id);
-    });
-    setVids(tmp);
-    setId(ids);
-  }
+  // async function getVidData() {
+  //   let tmp = [];
+  //   let ids = [];
+  //   const vidRef = firestore
+  //     .collection("contest")
+  //     .orderBy("uploadTime", "desc");
+  //   //.limit(16)
+  //   const activeref = await vidRef.get();
+  //   activeref.forEach((collection) => {
+  //     tmp.push(collection.data());
+  //     ids.push(collection.id);
+  //   });
+  //   setVids(tmp);
+  //   setId(ids);
+  // }
 
-  useEffect(() => {
-    getVidData();
-  }, []);
+  // useEffect(() => {
+  //   getVidData();
+  // }, []);
 
   const [vw, setWidth] = useState(window.innerWidth);
   useEffect(() => {
@@ -99,13 +114,52 @@ export default (props) => {
   // }
 
   function handleCardClick(post) {
+    const videoId = id[videos.indexOf(post)];
     setCardDetails(post);
+    post.likes ? setLikes(post.likes) : setLikes(0);
+    setViews(post.views ? post.views + 1 : 1);
+    post.views = post.views ? post.views + 1 : 1;
+    // console.log(post);
     firestore
       .collection("user")
       .doc(post.userid)
       .get()
-      .then((vals) => setAuthor(vals.data().name));
+      .then((vals) => {
+        setAuthor(vals.data().name);
+      })
+      .then(() => {
+        firestore.collection("contest").doc(videoId).update({
+          views: post.views,
+        });
+      });
+    if (auth().currentUser) {
+      likedVideos.indexOf(videoId) !== -1
+        ? setLikeBtn("clicked")
+        : setLikeBtn("");
+    }
   }
+
+  const handleClickLike = () => {
+    const videoId = id[videos.indexOf(cardDetails)];
+    let newLikes = 0;
+
+    //Check if user has not liked the video yet
+    if (likedVideos.indexOf(videoId) === -1) {
+      newLikes = parseInt(cardDetails.likes + 1) || 1;
+      setLikeBtn("clicked");
+      updateLikes(videoId, "like");
+    } else {
+      newLikes = cardDetails.likes >= 1 ? cardDetails.likes - 1 : 0;
+      setLikeBtn("");
+      updateLikes(videoId, "unlike");
+    }
+
+    setLikes(newLikes);
+    cardDetails.likes = newLikes;
+    firestore.collection("contest").doc(videoId).update({
+      likes: newLikes,
+    });
+  };
 
   return (
     <Container>
@@ -114,8 +168,8 @@ export default (props) => {
       </HeadingInfoContainer>
       <Content>
         <ThreeColumn>
-          {vids &&
-            vids.map((post, index) => (
+          {videos &&
+            videos.map((post, index) => (
               <Column key={index}>
                 <Card
                   onClick={() => {
@@ -127,10 +181,6 @@ export default (props) => {
                   <Image>
                     {post.thumbnail ? (
                       <>
-                        {/* <div
-                        className="thumbnail-container"
-                        style={{ backgroundImage: `url(${post.thumbnail})` }}
-                      ></div> */}
                         <img
                           className="thumbnail"
                           src={post.thumbnail}
@@ -144,7 +194,6 @@ export default (props) => {
                       />
                     )}
                   </Image>
-                  {/* const Image = tw.div`bg-cover bg-center h-40width sm:h-28width lg:h-24width xl:h-18width rounded overflow-hidden`; */}
                 </Card>
               </Column>
             ))}
@@ -179,7 +228,10 @@ export default (props) => {
                         <ReactPlayer
                           config={{
                             file: {
-                              attributes: { controlsList: "nodownload" },
+                              attributes: {
+                                disablepictureinpicture: "true",
+                                controlsList: "nodownload",
+                              },
                             },
                           }}
                           url={cardDetails.videoUrl}
@@ -200,22 +252,52 @@ export default (props) => {
                     </div>
                     <div tw="flex mt-2 pl-2">
                       <div class="video-actions">
-                        <a>
-                          <LikeIcon tw="w-4 mr-1" />{" "}
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <Tooltip
+                            placement="top"
+                            className="tooltip-top"
+                            title={disabled ? "Login to like" : "Like"}
+                          >
+                            <IconButton
+                              disabled={disabled}
+                              onClick={handleClickLike}
+                              className="icon-btn"
+                            >
+                              <LikeIcon className={likeBtn} tw="w-4 mr-1" />{" "}
+                            </IconButton>
+                          </Tooltip>
+                          <span class="video-like-count">{likes}</span>
+                        </div>
+                        <div className="icon-container">
+                          <IconButton className="icon-btn">
+                            <Comment tw="w-4 mr-1" />{" "}
+                          </IconButton>
+                          <span class="video-like-count">{comments}</span>
+                        </div>{" "}
+                        <div className="icon-container">
+                          <IconButton className="icon-btn">
+                            <Share tw="w-4 mr-1" />{" "}
+                          </IconButton>
                           <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a>
-                          <Comment tw="w-4 mr-1" />{" "}
-                          <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a>
-                          <Share tw="w-4 mr-1" />{" "}
-                          <span class="video-like-count">0</span>
-                        </a>{" "}
-                        <a class="report-video-link">
-                          <Report tw="w-4 mr-1" />{" "}
-                          <span class="reporttxt">Report</span>
-                        </a>
+                        </div>{" "}
+                        <div
+                          style={{ marginLeft: "10px" }}
+                          className="icon-container"
+                        >
+                          <EyeIcon tw="w-4 mr-1" />{" "}
+                          <span
+                            style={{ marginLeft: "10px" }}
+                            class="video-like-count"
+                          >
+                            {views}
+                          </span>
+                        </div>{" "}
+                        <div class="report-video-link">
+                          <Button className="icon-btn">
+                            <Report tw="w-4 mr-1" />{" "}
+                            <span class="reporttxt">Report</span>
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

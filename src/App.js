@@ -5,6 +5,7 @@ import "tailwindcss/dist/base.min.css";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { auth } from "./firebase.config";
 import UserContextProvider from "./contexts/UserContext";
+import VideosContextProvider from "./contexts/VideosContext";
 
 const App = () => {
   window.onunload = () => {
@@ -16,7 +17,9 @@ const App = () => {
     <AuthProvider>
       <LanguageProvider>
         <UserContextProvider>
-          <Router />
+          <VideosContextProvider>
+            <Router />
+          </VideosContextProvider>
         </UserContextProvider>
       </LanguageProvider>
     </AuthProvider>

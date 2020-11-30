@@ -15,9 +15,11 @@ import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
 import "../../ImageGrid.css";
 import { auth } from "firebase";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Tooltip, Button } from "@material-ui/core";
 import { UserContext } from "../../contexts/UserContext";
+import { VideosContext } from "../../contexts/VideosContext";
 import AuthContext from "../../contexts/AuthContext";
+import { navigate } from "hookrouter";
 
 const Container = tw.div`relative`;
 const Content = tw.div` -mx-2 py-2`;
@@ -36,8 +38,8 @@ const ModalContent = tw.div`relative w-auto my-6 mx-auto max-w-3xl`;
 
 export default (props) => {
   const [showModal, setShowModal] = useState(false);
-  const [vids, setVids] = useState(null);
-  const [id, setId] = useState(null); //eslint-disable-line
+  // const [vids, setVids] = useState(null);
+  // const [id, setId] = useState(null); //eslint-disable-line
   const [author, setAuthor] = useState(null);
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
@@ -46,6 +48,7 @@ export default (props) => {
   const [views, setViews] = useState(0);
 
   const { likedVideos, updateLikes } = useContext(UserContext);
+  const { videosLimited, id } = useContext(VideosContext);
   const { userDetails } = useContext(AuthContext);
 
   function useOutsideAlerter(ref) {
@@ -66,26 +69,6 @@ export default (props) => {
 
   const [cardDetails, setCardDetails] = useState({});
 
-  async function getVidData() {
-    let tmp = [];
-    let ids = [];
-    const vidRef = firestore
-      .collection("contest")
-      .orderBy("uploadTime", "desc")
-      .limit(16);
-    const activeref = await vidRef.get();
-    activeref.forEach((collection) => {
-      tmp.push(collection.data());
-      ids.push(collection.id);
-    });
-    setVids(tmp);
-    setId(ids);
-  }
-
-  useEffect(() => {
-    getVidData();
-  }, []);
-
   const [vw, setWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -98,25 +81,13 @@ export default (props) => {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
 
-  function addView(index) {
-    // firestore.collection("contest").doc(id[index]).update({
-    //   views: firebase.firestore.FieldValue.increment(1)
-    // });
-  }
-
-  // function addLike(index) {
-  // firestore.collection("contest").doc(id[index]).update({
-  //   views: firebase.firestore.FieldValue.increment(1)
-  // });
-  // }
-
   useEffect(() => {
     if (!auth().currentUser) setDisabled(true);
     else setDisabled(false);
   }, [userDetails]);
 
   function handleCardClick(post) {
-    const videoId = id[vids.indexOf(post)];
+    const videoId = id[videosLimited.indexOf(post)];
     setCardDetails(post);
     post.likes ? setLikes(post.likes) : setLikes(0);
     setViews(post.views ? post.views + 1 : 1);
@@ -142,8 +113,10 @@ export default (props) => {
   }
 
   const handleClickLike = () => {
-    const videoId = id[vids.indexOf(cardDetails)];
+    const videoId = id[videosLimited.indexOf(cardDetails)];
     let newLikes = 0;
+
+    //Check if user has not liked the video yet
     if (likedVideos.indexOf(videoId) === -1) {
       newLikes = parseInt(cardDetails.likes + 1) || 1;
       setLikeBtn("clicked");
@@ -153,20 +126,9 @@ export default (props) => {
       setLikeBtn("");
       updateLikes(videoId, "unlike");
     }
-    // if (likedVideos.indexOf(videoId) === -1) {
-    //   const newLikes = parseInt(cardDetails.likes + 1) || 1;
-    //   setLikes(newLikes);
-    //   updateLikes(videoId);
-    //   cardDetails.likes = newLikes;
-    //   setLikeBtn("clicked");
-    //   // console.log({ cardDetails, id, index: vids.indexOf(cardDetails) });
-    //   firestore.collection("contest").doc(videoId).update({
-    //     likes: newLikes,
-    //   });
-    // }
+
     setLikes(newLikes);
     cardDetails.likes = newLikes;
-    // console.log({ cardDetails, id, index: vids.indexOf(cardDetails) });
     firestore.collection("contest").doc(videoId).update({
       likes: newLikes,
     });
@@ -179,39 +141,29 @@ export default (props) => {
       </HeadingInfoContainer>
       <Content>
         <ThreeColumn>
-          {vids &&
-            vids.map((post, index) => (
+          {videosLimited &&
+            videosLimited.map((post, index) => (
               <Column key={index}>
                 <Card
                   onClick={() => {
                     handleCardClick(post);
                     setShowModal(true);
-                    addView(index);
                   }}
                 >
                   <Image>
                     {post.thumbnail ? (
-                      <>
-                        {/* <div
-                        className="thumbnail-container"
-                        style={{ backgroundImage: `url(${post.thumbnail})` }}
-                      ></div> */}
-                        <img
-                          className="thumbnail"
-                          src={post.thumbnail}
-                          alt={post.title}
-                        />
-                      </>
+                      <img
+                        className="thumbnail"
+                        src={post.thumbnail}
+                        alt={post.title}
+                      />
                     ) : (
                       <VideoThumbnail
                         videoUrl={post.videoUrl}
                         snapshotAtTime="1"
                       />
                     )}
-
-                    {/* <img src={post.thumbnail} alt={`post-${post.title}`} /> */}
                   </Image>
-                  {/* const Image = tw.div`bg-cover bg-center h-40width sm:h-28width lg:h-24width xl:h-18width rounded overflow-hidden`; */}
                 </Card>
               </Column>
             ))}
@@ -270,16 +222,28 @@ export default (props) => {
                     </div>
                     <div tw="flex mt-2 pl-2">
                       <div class="video-actions">
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <IconButton
-                            disabled={disabled}
-                            onClick={handleClickLike}
-                            className="icon-btn"
-                          >
-                            <LikeIcon className={likeBtn} tw="w-4 mr-1" />{" "}
-                          </IconButton>
-                          <span class="video-like-count">{likes}</span>
-                        </div>
+                        <Tooltip
+                          placement="bottom"
+                          className="tooltip-top"
+                          title={
+                            disabled
+                              ? "Login to like"
+                              : likeBtn === "clicked"
+                              ? "Unlike"
+                              : "Like"
+                          }
+                        >
+                          <div className="icon-container">
+                            <IconButton
+                              disabled={disabled}
+                              onClick={handleClickLike}
+                              className="icon-btn"
+                            >
+                              <LikeIcon className={likeBtn} tw="w-4 mr-1" />{" "}
+                            </IconButton>
+                            <span class="video-like-count">{likes}</span>
+                          </div>
+                        </Tooltip>
                         <div className="icon-container">
                           <IconButton className="icon-btn">
                             <Comment tw="w-4 mr-1" />{" "}
@@ -299,10 +263,10 @@ export default (props) => {
                           <span class="video-like-count">{views}</span>
                         </div>{" "}
                         <div class="report-video-link">
-                          <IconButton className="icon-btn">
+                          <Button className="icon-btn">
                             <Report tw="w-4 mr-1" />{" "}
-                          </IconButton>
-                          <span class="reporttxt">Report</span>
+                            <span class="reporttxt">Report</span>
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -315,7 +279,14 @@ export default (props) => {
         ) : null}
 
         <div class="more-video-btn">
-          <a href="/trending">More Videos</a>
+          <Button
+            className="more-btn"
+            onClick={() => {
+              navigate("/trending");
+            }}
+          >
+            More Videos
+          </Button>
         </div>
       </Content>
     </Container>

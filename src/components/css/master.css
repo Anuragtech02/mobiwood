@@ -1,140 +1,129 @@
 .pt {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .background-grey {
-    background-color: #1a202c;
+  background-color: #1a202c;
 }
 
 .react-thumbnail-generator {
-    height: 100%;
-    display: flex;
-    border: 1px solid #d8d8d8;
-    padding: 1px;
-    background: #3c3c3c url(../../images/bars.svg);
-    background-size: 29px;
-    background-repeat: no-repeat;
-    background-position: center center;
+  height: 100%;
+  display: flex;
+  border: 1px solid #d8d8d8;
+  padding: 1px;
+  background: #3c3c3c url(../../images/bars.svg);
+  background-size: 29px;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
-.react-thumbnail-generator img{
-    object-fit: cover;
+.react-thumbnail-generator img {
+  object-fit: cover;
 }
 
-.underconstruction
-{
-    margin-top:2rem;
+.underconstruction {
+  margin-top: 2rem;
 }
 
-.backtohome
-{
-    background: #303F9F;
-    color: white;
-    padding: 10px 20px;
-    margin-top: 1rem;
-    display: inline-block;
-    border-radius: 5px;
-    font-size: 13px;
+.backtohome {
+  background: #303f9f;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 1rem;
+  display: inline-block;
+  border-radius: 5px;
+  font-size: 13px;
 }
 .leftNav div:nth-child(1)::-webkit-scrollbar {
-    width: 0px;
-    background: transparent; /* make scrollbar transparent */
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
 }
-.lightnew__NavLink-sc-1q8vz2f-2:hover
-{
-	text-decoration:none !important;
+.lightnew__NavLink-sc-1q8vz2f-2:hover {
+  text-decoration: none !important;
 }
-.more-video-btn
-{
-	text-align: center;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+.more-video-btn {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
-.more-video-btn a
-{
-    display: inline-block;
-    background: #0d8a84;
-    padding: 10px;
-    width: 200px;
-    border-radius: 5px;
-    color: white;
+.more-video-btn a {
+  display: inline-block;
+  background: #0d8a84;
+  padding: 10px;
+  width: 200px;
+  border-radius: 5px;
+  color: white;
 }
-.video-like-count
-{
-    margin-top:3px;
-	font-size:14px;
-	margin-right:1rem;
+.more-video-btn .more-btn {
+  background: #0d8a84 !important;
+  padding: 10px !important;
+  width: 200px !important;
+  border-radius: 5px !important;
+  color: white !important;
 }
-.player div video
-{
-	outline:none;
-	border:none;
+.video-like-count {
+  margin-top: 3px;
+  font-size: 14px;
+  margin-right: 1rem;
 }
-.video-follow-btn
-{
-	background: red;
-    padding: 2px 6px;
-    border-radius: 2px;
-    font-size: 12px;
-    margin-left: 0.4rem;
+.player div video {
+  outline: none;
+  border: none;
 }
-.video-actions 
-{
-	width:100%;
-	padding-right:0.5rem;
+.video-follow-btn {
+  background: red;
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 12px;
+  margin-left: 0.4rem;
 }
-.video-actions a
-{
- display: inline-block;
- cursor:pointer;
+.video-actions {
+  width: 100%;
+  padding-right: 0.5rem;
 }
-.video-actions a svg
-{
-	float:left;
+.video-actions a {
+  display: inline-block;
+  cursor: pointer;
 }
-.reporttxt
-{
-	font-size:13px;
+.video-actions a svg {
+  float: left;
 }
-.report-video-link
-{
-	float:right;
+.reporttxt {
+  font-size: 13px;
 }
-.age-btns-b18
-{
-	float:left;
-	width:49%;
+.report-video-link {
+  float: right;
 }
-.age-btns-a18
-{
-	float:right;
-	width:49%;  
+.age-btns-b18 {
+  float: left;
+  width: 49%;
 }
-.b18-circle
-{
-	    position: absolute;
-    width: 50%;
-    text-align: center;
-	left:0px;
+.age-btns-a18 {
+  float: right;
+  width: 49%;
 }
-.a18-circle
-{
-	    position: absolute;
-    width: 50%;
-	right:0;
-    text-align: center;
+.b18-circle {
+  position: absolute;
+  width: 50%;
+  text-align: center;
+  left: 0px;
 }
-.vid-close-btn
-{
-    position: absolute;
-    top: -10px;
-    z-index: 9999;
-    right: -10px;
-    background: white;
-    border-radius: 3rem;
-    width: 35px;
-    height: 35px;
-    text-align: center;
-    padding: 4px 1.5px;
-    box-shadow: 0px 0px 4px black;
+.a18-circle {
+  position: absolute;
+  width: 50%;
+  right: 0;
+  text-align: center;
+}
+.vid-close-btn {
+  position: absolute;
+  top: -10px;
+  z-index: 9999;
+  right: -10px;
+  background: white;
+  border-radius: 3rem;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  padding: 4px 1.5px;
+  box-shadow: 0px 0px 4px black;
 }
