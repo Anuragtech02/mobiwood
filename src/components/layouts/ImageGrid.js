@@ -15,11 +15,33 @@ import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
 import "../../ImageGrid.css";
 import { auth } from "firebase";
-import { IconButton, Tooltip, Button } from "@material-ui/core";
+import {
+  IconButton,
+  Tooltip,
+  Button,
+  Menu,
+  MenuItem,
+  Link,
+} from "@material-ui/core";
 import { UserContext } from "../../contexts/UserContext";
 import { VideosContext } from "../../contexts/VideosContext";
 import AuthContext from "../../contexts/AuthContext";
 import { navigate } from "hookrouter";
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from "react-share";
+
+import {
+  FacebookIcon,
+  LinkedinIcon,
+  TelegramIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "react-share";
 
 const Container = tw.div`relative`;
 const Content = tw.div` -mx-2 py-2`;
@@ -38,6 +60,7 @@ const ModalContent = tw.div`relative w-auto my-6 mx-auto max-w-3xl`;
 
 export default (props) => {
   const [showModal, setShowModal] = useState(false);
+  const [shareModal, setShareModal] = useState(false);
   // const [vids, setVids] = useState(null);
   // const [id, setId] = useState(null); //eslint-disable-line
   const [author, setAuthor] = useState(null);
@@ -46,6 +69,15 @@ export default (props) => {
   const [disabled, setDisabled] = useState(true);
   const [likeBtn, setLikeBtn] = useState("");
   const [views, setViews] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [shareFlag, setShareFlag] = useState(false);
+
+  const handleClickShare = (event) => {
+    setAnchorEl(event.currentTarget);
+    setShareFlag(Boolean(anchorEl));
+    console.log("Clicked : " + shareFlag);
+    event.stopPropagation();
+  };
 
   const { likedVideos, updateLikes } = useContext(UserContext);
   const { videosLimited, id } = useContext(VideosContext);
@@ -55,8 +87,10 @@ export default (props) => {
     useEffect(() => {
       function handleClickOutside(event) {
         if (ref.current && !ref.current.contains(event.target)) {
-          setShowModal(false);
-          setAuthor(null);
+          console.log("Closed : " + shareFlag);
+          // setShowModal(false);
+          // setAnchorEl(null);
+          // setAuthor(null);
         }
       }
 
@@ -170,8 +204,11 @@ export default (props) => {
         </ThreeColumn>
         {showModal ? (
           <>
-            <ModalContainer>
-              <ModalContent ref={wrapperRef}>
+            <ModalContainer onClick={() => setShowModal(false)}>
+              <ModalContent
+                ref={wrapperRef}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
                   <div tw="flex items-start justify-between px-5  border-gray-300 rounded-t">
@@ -195,21 +232,23 @@ export default (props) => {
                   <div tw="relative p-2 flex-auto">
                     <div tw="text-gray-600 text-lg leading-relaxed bg-black">
                       <div class="player">
-                        <ReactPlayer
-                          config={{
-                            file: {
-                              attributes: {
-                                disablepictureinpicture: "true",
-                                controlsList: "nodownload",
+                        {showModal ? (
+                          <ReactPlayer
+                            config={{
+                              file: {
+                                attributes: {
+                                  disablePictureInPicture: true,
+                                  controlsList: "nodownload",
+                                },
                               },
-                            },
-                          }}
-                          url={cardDetails.videoUrl}
-                          controls={true}
-                          playing={true}
-                          width={vw < 730 ? vw - 60 : 640}
-                          height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
-                        />
+                            }}
+                            url={cardDetails.videoUrl}
+                            controls={true}
+                            playing={true}
+                            width={vw < 730 ? vw - 60 : 640}
+                            height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
+                          />
+                        ) : null}
                       </div>
                       <div tw="pl-5 pb-4 text-base text-white">
                         <a href="#" class="author-link">
@@ -251,16 +290,27 @@ export default (props) => {
                           <span class="video-like-count">{comments}</span>
                         </div>{" "}
                         <div className="icon-container">
-                          <IconButton className="icon-btn">
+                          <IconButton
+                            aria-controls="simple-menu"
+                            aria-haspopup="true"
+                            onClick={handleClickShare}
+                            className="icon-btn"
+                          >
                             <Share tw="w-4 mr-1" />{" "}
                           </IconButton>
                           <span class="video-like-count">0</span>
                         </div>{" "}
-                        <div className="icon-container">
-                          <IconButton className="icon-btn">
-                            <EyeIcon tw="w-4 mr-1" />{" "}
-                          </IconButton>
-                          <span class="video-like-count">{views}</span>
+                        <div
+                          style={{ marginLeft: "10px" }}
+                          className="icon-container"
+                        >
+                          <EyeIcon tw="w-4 mr-1" />{" "}
+                          <span
+                            style={{ marginLeft: "10px" }}
+                            class="video-like-count"
+                          >
+                            {views}
+                          </span>
                         </div>{" "}
                         <div class="report-video-link">
                           <Button className="icon-btn">
@@ -273,6 +323,14 @@ export default (props) => {
                   </div>
                 </div>
               </ModalContent>
+              {Boolean(anchorEl) ? (
+                <ShareModal
+                  setShareFlag={setShareFlag}
+                  anchorEl={anchorEl}
+                  setAnchorEl={setAnchorEl}
+                  shareUrl={cardDetails.videoUrl}
+                />
+              ) : null}
             </ModalContainer>
             <OutModal></OutModal>
           </>
@@ -290,5 +348,103 @@ export default (props) => {
         </div>
       </Content>
     </Container>
+  );
+};
+
+const ShareModal = ({ shareUrl, setAnchorEl, anchorEl, setShareFlag }) => {
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const whatsappRef = useRef(null);
+  const facebookRef = useRef(null);
+  const twitterRef = useRef(null);
+  const linkedinRef = useRef(null);
+  const telegramRef = useRef(null);
+
+  const handleItemClick = (e) => {
+    setShareFlag(true);
+    handleClose();
+    e.stopPropagation();
+  };
+
+  return (
+    <Menu
+      id="simple-menu"
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+    >
+      <MenuItem
+        onClick={(e) => {
+          whatsappRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <WhatsappShareButton
+          ref={whatsappRef}
+          url={shareUrl}
+          openShareDialogOnClick
+        >
+          <WhatsappIcon size={32} round={true} />
+        </WhatsappShareButton>
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          facebookRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <FacebookShareButton
+          ref={facebookRef}
+          url={shareUrl}
+          openShareDialogOnClick
+        >
+          <FacebookIcon size={32} round={true} />
+        </FacebookShareButton>
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          twitterRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <TwitterShareButton
+          ref={twitterRef}
+          url={shareUrl}
+          openShareDialogOnClick
+        >
+          <TwitterIcon size={32} round={true} />
+        </TwitterShareButton>
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          linkedinRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <LinkedinShareButton
+          ref={linkedinRef}
+          url={shareUrl}
+          openShareDialogOnClick
+        >
+          <LinkedinIcon size={32} round={true} />
+        </LinkedinShareButton>
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          telegramRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <TelegramShareButton
+          ref={telegramRef}
+          url={shareUrl}
+          openShareDialogOnClick
+        >
+          <TelegramIcon size={32} round={true} />
+        </TelegramShareButton>
+      </MenuItem>
+    </Menu>
   );
 };
