@@ -65,22 +65,25 @@ export default (props) => {
   // const [id, setId] = useState(null); //eslint-disable-line
   const [author, setAuthor] = useState(null);
   const [likes, setLikes] = useState(0);
+  const [shares, setShares] = useState(0);
   const [comments, setComments] = useState(0);
   const [disabled, setDisabled] = useState(true);
   const [likeBtn, setLikeBtn] = useState("");
   const [views, setViews] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [shareFlag, setShareFlag] = useState(false);
+  const [videosLimited, setVideosLimited] = useState(props.videosLimited);
 
   const handleClickShare = (event) => {
     setAnchorEl(event.currentTarget);
     setShareFlag(Boolean(anchorEl));
     console.log("Clicked : " + shareFlag);
     event.stopPropagation();
+    updateShareOnDB();
   };
 
   const { likedVideos, updateLikes } = useContext(UserContext);
-  const { videosLimited, id } = useContext(VideosContext);
+  const { id } = useContext(VideosContext);
   const { userDetails } = useContext(AuthContext);
 
   function useOutsideAlerter(ref) {
@@ -120,12 +123,19 @@ export default (props) => {
     else setDisabled(false);
   }, [userDetails]);
 
+  useEffect(() => {
+    setVideosLimited(props.videosLimited);
+  }, [props.videosLimited]);
+
   function handleCardClick(post) {
     const videoId = id[videosLimited.indexOf(post)];
     setCardDetails(post);
     post.likes ? setLikes(post.likes) : setLikes(0);
     setViews(post.views ? post.views + 1 : 1);
     post.views = post.views ? post.views + 1 : 1;
+
+    post.shares ? setShares(post.shares) : setShares(0);
+
     // console.log(post);
     firestore
       .collection("user")
@@ -166,6 +176,18 @@ export default (props) => {
     firestore.collection("contest").doc(videoId).update({
       likes: newLikes,
     });
+  };
+
+  const updateShareOnDB = async () => {
+    const videoId = id[videosLimited.indexOf(cardDetails)];
+    setShares((curr) => curr + 1);
+    cardDetails.shares = shares + 1;
+    await firestore
+      .collection("contest")
+      .doc(videoId)
+      .update({
+        shares: cardDetails.shares + 1,
+      });
   };
 
   return (
@@ -298,7 +320,7 @@ export default (props) => {
                           >
                             <Share tw="w-4 mr-1" />{" "}
                           </IconButton>
-                          <span class="video-like-count">0</span>
+                          <span class="video-like-count">{shares}</span>
                         </div>{" "}
                         <div
                           style={{ marginLeft: "10px" }}
