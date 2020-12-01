@@ -17,8 +17,8 @@ const Row = tw.div`flex items-center justify-center flex-col px-8`;
 const LogoContainer = tw.div`flex items-center justify-center md:justify-start`;
 const LogoImg = tw.img`w-56 mb-2`;
 
-const LinksContainer = tw.div`font-medium flex flex-wrap justify-center items-center flex-col sm:flex-row`;
-const Link = tw.a`border-b-2 border-transparent hocus:text-gray-300 hocus:border-gray-300 pb-1 transition duration-300 mt-2 mx-4 text-sm md:text-base`;
+const LinksContainer = tw.div`font-medium flex flex-wrap justify-center items-center flex-col sm:flex-row w-full block text-center`;
+const Link = tw.a`border-b-2 border-transparent hocus:text-gray-300 hocus:border-gray-300 pb-1 transition duration-300 mt-2 mx-4 text-sm md:text-base inline-block`;
 
 const CopyrightText = tw.p`text-center mt-5 font-medium tracking-wide text-xs md:text-sm text-gray-500`;
 

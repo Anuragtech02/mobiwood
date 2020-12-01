@@ -18,7 +18,7 @@ import { navigate } from "hookrouter";
 import styles from '../css/master.css'; 
 
 const SidebarContainer = tw.div`bg-prim-200 text-white`;
-const SidebarHeading = tw.div`bg-prim-200 p-6 flex pb-6 pt-4`;
+const SidebarHeading = tw.div`bg-prim-200 p-6 flex pb-6 pt-4 mb-4`;
 const HeadingText = styled.div`
   ${(props) => `background-image: url("${props.imageSrc}");`}
   ${tw`w-40 h-10 -mt-3 mr-12 bg-contain bg-no-repeat`}
