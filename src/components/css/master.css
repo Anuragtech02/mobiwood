@@ -127,3 +127,10 @@
   padding: 4px 1.5px;
   box-shadow: 0px 0px 4px black;
 }
+button.MuiButtonBase-root.MuiIconButton-root.icon-btn:hover {
+  background: none;
+}
+.comments-icon
+{
+  display: none !important;
+}
