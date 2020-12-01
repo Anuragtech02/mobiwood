@@ -114,7 +114,7 @@ export const SideLinksShort = (
           <HomeIcon height="20" width="20" />
         </SidebarContentFirst>
       </a>
-	  <a href="/dashboard" title="Trending">
+	  <a href="/trending" title="Trending">
       <SidebarContent>
         <StarIcon height="20" width="20" />
       </SidebarContent>

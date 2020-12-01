@@ -46,7 +46,7 @@ import {
 const Container = tw.div`relative`;
 const Content = tw.div` -mx-2 py-2`;
 const ThreeColumn = tw.div`flex items-center flex-row flex-wrap`;
-const Column = tw.div`mb-2 w-1/2 sm:w-1/3 xl:w-1/4`;
+const Column = tw.div`mb-4 w-1/2 sm:w-1/3 xl:w-1/4`;
 
 const HeadingInfoContainer = tw.div`flex flex-col items-start ml-0`;
 const HeadingDescription = tw.p`mt-4 font-bold text-3xl text-gray-900 text-center max-w-sm`;

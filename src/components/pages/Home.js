@@ -468,7 +468,7 @@ const Home = ({
                 </button> */}
               </div>
               {/* </Actions> */}
-              <TrendingSearchOptions>
+              <TrendingSearchOptions tw="hidden">
                 <TrendingNames>
                   <TrendingIcon tw="h-4" />
                   Trending Searches:&nbsp;

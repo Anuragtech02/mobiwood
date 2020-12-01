@@ -757,7 +757,7 @@ const ContestRegister = ({
                           onClick={onClickTerms}
                           tw="cursor-pointer text-blue-500 hover:text-black hover:underline transition duration-500"
                         >
-                          Terms and Conditions{" "}
+                          <a href="/terms">Terms and Conditions</a>{" "}
                         </span>
                       </span>
                       <MainSubmitButton type="submit">

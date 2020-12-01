@@ -518,8 +518,8 @@ const About = ({
             />
             <OutNav>
               <Container>
-                <Page tw="block pl-6 mt-4 px-5">
-                  <div tw="w-full pl-2">
+                <Page tw="block pl-6 px-2">
+                  <div tw="w-full">
                     <ImageGrid />
                   </div>
                 </Page>
