@@ -401,7 +401,6 @@ const Home = ({
   // console.log(videos);
 
   const onChangeSearch = (e, value) => {
-    console.log(value);
     if (videos.indexOf(value) !== -1) {
       const current = videos;
       const newData = current.filter((vid) => vid.userid === value.userid);

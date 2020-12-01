@@ -12,7 +12,7 @@ import { ReactComponent as Comment } from "feather-icons/dist/icons/message-squa
 import { ReactComponent as Report } from "feather-icons/dist/icons/flag.svg";
 import "../../ImageGrid.css";
 import { ReactComponent as EyeIcon } from "feather-icons/dist/icons/eye.svg";
-import { Button, IconButton, Tooltip } from "@material-ui/core";
+import { Button, IconButton, Tooltip, MenuItem, Menu } from "@material-ui/core";
 
 import VideoThumbnail from "react-video-thumbnail";
 import "../css/master.css";
@@ -20,6 +20,21 @@ import { auth } from "firebase";
 import { UserContext } from "../../contexts/UserContext";
 import { VideosContext } from "../../contexts/VideosContext";
 import AuthContext from "../../contexts/AuthContext";
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from "react-share";
+
+import {
+  FacebookIcon,
+  LinkedinIcon,
+  TelegramIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "react-share";
 
 const Container = tw.div`relative`;
 const Content = tw.div` -mx-2 py-2`;
@@ -46,6 +61,17 @@ export default (props) => {
   const [disabled, setDisabled] = useState(true);
   const [likeBtn, setLikeBtn] = useState("");
   const [views, setViews] = useState(0);
+  const [shares, setShares] = useState(0);
+  const [shareFlag, setShareFlag] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClickShare = (event) => {
+    setAnchorEl(event.currentTarget);
+    setShareFlag(Boolean(anchorEl));
+    console.log("Clicked : " + shareFlag);
+    event.stopPropagation();
+    updateShareOnDB();
+  };
 
   const { likedVideos, updateLikes } = useContext(UserContext);
   const { userDetails } = useContext(AuthContext);
@@ -54,8 +80,10 @@ export default (props) => {
     useEffect(() => {
       function handleClickOutside(event) {
         if (ref.current && !ref.current.contains(event.target)) {
-          setShowModal(false);
-          setAuthor(null);
+          console.log("Closed : " + shareFlag);
+          // setShowModal(false);
+          // setAnchorEl(null);
+          // setAuthor(null);
         }
       }
 
@@ -101,6 +129,11 @@ export default (props) => {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
 
+  useEffect(() => {
+    if (!auth().currentUser) setDisabled(true);
+    else setDisabled(false);
+  }, [userDetails]);
+
   function addView(index) {
     // firestore.collection("contest").doc(id[index]).update({
     //   views: firebase.firestore.FieldValue.increment(1)
@@ -119,6 +152,9 @@ export default (props) => {
     post.likes ? setLikes(post.likes) : setLikes(0);
     setViews(post.views ? post.views + 1 : 1);
     post.views = post.views ? post.views + 1 : 1;
+
+    post.shares ? setShares(post.shares) : setShares(0);
+
     // console.log(post);
     firestore
       .collection("user")
@@ -161,6 +197,18 @@ export default (props) => {
     });
   };
 
+  const updateShareOnDB = async () => {
+    const videoId = id[videos.indexOf(cardDetails)];
+    setShares((curr) => curr + 1);
+    cardDetails.shares = shares + 1;
+    await firestore
+      .collection("contest")
+      .doc(videoId)
+      .update({
+        shares: cardDetails.shares + 1,
+      });
+  };
+
   return (
     <Container>
       <HeadingInfoContainer>
@@ -200,8 +248,11 @@ export default (props) => {
         </ThreeColumn>
         {showModal ? (
           <>
-            <ModalContainer>
-              <ModalContent ref={wrapperRef}>
+            <ModalContainer onClick={() => setShowModal(false)}>
+              <ModalContent
+                ref={wrapperRef}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
                   <div tw="flex items-start justify-between px-5  border-gray-300 rounded-t">
@@ -215,9 +266,9 @@ export default (props) => {
                           setCardDetails({});
                           setAuthor(null);
                         }}
-                        tw="p-1 ml-auto  bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                        tw="p-1 ml-auto bg-transparent  border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
                       >
-                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none border-solid focus:outline-none" />
                       </button>
                     </span>
                   </div>
@@ -225,21 +276,23 @@ export default (props) => {
                   <div tw="relative p-2 flex-auto">
                     <div tw="text-gray-600 text-lg leading-relaxed bg-black">
                       <div class="player">
-                        <ReactPlayer
-                          config={{
-                            file: {
-                              attributes: {
-                                disablepictureinpicture: "true",
-                                controlsList: "nodownload",
+                        {showModal ? (
+                          <ReactPlayer
+                            config={{
+                              file: {
+                                attributes: {
+                                  disablePictureInPicture: true,
+                                  controlsList: "nodownload",
+                                },
                               },
-                            },
-                          }}
-                          url={cardDetails.videoUrl}
-                          controls={true}
-                          playing={true}
-                          width={vw < 730 ? vw - 60 : 640}
-                          height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
-                        />
+                            }}
+                            url={cardDetails.videoUrl}
+                            controls={true}
+                            playing={true}
+                            width={vw < 730 ? vw - 60 : 640}
+                            height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
+                          />
+                        ) : null}
                       </div>
                       <div tw="pl-5 pb-4 text-base text-white">
                         <a href="#" class="author-link">
@@ -252,12 +305,18 @@ export default (props) => {
                     </div>
                     <div tw="flex mt-2 pl-2">
                       <div class="video-actions">
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <Tooltip
-                            placement="top"
-                            className="tooltip-top"
-                            title={disabled ? "Login to like" : "Like"}
-                          >
+                        <Tooltip
+                          placement="bottom"
+                          className="tooltip-top"
+                          title={
+                            disabled
+                              ? "Login to like"
+                              : likeBtn === "clicked"
+                              ? "Unlike"
+                              : "Like"
+                          }
+                        >
+                          <div className="icon-container">
                             <IconButton
                               disabled={disabled}
                               onClick={handleClickLike}
@@ -265,9 +324,9 @@ export default (props) => {
                             >
                               <LikeIcon className={likeBtn} tw="w-4 mr-1" />{" "}
                             </IconButton>
-                          </Tooltip>
-                          <span class="video-like-count">{likes}</span>
-                        </div>
+                            <span class="video-like-count">{likes}</span>
+                          </div>
+                        </Tooltip>
                         <div className="icon-container comments-icon">
                           <IconButton className="icon-btn">
                             <Comment tw="w-4 mr-1" />{" "}
@@ -275,10 +334,15 @@ export default (props) => {
                           <span class="video-like-count">{comments}</span>
                         </div>{" "}
                         <div className="icon-container">
-                          <IconButton className="icon-btn">
+                          <IconButton
+                            aria-controls="simple-menu"
+                            aria-haspopup="true"
+                            onClick={handleClickShare}
+                            className="icon-btn"
+                          >
                             <Share tw="w-4 mr-1" />{" "}
                           </IconButton>
-                          <span class="video-like-count">0</span>
+                          <span class="video-like-count">{shares}</span>
                         </div>{" "}
                         <div
                           style={{ marginLeft: "10px" }}
@@ -303,11 +367,135 @@ export default (props) => {
                   </div>
                 </div>
               </ModalContent>
+              {Boolean(anchorEl) ? (
+                <ShareModal
+                  title={cardDetails.title}
+                  description={cardDetails.description}
+                  setShareFlag={setShareFlag}
+                  anchorEl={anchorEl}
+                  setAnchorEl={setAnchorEl}
+                  shareUrl={cardDetails.videoUrl}
+                />
+              ) : null}
             </ModalContainer>
             <OutModal></OutModal>
           </>
         ) : null}
       </Content>
     </Container>
+  );
+};
+
+const ShareModal = ({
+  shareUrl,
+  setAnchorEl,
+  anchorEl,
+  setShareFlag,
+  title,
+  description,
+}) => {
+  const handleClose = () => {
+    setAnchorEl(null);
+    setShareFlag(true);
+  };
+
+  const whatsappRef = useRef(null);
+  const facebookRef = useRef(null);
+  const twitterRef = useRef(null);
+  const linkedinRef = useRef(null);
+  const telegramRef = useRef(null);
+
+  let capitalizedTitle = title.charAt().toUpperCase() + title.slice(1);
+
+  const handleItemClick = (e) => {
+    setShareFlag(true);
+    handleClose();
+    e.stopPropagation();
+  };
+
+  return (
+    <Menu
+      id="simple-menu"
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+    >
+      <MenuItem
+        onClick={(e) => {
+          whatsappRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <WhatsappShareButton
+          ref={whatsappRef}
+          url={shareUrl}
+          openShareDialogOnClick
+          title={capitalizedTitle}
+        >
+          <WhatsappIcon size={32} round={true} />
+        </WhatsappShareButton>
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          facebookRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <FacebookShareButton
+          ref={facebookRef}
+          url={shareUrl}
+          openShareDialogOnClick
+          quote={`${capitalizedTitle} | ${description}`}
+        >
+          <FacebookIcon size={32} round={true} />
+        </FacebookShareButton>
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          twitterRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <TwitterShareButton
+          ref={twitterRef}
+          url={shareUrl}
+          openShareDialogOnClick
+          title={capitalizedTitle}
+        >
+          <TwitterIcon size={32} round={true} />
+        </TwitterShareButton>
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          linkedinRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <LinkedinShareButton
+          ref={linkedinRef}
+          url={shareUrl}
+          openShareDialogOnClick
+          title={capitalizedTitle}
+          summary={description}
+        >
+          <LinkedinIcon size={32} round={true} />
+        </LinkedinShareButton>
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          telegramRef.current.click();
+          handleItemClick(e);
+        }}
+      >
+        <TelegramShareButton
+          ref={telegramRef}
+          url={shareUrl}
+          openShareDialogOnClick
+          title={capitalizedTitle}
+        >
+          <TelegramIcon size={32} round={true} />
+        </TelegramShareButton>
+      </MenuItem>
+    </Menu>
   );
 };
