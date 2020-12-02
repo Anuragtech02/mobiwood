@@ -17,7 +17,7 @@ import googleIconImageSrc from "../../images/google-icon.png";
 import twitterIconImageSrc from "../../images/twitter-icon.png";
 import facebookIconImageSrc from "../../images/facebook-icon.png";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-
+import logo from "../../images/logo_tm.png";
 import { isBrowser, isMobile, isTablet } from "react-device-detect";
 import { SideLinks, SideLinksShort } from "../layouts/SideLinks";
 import { useFormik } from "formik";
@@ -61,9 +61,9 @@ const ContentLeft = tw.div`w-full lg:w-9/12 overflow-hidden lg:pr-4`;
 const ContentRight = tw.div`w-full lg:w-3/12`;
 const SliderContainer = tw.div`w-full flex-col`;
 
-const ModalContainer = tw.div`justify-center m-4 items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`;
-const OutModal = tw.div`opacity-75 fixed inset-0 z-40 bg-black`;
-const ModalContent = tw.div`relative w-auto my-auto mx-auto max-w-3xl`;
+const ModalContainer = tw.div`justify-center items-center overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none`;
+const OutModal = tw.div`opacity-75 fixed inset-0 z-40 bg-black mx-auto`;
+const ModalContent = tw.div`relative w-auto my-auto mx-auto `;
 
 const FormContainer = tw.div`w-full flex flex-col sm:flex-row`;
 
@@ -125,6 +125,23 @@ const validate = (values) => {
 
   return errors;
 };
+
+const SocialButtonsContainer = tw.div`flex flex-col items-center`;
+const SocialButton = styled.a`
+  ${tw`w-full max-w-xs font-semibold rounded-lg py-3 border text-gray-900 bg-gray-100 hocus:bg-gray-200 hocus:border-gray-400 flex items-center justify-center transition-all duration-300 focus:outline-none focus:shadow-outline text-sm mt-5 first:mt-0`}
+  .iconContainer {
+    ${tw`bg-white p-2 rounded-full`}
+  }
+  .icon {
+    ${tw`w-4`}
+  }
+  .text {
+    ${tw`ml-4`}
+  }
+`;
+
+const DividerTextContainer = tw.div`my-12 border-b text-center relative`;
+const DividerText = tw.div`leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform -translate-y-1/2 absolute inset-x-0 top-1/2 bg-transparent`;
 
 // Main Function
 
@@ -566,10 +583,9 @@ const Home = ({
               <>
                 <ModalContainer>
                   <ModalContent ref={wrapperRef}>
-                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                    <div tw="border-0 shadow-lg  relative flex flex-col w-full bg-white outline-none focus:outline-none h-screen table">
                       {/*header*/}
-                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                        <h3 tw="text-xl font-semibold">Create New Account</h3>
+                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
                         <button
                           onClick={() => setSignupModal(false)}
                           tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
@@ -578,9 +594,13 @@ const Home = ({
                         </button>
                       </div>
                       {/*body*/}
-                      <div tw="relative p-6 pt-4 flex-auto">
-                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                      <div tw="relative p-6 pt-0 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
+                            
+                          <a href="/" class="create-account-logo"><img src={logo} alt="logo" /></a>
+                          <h3 tw="text-xl font-semibold mb-4 text-center">Create New Account</h3>
+                        
                             <FormContainer>
                               {}
                               <div tw="w-full ">
@@ -596,7 +616,7 @@ const Home = ({
                                         <input
                                           type="radio"
                                           name="age"
-                                          tw="invisible"
+                                          tw="invisible w-0"
                                           value="b18"
                                           onClick={() => setRadioValue("b18")}
                                         />
@@ -613,7 +633,7 @@ const Home = ({
                                         <input
                                           type="radio"
                                           name="age"
-                                          tw="invisible"
+                                          tw="invisible w-0"
                                           value="a18"
                                           onClick={() => setRadioValue("a18")}
                                         />
@@ -701,9 +721,9 @@ const Home = ({
                         <div tw="mt-4 -mb-2 text-center text-xs">
                           By creating an account you are agree to our{" "}
                           <a href="/terms-and-conditions">
-                            Terms and Conditions
+                            <u>Terms</u>
                           </a>{" "}
-                          and <a href="/policy">Privacy Policy</a>
+                          and <a href="/policy"><u>Privacy</u></a>
                         </div>
                       </div>
                     </div>
@@ -716,58 +736,28 @@ const Home = ({
               <>
                 <ModalContainer>
                   <ModalContent ref={wrapperRef}>
-                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                    <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
                       {/*header*/}
-                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                        <h3 tw="text-xl font-semibold">
-                          Log In to Your Account
-                        </h3>
+                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
+                        
                         <button
                           onClick={() => setLoginModal(false)}
-                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
                         >
-                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                          <CloseIcon tw="cursor-pointer text-black h-10 w-8 text-2xl block outline-none focus:outline-none" />
                         </button>
                       </div>
                       {/*body*/}
                       <div tw="relative p-6 flex-auto">
-                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
                             <FormContainer>
-                              {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
-                              <SocialButtonsContainer>
-                                {LoginsocialButtons.map(
-                                  (socialButton, index) => (
-                                    <SocialButton
-                                      key={index}
-                                      onClick={socialButton.onclick}
-                                      style={{
-                                        backgroundColor: socialButton.bg,
-                                      }}
-                                    >
-                                      <span className="iconContainer">
-                                        <img
-                                          src={socialButton.iconImageSrc}
-                                          className="icon"
-                                          alt=""
-                                        />
-                                      </span>
-                                      <span className="text">
-                                        {socialButton.text}
-                                      </span>
-                                    </SocialButton>
-                                  )
-                                )}
-                              </SocialButtonsContainer>
-                            </div>
-                            {isMobile && (
-                              <DividerTextContainer>
-                                <DividerText>
-                                  Or Log In Using Username
-                                </DividerText>
-                              </DividerTextContainer>
-                            )} */}
+                              
                               <div tw="w-full">
+                              <a href="/" class="login-logo"><img src={logo} alt="logo" /></a>
+                              <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
+                          Log In to Your Account
+                        </h3>
                                 {firebaseErrors.others ? (
                                   <ErrorMessage>
                                     {firebaseErrors.others}
@@ -817,13 +807,7 @@ const Home = ({
                             </FormContainer>
                           </div>
                         </div>
-                        <div tw="mt-4 -mb-2 text-center text-xs">
-                          By logging in you agree to our{" "}
-                          <a href="/terms-and-conditions">
-                            Terms and Conditions
-                          </a>{" "}
-                          and <a href="/policy">Privacy Policy</a>
-                        </div>
+                        
                       </div>
                     </div>
                   </ModalContent>

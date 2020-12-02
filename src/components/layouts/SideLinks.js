@@ -16,6 +16,7 @@ import { ReactComponent as TargetIcon } from "feather-icons/dist/icons/target.sv
 import {css} from "styled-components/macro"; //eslint-disable-line
 import { navigate } from "hookrouter";
 import styles from '../css/master.css'; 
+import { auth } from "../../firebase.config";
 
 const SidebarContainer = tw.div`bg-prim-200 text-white`;
 const SidebarHeading = tw.div`bg-prim-200 p-6 flex pb-6 pt-4 mb-4`;
@@ -38,9 +39,11 @@ const handleClick = () => {
 const mystyle = {
   
     };
+	
+
 
 export const SideLinks = (
-						  
+			<div class="l-menu">			  
   <SidebarContainer>
     <SidebarHeading>
       <HeadingText imageSrc={transLogo}></HeadingText>
@@ -64,13 +67,13 @@ export const SideLinks = (
           Contests
         </SidebarContent>
       </div>
-      <a href="/profile">
+	  
+       <a href="/profile">
         <SidebarContent>
           <UserIcon height="20" width="20" tw="mr-4" />
           Profile
         </SidebarContent>
       </a>
-      
       <SidebarContent>
         <MusicIcon height="20" width="20" tw="mr-4" />
         Notifications
@@ -101,6 +104,7 @@ export const SideLinks = (
       </SidebarContent>
     </SidebarContentContainer>
   </SidebarContainer>
+  </div>
 );
 
 export const SideLinksShort = (
@@ -124,12 +128,16 @@ export const SideLinksShort = (
           <FilmIcon height="20" width="20" />
         </SidebarContent>
       </div>
+      {auth.currentUser ? (
       <a href="/profile" title="Profile">
         <SidebarContent>
           <UserIcon height="20" width="20" />
         </SidebarContent>
       </a>
-	  
+	  ) : (
+      null
+      )}
+
 	  <a href="/notification" title="Notification">
       <SidebarContent>
         <MusicIcon height="20" width="20" />

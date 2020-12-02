@@ -8,6 +8,7 @@ import Sidebar from "react-sidebar";
 import { auth, firestore } from "../../firebase.config";
 import { navigate } from "hookrouter";
 import { SideLinks, SideLinksShort } from "../layouts/SideLinks";
+import logo from "../../images/logo_tm.png";
 import { ReactComponent as MapPin } from "feather-icons/dist/icons/map-pin.svg";
 import { ReactComponent as AwardIcon } from "feather-icons/dist/icons/award.svg";
 import { ReactComponent as LikeIcon } from "feather-icons/dist/icons/thumbs-up.svg";

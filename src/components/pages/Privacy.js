@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import Video from "../../videos/video.mp4";
 import ReactPlayer from "react-player";
 import Sidebar from "react-sidebar";
+import logo from "../../images/logo_tm.png";
 import { isBrowser, isMobile, isTablet } from "react-device-detect"; //eslint-disable-line
 import { SideLinks, SideLinksShort } from "../layouts/SideLinks";
 import { auth, firestore } from "../../firebase.config";
@@ -54,11 +55,11 @@ const SubmitButton = styled.button`
   }
 `;
 
-const ModalContainer = tw.div`justify-center m-4 items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`;
+const ModalContainer = tw.div`justify-center items-center overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none`;
 const OutModal = tw.div`opacity-75 fixed inset-0 z-40 bg-black`;
-const ModalContent = tw.div`relative w-auto my-auto mx-auto max-w-3xl`;
+const ModalContent = tw.div`relative w-auto my-auto mx-auto `;
 
-const ErrorMessage = tw.div`text-red-600 -mb-2 mt-3`;
+const ErrorMessage = tw.div`text-red-600 -mb-2 mt-3 text-sm`;
 
 const validate = (values) => {
   const errors = {};
@@ -718,68 +719,13 @@ const About = ({
             </OutNav>
             <Footer />
 
-            {signupModal ? (
-              <>
-                <ModalContainer>
+          {signupModal ? (
+            <>
+              <ModalContainer>
                   <ModalContent ref={wrapperRef}>
-                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                    <div tw="border-0 shadow-lg  relative flex flex-col w-full bg-white outline-none focus:outline-none h-screen table">
                       {/*header*/}
-                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                        <h3 tw="text-xl font-semibold">Categories</h3>
-                        <button
-                          onClick={() => setShowModal(false)}
-                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                        >
-                          <CloseIcon tw="cursor-pointer text-black h-5  w-6 text-xl block outline-none focus:outline-none" />
-                        </button>
-                      </div>
-                      {/*body*/}
-                      <div tw="relative p-6 flex-auto">
-                        <div tw="my-4 text-gray-600 text-lg leading-relaxed">
-                          <GridContent>
-                            <ThreeColumn>
-                              <Column>
-                                <Card>Acting</Card>
-                              </Column>
-                              <Column>
-                                <Card>Singing</Card>
-                              </Column>
-                              <Column>
-                                <Card>Dancing</Card>
-                              </Column>
-                              <Column>
-                                <Card>Comedy</Card>
-                              </Column>
-                              <Column>
-                                <Card>Music</Card>
-                              </Column>
-                              <Column>
-                                <Card>Magic</Card>
-                              </Column>
-                              <Column>
-                                <Card>Acrobatics</Card>
-                              </Column>
-                              <Column>
-                                <Card>Others</Card>
-                              </Column>
-                            </ThreeColumn>
-                          </GridContent>
-                        </div>
-                      </div>
-                    </div>
-                  </ModalContent>
-                </ModalContainer>
-                <OutModal></OutModal>
-              </>
-            ) : null}
-            {signupModal ? (
-              <>
-                <ModalContainer>
-                  <ModalContent ref={wrapperRef}>
-                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                      {/*header*/}
-                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                        <h3 tw="text-xl font-semibold">Create New Account</h3>
+                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
                         <button
                           onClick={() => setSignupModal(false)}
                           tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
@@ -788,9 +734,13 @@ const About = ({
                         </button>
                       </div>
                       {/*body*/}
-                      <div tw="relative p-6 pt-4 flex-auto">
-                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                      <div tw="relative p-6 pt-0 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
+                            
+                          <a href="/" class="create-account-logo"><img src={logo} alt="logo" /></a>
+                          <h3 tw="text-xl font-semibold mb-4 text-center">Create New Account</h3>
+                        
                             <FormContainer>
                               {}
                               <div tw="w-full ">
@@ -806,7 +756,7 @@ const About = ({
                                         <input
                                           type="radio"
                                           name="age"
-                                          tw="invisible"
+                                          tw="invisible w-0"
                                           value="b18"
                                           onClick={() => setRadioValue("b18")}
                                         />
@@ -823,7 +773,7 @@ const About = ({
                                         <input
                                           type="radio"
                                           name="age"
-                                          tw="invisible"
+                                          tw="invisible w-0"
                                           value="a18"
                                           onClick={() => setRadioValue("a18")}
                                         />
@@ -911,37 +861,35 @@ const About = ({
                         <div tw="mt-4 -mb-2 text-center text-xs">
                           By creating an account you are agree to our{" "}
                           <a href="/terms-and-conditions">
-                            Terms and Conditions
+                            <u>Terms</u>
                           </a>{" "}
-                          and <a href="/policy">Privacy Policy</a>
+                          and <a href="/policy"><u>Privacy</u></a>
                         </div>
                       </div>
                     </div>
                   </ModalContent>
                 </ModalContainer>
-                <OutModal></OutModal>
-              </>
-            ) : null}
-            {loginModal ? (
-              <>
-                <ModalContainer>
+              <OutModal></OutModal>
+            </>
+          ) : null}
+          {loginModal ? (
+            <>
+              <ModalContainer>
                   <ModalContent ref={wrapperRef}>
-                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                    <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
                       {/*header*/}
-                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                        <h3 tw="text-xl font-semibold">
-                          Log In to Your Account
-                        </h3>
+                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
+                        
                         <button
                           onClick={() => setLoginModal(false)}
-                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
                         >
-                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                          <CloseIcon tw="cursor-pointer text-black h-10 w-8 text-2xl block outline-none focus:outline-none" />
                         </button>
                       </div>
                       {/*body*/}
                       <div tw="relative p-6 flex-auto">
-                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
                             <FormContainer>
                               {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
@@ -978,6 +926,10 @@ const About = ({
                               </DividerTextContainer>
                             )} */}
                               <div tw="w-full">
+                              <a href="/" class="login-logo"><img src={logo} alt="logo" /></a>
+                              <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
+                          Log In to Your Account
+                        </h3>
                                 {firebaseErrors.others ? (
                                   <ErrorMessage>
                                     {firebaseErrors.others}
@@ -1027,20 +979,14 @@ const About = ({
                             </FormContainer>
                           </div>
                         </div>
-                        <div tw="mt-4 -mb-2 text-center text-xs">
-                          By logging in you agree to our{" "}
-                          <a href="/terms-and-conditions">
-                            Terms and Conditions
-                          </a>{" "}
-                          and <a href="/policy">Privacy Policy</a>
-                        </div>
+                        
                       </div>
                     </div>
                   </ModalContent>
                 </ModalContainer>
-                <OutModal></OutModal>
-              </>
-            ) : null}
+              <OutModal></OutModal>
+            </>
+          ) : null}
           </AnimationRevealPage>
         </Sidebar>
       </Sidebar>

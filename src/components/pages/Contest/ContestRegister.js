@@ -40,9 +40,9 @@ const MainSubmitButton = styled.button`
   }
 `;
 
-const ModalContainer = tw.div`justify-center m-4 items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`;
+const ModalContainer = tw.div`justify-center items-center overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none`;
 const OutModal = tw.div`opacity-75 fixed inset-0 z-40 bg-black`;
-const ModalContent = tw.div`relative w-auto my-auto mx-auto max-w-3xl`;
+const ModalContent = tw.div`relative w-auto my-auto mx-auto `;
 
 const IllustrationContainer = tw.div`flex-1 border-t-2 flex justify-start lg:pl-0 sm:p-6`;
 const IllustratorContent = tw.div`block relative`;

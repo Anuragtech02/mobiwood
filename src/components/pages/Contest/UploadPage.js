@@ -13,12 +13,12 @@ import { SideLinks, SideLinksShort } from "../../layouts/SideLinks";
 import { isBrowser, isMobile, isTablet } from "react-device-detect"; //eslint-disable-line
 
 const Container = tw.div`relative bg-purple-100 text-gray-900 font-medium flex flex-col justify-center mt-0 pb-5`;
-const ContainerHeading = tw.div`px-4 sm:px-10 pt-4 text-2xl font-normal`;
+const ContainerHeading = tw.div`px-4 sm:px-10 pt-4 text-2xl font-semibold`;
 const Content = tw.div`m-4 sm:m-8 mt-2 sm:mt-2 bg-purple-100 text-gray-900 flex justify-center flex-1 flex-col lg:flex-row`;
-const MainContainer = tw.div`w-full lg:w-1/2 p-2 sm:p-6 lg:border-t-2`;
-const FormContainer = tw.div`w-full flex-1 mt-2`;
+const MainContainer = tw.div`w-full lg:w-1/2 sm:p-0 lg:p-2 lg:pl-8 lg:border-t-2`;
+const FormContainer = tw.div`w-full flex-1  lg:mt-2 md:mt-4 `;
 
-const OutNav = tw.div`font-display text-secondary-500 block overflow-hidden`;
+const OutNav = tw.div`font-display text-secondary-500 block overflow-hidden `;
 
 const Form = tw.form`mx-auto`;
 const InputContainer = tw.div`first:mt-0 mt-5 flex flex-col`;
@@ -35,7 +35,7 @@ const SubmitButton = styled.button`
 const IllustrationContainer = tw.div`flex-1 border-t-2 flex justify-start`;
 const IllustratorContent = tw.div`block relative`;
 const IllustrationHeading = tw.div`text-lg pt-4 font-semibold`;
-const OL = tw.ul`pl-5 mt-4 list-decimal font-light text-sm text-justify`;
+const OL = tw.ul`pl-5 mt-4 list-decimal font-light text-sm text-justify pb-4`;
 const LI = tw.li`py-1`;
 
 const ErrorMessage = tw.div`text-red-600 -mb-2 mt-3 text-xs`;

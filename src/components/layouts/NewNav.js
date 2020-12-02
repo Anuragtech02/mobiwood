@@ -39,12 +39,12 @@ const Nav = ({ onSetSidebarOpen, onClickSignup, onClickLogin }) => {
   const navLinks = loggedIn
     ? [
       <NavLinks key={1}>
-        <PrimaryLink onClick={() => {logout(); auth.signOut()}}>Logout</PrimaryLink>
+        <PrimaryLink  onClick={() => {logout(); auth.signOut()}}>Logout</PrimaryLink>
       </NavLinks>
     ]
     : [
         <NavLinks key={1}>
-          <NavLink onClick={onClickLogin} tw="w-12 inline-block hover:no-underline">Login</NavLink>
+          <NavLink onClick={onClickLogin} tw="w-12 inline-block hover:no-underline mr-3">Login</NavLink>
           <PrimaryLink hred="#" onClick={onClickSignup}>Signup</PrimaryLink>
         </NavLinks>,
       ];

@@ -47,7 +47,7 @@ const HeadingDescription = tw.p`mt-4 font-bold text-3xl text-gray-900 text-cente
 const Card = tw.div`mx-2 cursor-pointer`;
 const Image = tw.div`bg-cover bg-center h-40width sm:h-28width lg:h-24width xl:h-18width rounded`;
 
-const ModalContainer = tw.div`justify-center m-4 items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`;
+const ModalContainer = tw.div`justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`;
 const OutModal = tw.div`opacity-75 fixed inset-0 z-40 bg-black`;
 const ModalContent = tw.div`relative w-auto my-6 mx-auto max-w-3xl`;
 

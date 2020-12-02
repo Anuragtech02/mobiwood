@@ -140,3 +140,29 @@ button.MuiButtonBase-root.MuiIconButton-root.icon-btn:hover {
     margin-top: 0.9rem;
     padding: 1rem 0;
 }
+select
+{
+  -webkit-appearance:none;
+}
+@media (max-width: 600px){
+.top-logo a
+{
+  left: 2.5rem;
+}
+.l-menu div, .l-menu a div
+{
+  font-size:1rem;
+}
+
+}
+.login-logo img
+{
+  max-width: 15rem;
+  margin: auto;
+}
+.create-account-logo img
+{
+  max-width: 15rem;
+  margin: auto;
+  margin-bottom: 1rem;
+}

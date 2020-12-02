@@ -83,9 +83,11 @@ export default ({
   );
 
   const midLogo = (
-    <LogoLink href="/" tw="m-0 p-0 -ml-12 -mt-2">
+    <span class="top-logo">
+    <LogoLink href="/" tw="m-0 p-0 absolute lg:left-1/2 lg:-ml-20 md:ml-8 top-0">
       <img src={logo} alt="logo" tw="m-auto" />
     </LogoLink>
+    </span>
   );
 
   logoLink = logoLink || defaultLogoLink;
