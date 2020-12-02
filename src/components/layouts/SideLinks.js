@@ -3,6 +3,7 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import transLogo from "../../images/logo_black.jpg";
 import slogo from "../../images/slogo.png";
+import { auth } from "firebase";
 import { ReactComponent as HomeIcon } from "feather-icons/dist/icons/home.svg";
 import { ReactComponent as FilmIcon } from "feather-icons/dist/icons/film.svg";
 import { ReactComponent as UserIcon } from "feather-icons/dist/icons/user.svg";
@@ -15,8 +16,8 @@ import { ReactComponent as UserAddIcon } from "feather-icons/dist/icons/user-plu
 import { ReactComponent as TargetIcon } from "feather-icons/dist/icons/target.svg";
 import {css} from "styled-components/macro"; //eslint-disable-line
 import { navigate } from "hookrouter";
-import styles from '../css/master.css'; 
-import { auth } from "../../firebase.config";
+import styles from '../css/master.css';
+
 
 const SidebarContainer = tw.div`bg-prim-200 text-white`;
 const SidebarHeading = tw.div`bg-prim-200 p-6 flex pb-6 pt-4 mb-4`;
@@ -39,9 +40,9 @@ const handleClick = () => {
 const mystyle = {
   
     };
-	
-
-
+    console.log(auth.currentUser);
+    if (!auth.currentUser) {
+    }
 export const SideLinks = (
 			<div class="l-menu">			  
   <SidebarContainer>

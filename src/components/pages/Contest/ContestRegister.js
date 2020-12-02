@@ -389,7 +389,8 @@ const ContestRegister = ({
 
   const handleAuthStateChange = (u) => {
     if (u && u.uid) {
-      console.log("LOGGED IN: ", u.displayName);
+     // console.log("LOGGED IN: ", u.displayName);
+     // console.log("LOGGED IN: ", u);
     }
   };
 
