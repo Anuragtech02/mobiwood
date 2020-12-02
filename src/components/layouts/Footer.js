@@ -72,12 +72,12 @@ export default () => {
           <CopyrightText>
             &copy; Copyright {new Date().getFullYear()} &bull; Mobiwood - All
             Rights Reserved
-            <span>
+            <div>
               Powered By -{" "}
               <a href="https://samairawebsolutions.in/" target="_blank">
                 Samaira Web Solutions
               </a>
-            </span>
+            </div>
           </CopyrightText>
         </Row>
       </Content>
