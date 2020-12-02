@@ -14,7 +14,7 @@ const VideosContextProvider = ({ children }) => {
     if (!initialCount) sessionStorage.setItem("count", 0);
     if (!timestamp) sessionStorage.setItem("lastLoad", new Date());
     const difference =
-      (new Date() - new Date(timestamp)) / (1000 * 60 * 60 * 24);
+      Math.floor(new Date() - new Date(timestamp)) / (1000 * 60 * 60 * 24);
     // console.log(Math.floor(difference / (1000 * 60 * 60 * 24)));
     const fetchLimitedVideos = async () => {
       const count = parseInt(sessionStorage.getItem("count"));
