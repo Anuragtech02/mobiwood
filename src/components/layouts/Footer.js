@@ -1,7 +1,7 @@
 import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
-import { css } from "styled-components/macro"; //eslint-disable-line 
+import { css } from "styled-components/macro"; //eslint-disable-line
 import { Container as ContainerBase } from "./Layouts.js";
 import logo from "../../images/logo_black.jpg";
 import FacebookIcon from "../../images/facebook-icon.png";
@@ -62,19 +62,22 @@ export default () => {
             <SocialLink href="https://twitter.com/MobiwoodE" target="_blank">
               <img src={TwitterIcon} alt="Twitter" tw="h-5" />
             </SocialLink>
-			<SocialLink href="https://www.youtube.com/channel/UCHIDY2PMNb7Czfck_dARl-w" target="_blank">
+            <SocialLink
+              href="https://www.youtube.com/channel/UCHIDY2PMNb7Czfck_dARl-w"
+              target="_blank"
+            >
               <img src={YoutubeIcon} alt="Youtube" tw="h-5" />
             </SocialLink>
           </SocialLinksContainer>
           <CopyrightText>
             &copy; Copyright {new Date().getFullYear()} &bull; Mobiwood - All
             Rights Reserved
-            <div>
+            <span>
               Powered By -{" "}
               <a href="https://samairawebsolutions.in/" target="_blank">
                 Samaira Web Solutions
               </a>
-            </div>
+            </span>
           </CopyrightText>
         </Row>
       </Content>

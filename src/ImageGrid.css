@@ -33,3 +33,20 @@
   justify-content: space-between;
   align-items: center;
 }
+@media screen and (max-width: 400px) {
+  .video-player {
+    width: 90vw !important;
+  }
+  .video-like-count {
+    margin-right: 0;
+  }
+  .icon-container button {
+    padding: 2px;
+  }
+  .video-actions {
+    justify-content: space-between;
+  }
+  .report-video-link {
+    margin: 0;
+  }
+}

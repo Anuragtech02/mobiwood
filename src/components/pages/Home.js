@@ -859,13 +859,8 @@ const AdImages = () => {
   return (
     <div>
       {ads.map((ad, index) => (
-        <a href={ad.url}>
-          <img
-            src={ad.image}
-            alt={ad.name}
-            key={`${index.toString()}_ad`}
-            tw="mb-5"
-          />
+        <a key={`${index.toString()}_ad`} href={ad.url}>
+          <img src={ad.image} alt={ad.name} tw="mb-5" />
         </a>
       ))}
     </div>

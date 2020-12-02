@@ -110,55 +110,55 @@ const VideoGrid = ({ gridHeading = (props) => props.gridHeading }) => {
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "7",
       postImageSrc: Image7,
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "8",
       postImageSrc: Image8,
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "9",
       postImageSrc: Image9,
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "10",
       postImageSrc: Image10,
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "11",
       postImageSrc: Image11,
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "12",
       postImageSrc: Image12,
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "13",
       postImageSrc: Image13,
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "14",
       postImageSrc: Image14,
       title: "Hiking during the monsoon in Asia",
       url: "/v",
     },
-	{
+    {
       postId: "15",
       postImageSrc: Image15,
       title: "Hiking during the monsoon in Asia",
@@ -171,8 +171,8 @@ const VideoGrid = ({ gridHeading = (props) => props.gridHeading }) => {
       <Content>
         <CardSlider {...sliderSettings} tw="w-full h-64">
           {cards.map((card, index) => (
-            <a href={card.url} tw="w-full h-64">
-              <Card key={index}>
+            <a key={index} href={card.url} tw="w-full h-64">
+              <Card>
                 <CardImage imageSrc={card.postImageSrc} />
               </Card>
             </a>

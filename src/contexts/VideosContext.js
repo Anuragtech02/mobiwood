@@ -10,7 +10,12 @@ const VideosContextProvider = ({ children }) => {
 
   React.useEffect(() => {
     const initialCount = sessionStorage.getItem("count");
+    const timestamp = sessionStorage.getItem("lastLoad");
     if (!initialCount) sessionStorage.setItem("count", 0);
+    if (!timestamp) sessionStorage.setItem("lastLoad", new Date());
+    const difference =
+      (new Date() - new Date(timestamp)) / (1000 * 60 * 60 * 24);
+    // console.log(Math.floor(difference / (1000 * 60 * 60 * 24)));
     const fetchLimitedVideos = async () => {
       const count = parseInt(sessionStorage.getItem("count"));
       let vids = [];
@@ -20,7 +25,7 @@ const VideosContextProvider = ({ children }) => {
         .collection("contest")
         .orderBy("uploadTime", "desc");
 
-      if (count >= 3 || !initialCount) {
+      if (count >= 3 || !initialCount || !timestamp || difference > 0) {
         console.log("Query Made from context");
         const activeref = await vidRef.get();
         activeref.forEach((collection) => {
@@ -39,6 +44,7 @@ const VideosContextProvider = ({ children }) => {
         sessionStorage.setItem("videosLimited", JSON.stringify(tmp));
         sessionStorage.setItem("videos", JSON.stringify(vids));
         sessionStorage.setItem("id", JSON.stringify(ids));
+        sessionStorage.setItem("lastLoad", new Date());
       } else {
         sessionStorage.setItem("count", parseInt(count) + 1);
         const tempVids = sessionStorage.getItem("videosLimited");
