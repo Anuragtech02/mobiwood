@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import AnimationRevealPage from "../layouts/AnimationRevealPage";
 import Nav from "../layouts/NewNav";
 import tw from "twin.macro";
@@ -22,12 +22,11 @@ import twitterIconImageSrc from "../../images/twitter-icon.png";
 import facebookIconImageSrc from "../../images/facebook-icon.png";
 import Footer from "../layouts/Footer";
 import { css } from "styled-components/macro"; //eslint-disable-line
-
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
-
 import { ReactComponent as CircleCheckIcon } from "feather-icons/dist/icons/check.svg";
-
 import { useFormik } from "formik";
+import ImageGrid from "../layouts/ImageGrid";
+import { UserContext } from "../../contexts/UserContext";
 
 const Content = tw.div`flex flex-col lg:flex-row pt-6 px-2 sm:px-6 overflow-x-hidden bg-purple-100 block`;
 const LeftContent = tw.div`w-full lg:w-2/3 m-auto`;
@@ -180,6 +179,20 @@ const UserDashboard = ({
   function onSetSidebarOpen(open) {
     setSidebarOpen(!sidebarOpen);
   }
+
+  const { myVideos } = useContext(UserContext);
+  // const [myVideos, setMyVideos] = useState([]);
+
+  // useEffect(() => {
+  //   if (userDetails.videos) {
+  //     const videos = userDetails.videos;
+  //     console.log(userDetails);
+  //     const myVids = videos.forEach((vid) => {
+  //       if (vid.videoUrl) return vid;
+  //     });
+  //     setMyVideos([...myVideos, myVids]);
+  //   }
+  // }, [userDetails, myVideos]);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -428,7 +441,7 @@ const UserDashboard = ({
                       <ProfileLeft>
                         <ProfileImage
                           imageSrc={
-                            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3.25&w=512&h=512&q=80"
+                            "https://cdn2.iconfinder.com/data/icons/user-interface-solid-6/64/User_Interface_Glyph-01-512.png"
                           }
                         />
                         <OtherInfo>
@@ -454,7 +467,13 @@ const UserDashboard = ({
                   </LeftContent>
 
                   <div tw="clear-both"></div>
-                  <div class="profile-grid">Under Construction</div>
+                  <div class="profile-grid">
+                    {myVideos.length ? (
+                      <ImageGrid videosLimited={myVideos} />
+                    ) : (
+                      <p>Seems like you haven't uploaded any video yet!</p>
+                    )}
+                  </div>
                 </>
               ) : (
                 <div
