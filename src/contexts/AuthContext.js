@@ -15,12 +15,15 @@ export const AuthProvider = (props) => {
     if (u) {
       setUser(u);
       setUid(u.uid);
+      sessionStorage.setItem("isLoggedIn", true);
       await db
         .doc(u.uid)
         .get()
         .then((vals) => {
           setUserDetails(vals.data());
         });
+    } else {
+      sessionStorage.setItem("isLoggedIn", false);
     }
   };
 

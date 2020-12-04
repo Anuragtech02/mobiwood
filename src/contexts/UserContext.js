@@ -6,6 +6,7 @@ export const UserContext = createContext({});
 
 const UserContextProvider = ({ children }) => {
   const [likedVideos, setLikedVideos] = useState([]);
+  const [myVideos, setMyVideos] = useState([]);
 
   const { userDetails, uid } = useContext(AuthContext);
 

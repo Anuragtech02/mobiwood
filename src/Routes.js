@@ -56,5 +56,6 @@ export const guestRoutes = {
   "/privacy": () => <Privacy />,
   "/policy": () => <Privacy />,
   "/advertising": () => <Advertising />,
+  "/profile": () => <UserDashboard />,
   // "/profile": () => <UserDashboard />,
 };
