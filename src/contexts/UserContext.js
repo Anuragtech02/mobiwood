@@ -13,7 +13,7 @@ const UserContextProvider = ({ children }) => {
   // const { videos } = useContext(VideosContext);
 
   useEffect(() => {
-    setLikedVideos(userDetails.likedVideos || []);
+    if (userDetails) setLikedVideos(userDetails.likedVideos || []);
   }, [userDetails]);
 
   useEffect(() => {

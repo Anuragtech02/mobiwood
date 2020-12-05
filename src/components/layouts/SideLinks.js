@@ -45,7 +45,7 @@ const mystyle = {};
 // console.log(isLoggedIn);
 
 export const SideLinks = (
-  <div class="l-menu">
+  <div className="l-menu">
     <SidebarContainer>
       <SidebarHeading>
         <HeadingText imageSrc={transLogo}></HeadingText>
