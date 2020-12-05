@@ -255,6 +255,7 @@ const About = ({
                   username: values.username,
                   account_creation_datetime: user.metadata.creationTime,
                   last_login_datetime: user.metadata.creationTime,
+                  likedVideos: [],
                 };
                 firestore
                   .collection("user")
@@ -309,7 +310,7 @@ const About = ({
       // }
     },
   });
-  
+
   // Formik
 
   const formik = useFormik({
@@ -420,13 +421,10 @@ const About = ({
                   )
                   .then(function () {
                     asyncLocalStorage.setItem("username", values.username);
-                    firestore
-                      .collection("user")
-                      .doc(details.data().uid)
-                      .update(
-                        { last_login_datetime: new Date() },
-                        //{ merge: true }
-                      );
+                    firestore.collection("user").doc(details.data().uid).update(
+                      { last_login_datetime: new Date() }
+                      //{ merge: true }
+                    );
                     navigate("/contest");
                     setLoginModal(false);
                     setSignupModal(false);
@@ -447,84 +445,233 @@ const About = ({
   });
 
   return (
-		  <div className="leftNav">
-    <Sidebar
-      sidebar={SideLinks}
-	  
-      open={sidebarOpen}
-      onSetOpen={onSetSidebarOpen}
-      styles={
-        isBrowser
-          ? { sidebar: { background: "#111", zIndex: 50  } }
-          : { sidebar: { background: "#111", zIndex: 50 } }
-      }
-      docked={isBrowser ? sidebarOpen : false}
-    >
+    <div className="leftNav">
       <Sidebar
-        sidebar={SideLinksShort}
-        open={isBrowser ? !sidebarOpen : false}
+        sidebar={SideLinks}
+        open={sidebarOpen}
         onSetOpen={onSetSidebarOpen}
-        styles={{ sidebar: { background: "#111", zIndex: 30 } }}
-        docked={isBrowser ? !sidebarOpen : false}
+        styles={
+          isBrowser
+            ? { sidebar: { background: "#111", zIndex: 50 } }
+            : { sidebar: { background: "#111", zIndex: 50 } }
+        }
+        docked={isBrowser ? sidebarOpen : false}
       >
-        <AnimationRevealPage disabled>
-          <Nav
-            onSetSidebarOpen={onSetSidebarOpen}
-            onClickLogin={onClickLogin}
-            onClickSignup={onClickSignup}
-          />
-          <OutNav>
-            <Container>
-              <ContainerHeading tw="pl-8 pt-8 text-3xl">Terms of Service</ContainerHeading>
-              <Page tw="block pl-6 mt-4 px-5">
-                <div  tw="w-full pl-2 text-justify">
-                  
-<p>MobiWood is an entertainment next generation Website  and Mobile app (Android and IOS both) to entertain and organise various talent  shows for people across the globe. And Website/App will entertain people by Videos,  Live sessions created by Content creators, purchased from market or by hired  Content creators. MobiWood will be a platform for jobs seekers in  entertainment/media industry and will be creating more business opportunities  for vendors/suppliers related to entertainment/media industry across the globe.</p>
-<p>&nbsp;</p>
-<p>By using our Products, you agree that we can show you  ads that we think will be relevant to you and your interests. We use your  personal data to help determine which ads to show you.  We don't sell any personal data to  advertisers, and we don't share information that directly identifies you (such  as your name, email address or other contact information) with advertisers  unless you give us specific permission. Instead, advertisers can tell us things  such as the kind of audience that they want to see their ads, and we show those  ads to people who may be interested. We provide advertisers with reports about  the performance of their ads that help them understand how people are  interacting with their content. See Section 2 below to learn more.<strong> </strong></p>
+        <Sidebar
+          sidebar={SideLinksShort}
+          open={isBrowser ? !sidebarOpen : false}
+          onSetOpen={onSetSidebarOpen}
+          styles={{ sidebar: { background: "#111", zIndex: 30 } }}
+          docked={isBrowser ? !sidebarOpen : false}
+        >
+          <AnimationRevealPage disabled>
+            <Nav
+              onSetSidebarOpen={onSetSidebarOpen}
+              onClickLogin={onClickLogin}
+              onClickSignup={onClickSignup}
+            />
+            <OutNav>
+              <Container>
+                <ContainerHeading tw="pl-8 pt-8 text-3xl">
+                  Terms of Service
+                </ContainerHeading>
+                <Page tw="block pl-6 mt-4 px-5">
+                  <div tw="w-full pl-2 text-justify">
+                    <p>
+                      MobiWood is an entertainment next generation Website and
+                      Mobile app (Android and IOS both) to entertain and
+                      organise various talent shows for people across the globe.
+                      And Website/App will entertain people by Videos, Live
+                      sessions created by Content creators, purchased from
+                      market or by hired Content creators. MobiWood will be a
+                      platform for jobs seekers in entertainment/media industry
+                      and will be creating more business opportunities for
+                      vendors/suppliers related to entertainment/media industry
+                      across the globe.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      By using our Products, you agree that we can show you ads
+                      that we think will be relevant to you and your interests.
+                      We use your personal data to help determine which ads to
+                      show you.  We don't sell any personal data to advertisers,
+                      and we don't share information that directly identifies
+                      you (such as your name, email address or other contact
+                      information) with advertisers unless you give us specific
+                      permission. Instead, advertisers can tell us things such
+                      as the kind of audience that they want to see their ads,
+                      and we show those ads to people who may be interested. We
+                      provide advertisers with reports about the performance of
+                      their ads that help them understand how people are
+                      interacting with their content. See Section 2 below to
+                      learn more.<strong> </strong>
+                    </p>
 
-<h2 tw="font-bold text-lg my-4">Term of Use</h2>
-<h3 tw="font-bold text-base my-4">1. Relationship with MobiWood</h3>
-<p>Welcome to <strong>MobiWood</strong> (the “Platform”), which is  provided by Samaira Web Solutions Pvt Ltd, Address - Assotech Business Cresterra, Upper Ground,
-Tower 2. Plot No 22, Sector 135, Noida - Uttar Pradesh - 201301 (collectively such entities will be  referred to as “<strong>MobiWood</strong>”, “we” or “us”).</p>
-<p>You are reading the terms of service (the “Terms”),  which govern the relationship and serve as an agreement between you and us and  set forth the terms and conditions by which you may access and use the Platform  and our related websites, services, applications, products and content  (collectively, the “Services”). Access to certain Services or features of the  Services (such as, by way of example and not limitation, the ability to submit  or share User Content (defined below)) may be subject to age restrictions and  not available to all users of the Services. Our Services are provided for  private, non-commercial use. For purposes of these Terms, “you” and “your”  means you as the user of the Services.</p>
-<p>The Terms form a legally binding agreement between you  and us. Please take the time to read them carefully. If you are under age 18,  you may only use the Services with the consent of your parent or legal  guardian. Please be sure your parent or legal guardian has reviewed and  discussed these Terms with you.</p>
-<h3 tw="font-bold text-base my-4">2. Accepting  the Terms</h3>
-<p>By accessing or using our Services, you confirm that  you can form a binding contract with MobiWood, that you accept these Terms and  that you agree to comply with them. Your access to and use of our Services is  also subject to our Privacy Policy and Community Policy, the terms of which can  be found directly on the Platform, or where the Platform is made available for  download, on your mobile device’s applicable app store, and are incorporated  herein by reference. By using the Services, you consent to the terms of the  Privacy Policy.</p>
-<p>If you are accessing or using the Services on behalf  of a business or entity, then (a) “you” and “your” includes you and that  business or entity, (b) you represent and warrant that you are an authorized  representative of the business or entity with the authority to bind the entity  to these Terms, and that you agree to these Terms on the entity’s behalf, and  (c) your business or entity is legally and financially responsible for your  access or use of the Services as well as for the access or use of your account  by others affiliated with your entity, including any employees, agents or  contractors.</p>
-<p>You can accept the Terms by accessing or using our  Services. You understand and agree that we will treat your access or use of the  Services as acceptance of the Terms from that point onwards.’</p>
-<h3 tw="font-bold text-base my-4">3. Amendments/Changes in terms</h3>
-<p>We keep amending these terms from time to time and to  comply with all the legal formalities and regulations and will use commercially  reasonable efforts to generally notify all users of any material changes to  these terms, however the user should keep visiting any changes in these terms  regularly.  Your continued access or use  of the Services after the date of the new Terms constitutes your acceptance of  the new Terms. If you do not agree to the new Terms, you must stop accessing or  using the Services. </p>
-<h3 tw="font-bold text-base my-4">4. Account Creation</h3>
-<p>To access or use our Services, you must create an  account with us. When you create this account, you must provide accurate and  up-to-date information. It is important that you maintain and promptly update  your details and any other information you provide to us, to keep such  information current and complete.</p>
-<p>You agree that you are solely responsible (to us and  to others) for the activity that occurs under your account.</p>
-<p>We reserve the right to disable your user account at  any time, including if you have failed to comply with any of the provisions of  these Terms.</p>
-<h3 tw="font-bold text-base my-4">5. Your  Access to and Use of Our Services</h3>
-<p>Your access to and use of the Services is subject  to these Terms and all applicable laws and regulations. </p>
-<p tw="mt-3">You shall not use our platform:</p>
-<ul class="bullets">
-  <li>if  you are not fully able and legally competent to agree to these Terms or are  authorized to use the Services by your parent or legal guardian;</li>
-  <li>to  make unauthorised copies, modify, adapt, translate, reverse engineer,  disassemble, decompile or create any derivative works of the Services to distribute,  license, transfer, or sell, in whole or in part, any of the Services.</li>
-  <li>without  our express written consent, for any commercial or unauthorized purpose,  including communicating or facilitating any commercial advertisement or  solicitation or spamming;</li>
-  <li>to  upload, transmit, distribute, store or otherwise make available in any way:  files that contain viruses, trojans, worms, logic bombs or other material that  is malicious or technologically harmful;</li>
-  <li>any  material which does or may infringe any copyright, trademark or other  intellectual property or privacy rights of any other person;</li>
-  <li>any  material that is racist or discriminatory, including discrimination on the  basis of someone’s race, religion, age, gender, disability or sexuality;</li>
-  <li>any  material that contains a threat of any kind, including threats of physical  violence;</li>
-</ul>
-<p tw="mt-3">We reserve the right,  at any time and without prior notice, to remove or disable access to content at  our discretion for any reason or no reason. </p>
+                    <h2 tw="font-bold text-lg my-4">Term of Use</h2>
+                    <h3 tw="font-bold text-base my-4">
+                      1. Relationship with MobiWood
+                    </h3>
+                    <p>
+                      Welcome to <strong>MobiWood</strong> (the “Platform”),
+                      which is provided by Samaira Web Solutions Pvt Ltd,
+                      Address - Assotech Business Cresterra, Upper Ground, Tower
+                      2. Plot No 22, Sector 135, Noida - Uttar Pradesh - 201301
+                      (collectively such entities will be referred to as “
+                      <strong>MobiWood</strong>”, “we” or “us”).
+                    </p>
+                    <p>
+                      You are reading the terms of service (the “Terms”), which
+                      govern the relationship and serve as an agreement between
+                      you and us and set forth the terms and conditions by which
+                      you may access and use the Platform and our related
+                      websites, services, applications, products and content
+                      (collectively, the “Services”). Access to certain Services
+                      or features of the Services (such as, by way of example
+                      and not limitation, the ability to submit or share User
+                      Content (defined below)) may be subject to age
+                      restrictions and not available to all users of the
+                      Services. Our Services are provided for private,
+                      non-commercial use. For purposes of these Terms, “you” and
+                      “your” means you as the user of the Services.
+                    </p>
+                    <p>
+                      The Terms form a legally binding agreement between you and
+                      us. Please take the time to read them carefully. If you
+                      are under age 18, you may only use the Services with the
+                      consent of your parent or legal guardian. Please be sure
+                      your parent or legal guardian has reviewed and discussed
+                      these Terms with you.
+                    </p>
+                    <h3 tw="font-bold text-base my-4">
+                      2. Accepting the Terms
+                    </h3>
+                    <p>
+                      By accessing or using our Services, you confirm that you
+                      can form a binding contract with MobiWood, that you accept
+                      these Terms and that you agree to comply with them. Your
+                      access to and use of our Services is also subject to our
+                      Privacy Policy and Community Policy, the terms of which
+                      can be found directly on the Platform, or where the
+                      Platform is made available for download, on your mobile
+                      device’s applicable app store, and are incorporated herein
+                      by reference. By using the Services, you consent to the
+                      terms of the Privacy Policy.
+                    </p>
+                    <p>
+                      If you are accessing or using the Services on behalf of a
+                      business or entity, then (a) “you” and “your” includes you
+                      and that business or entity, (b) you represent and warrant
+                      that you are an authorized representative of the business
+                      or entity with the authority to bind the entity to these
+                      Terms, and that you agree to these Terms on the entity’s
+                      behalf, and (c) your business or entity is legally and
+                      financially responsible for your access or use of the
+                      Services as well as for the access or use of your account
+                      by others affiliated with your entity, including any
+                      employees, agents or contractors.
+                    </p>
+                    <p>
+                      You can accept the Terms by accessing or using our
+                      Services. You understand and agree that we will treat your
+                      access or use of the Services as acceptance of the Terms
+                      from that point onwards.’
+                    </p>
+                    <h3 tw="font-bold text-base my-4">
+                      3. Amendments/Changes in terms
+                    </h3>
+                    <p>
+                      We keep amending these terms from time to time and to
+                      comply with all the legal formalities and regulations and
+                      will use commercially reasonable efforts to generally
+                      notify all users of any material changes to these terms,
+                      however the user should keep visiting any changes in these
+                      terms regularly.  Your continued access or use of the
+                      Services after the date of the new Terms constitutes your
+                      acceptance of the new Terms. If you do not agree to the
+                      new Terms, you must stop accessing or using the Services.{" "}
+                    </p>
+                    <h3 tw="font-bold text-base my-4">4. Account Creation</h3>
+                    <p>
+                      To access or use our Services, you must create an account
+                      with us. When you create this account, you must provide
+                      accurate and up-to-date information. It is important that
+                      you maintain and promptly update your details and any
+                      other information you provide to us, to keep such
+                      information current and complete.
+                    </p>
+                    <p>
+                      You agree that you are solely responsible (to us and to
+                      others) for the activity that occurs under your account.
+                    </p>
+                    <p>
+                      We reserve the right to disable your user account at any
+                      time, including if you have failed to comply with any of
+                      the provisions of these Terms.
+                    </p>
+                    <h3 tw="font-bold text-base my-4">
+                      5. Your Access to and Use of Our Services
+                    </h3>
+                    <p>
+                      Your access to and use of the Services is subject to these
+                      Terms and all applicable laws and regulations.{" "}
+                    </p>
+                    <p tw="mt-3">You shall not use our platform:</p>
+                    <ul class="bullets">
+                      <li>
+                        if you are not fully able and legally competent to agree
+                        to these Terms or are authorized to use the Services by
+                        your parent or legal guardian;
+                      </li>
+                      <li>
+                        to make unauthorised copies, modify, adapt, translate,
+                        reverse engineer, disassemble, decompile or create any
+                        derivative works of the Services to distribute, license,
+                        transfer, or sell, in whole or in part, any of the
+                        Services.
+                      </li>
+                      <li>
+                        without our express written consent, for any commercial
+                        or unauthorized purpose, including communicating or
+                        facilitating any commercial advertisement or
+                        solicitation or spamming;
+                      </li>
+                      <li>
+                        to upload, transmit, distribute, store or otherwise make
+                        available in any way: files that contain viruses,
+                        trojans, worms, logic bombs or other material that is
+                        malicious or technologically harmful;
+                      </li>
+                      <li>
+                        any material which does or may infringe any copyright,
+                        trademark or other intellectual property or privacy
+                        rights of any other person;
+                      </li>
+                      <li>
+                        any material that is racist or discriminatory, including
+                        discrimination on the basis of someone’s race, religion,
+                        age, gender, disability or sexuality;
+                      </li>
+                      <li>
+                        any material that contains a threat of any kind,
+                        including threats of physical violence;
+                      </li>
+                    </ul>
+                    <p tw="mt-3">
+                      We reserve the right, at any time and without prior
+                      notice, to remove or disable access to content at our
+                      discretion for any reason or no reason.{" "}
+                    </p>
+                  </div>
+                </Page>
+              </Container>
 
+              {}
+            </OutNav>
+            <Footer />
 
-				</div>
-              </Page>
-            </Container>
-
-            {}
-          </OutNav>
-          <Footer />
-
-          {signupModal ? (
-            <>
-              <ModalContainer>
+            {signupModal ? (
+              <>
+                <ModalContainer>
                   <ModalContent ref={wrapperRef}>
                     <div tw="border-0 shadow-lg  relative flex flex-col w-full bg-white outline-none focus:outline-none h-screen table">
                       {/*header*/}
@@ -540,10 +687,13 @@ Tower 2. Plot No 22, Sector 135, Noida - Uttar Pradesh - 201301 (collectively su
                       <div tw="relative p-6 pt-0 flex-auto">
                         <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
-                            
-                          <a href="/" class="create-account-logo"><img src={logo} alt="logo" /></a>
-                          <h3 tw="text-xl font-semibold mb-4 text-center">Create New Account</h3>
-                        
+                            <a href="/" class="create-account-logo">
+                              <img src={logo} alt="logo" />
+                            </a>
+                            <h3 tw="text-xl font-semibold mb-4 text-center">
+                              Create New Account
+                            </h3>
+
                             <FormContainer>
                               {}
                               <div tw="w-full ">
@@ -666,23 +816,25 @@ Tower 2. Plot No 22, Sector 135, Noida - Uttar Pradesh - 201301 (collectively su
                           <a href="/terms-and-conditions">
                             <u>Terms</u>
                           </a>{" "}
-                          and <a href="/policy"><u>Privacy</u></a>
+                          and{" "}
+                          <a href="/policy">
+                            <u>Privacy</u>
+                          </a>
                         </div>
                       </div>
                     </div>
                   </ModalContent>
                 </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-          {loginModal ? (
-            <>
-              <ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {loginModal ? (
+              <>
+                <ModalContainer>
                   <ModalContent ref={wrapperRef}>
                     <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
                       {/*header*/}
                       <div tw="flex items-start justify-between py-3 px-5 rounded-t">
-                        
                         <button
                           onClick={() => setLoginModal(false)}
                           tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
@@ -729,10 +881,12 @@ Tower 2. Plot No 22, Sector 135, Noida - Uttar Pradesh - 201301 (collectively su
                               </DividerTextContainer>
                             )} */}
                               <div tw="w-full">
-                              <a href="/" class="login-logo"><img src={logo} alt="logo" /></a>
-                              <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
-                          Log In to Your Account
-                        </h3>
+                                <a href="/" class="login-logo">
+                                  <img src={logo} alt="logo" />
+                                </a>
+                                <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
+                                  Log In to Your Account
+                                </h3>
                                 {firebaseErrors.others ? (
                                   <ErrorMessage>
                                     {firebaseErrors.others}
@@ -782,18 +936,18 @@ Tower 2. Plot No 22, Sector 135, Noida - Uttar Pradesh - 201301 (collectively su
                             </FormContainer>
                           </div>
                         </div>
-                        
                       </div>
                     </div>
                   </ModalContent>
                 </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-        </AnimationRevealPage>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+          </AnimationRevealPage>
+        </Sidebar>
       </Sidebar>
-    </Sidebar>
-  </div>);
+    </div>
+  );
 };
 
 export default About;

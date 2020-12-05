@@ -288,6 +288,7 @@ const UserDashboard = ({
                   username: values.username,
                   account_creation_datetime: user.metadata.creationTime,
                   last_login_datetime: user.metadata.creationTime,
+                  likedVideos: [],
                 };
                 firestore
                   .collection("user")

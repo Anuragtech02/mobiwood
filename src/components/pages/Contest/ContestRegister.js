@@ -389,8 +389,8 @@ const ContestRegister = ({
 
   const handleAuthStateChange = (u) => {
     if (u && u.uid) {
-     // console.log("LOGGED IN: ", u.displayName);
-     // console.log("LOGGED IN: ", u);
+      // console.log("LOGGED IN: ", u.displayName);
+      // console.log("LOGGED IN: ", u);
     }
   };
 
@@ -420,6 +420,7 @@ const ContestRegister = ({
                   username: values.username,
                   account_creation_datetime: user.metadata.creationTime,
                   last_login_datetime: user.metadata.creationTime,
+                  likedVideos: [],
                 };
                 firestore
                   .collection("user")

@@ -303,6 +303,7 @@ const NotFound = ({
                   username: values.username,
                   account_creation_datetime: user.metadata.creationTime,
                   last_login_datetime: user.metadata.creationTime,
+                  likedVideos: [],
                 };
                 firestore
                   .collection("user")
@@ -469,181 +470,186 @@ const NotFound = ({
         </BottomNavigation> */}
             <Footer />
           </OutNav>
-          
+
           {signupModal ? (
             <>
               <ModalContainer>
-                  <ModalContent ref={wrapperRef}>
-                    <div tw="border-0 shadow-lg  relative flex flex-col w-full bg-white outline-none focus:outline-none h-screen table">
-                      {/*header*/}
-                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
-                        <button
-                          onClick={() => setSignupModal(false)}
-                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
-                        >
-                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
-                        </button>
-                      </div>
-                      {/*body*/}
-                      <div tw="relative p-6 pt-0 flex-auto">
-                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
-                          <div tw="w-full">
-                            
-                          <a href="/" class="create-account-logo"><img src={logo} alt="logo" /></a>
-                          <h3 tw="text-xl font-semibold mb-4 text-center">Create New Account</h3>
-                        
-                            <FormContainer>
-                              {}
-                              <div tw="w-full ">
-                                {firebaseErrors.others ? (
+                <ModalContent ref={wrapperRef}>
+                  <div tw="border-0 shadow-lg  relative flex flex-col w-full bg-white outline-none focus:outline-none h-screen table">
+                    {/*header*/}
+                    <div tw="flex items-start justify-between py-3 px-5 rounded-t">
+                      <button
+                        onClick={() => setSignupModal(false)}
+                        tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                      >
+                        <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                      </button>
+                    </div>
+                    {/*body*/}
+                    <div tw="relative p-6 pt-0 flex-auto">
+                      <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
+                        <div tw="w-full">
+                          <a href="/" class="create-account-logo">
+                            <img src={logo} alt="logo" />
+                          </a>
+                          <h3 tw="text-xl font-semibold mb-4 text-center">
+                            Create New Account
+                          </h3>
+
+                          <FormContainer>
+                            {}
+                            <div tw="w-full ">
+                              {firebaseErrors.others ? (
+                                <ErrorMessage>
+                                  {firebaseErrors.others}
+                                </ErrorMessage>
+                              ) : null}
+                              <Form onSubmit={formik.handleSubmit}>
+                                <div tw="relative">
+                                  <div class="age-btns-b18">
+                                    <label tw="cursor-pointer rounded block p-2 bg-gray-300 text-gray-900 text-center font-semibold text-sm">
+                                      <input
+                                        type="radio"
+                                        name="age"
+                                        tw="invisible w-0"
+                                        value="b18"
+                                        onClick={() => setRadioValue("b18")}
+                                      />
+                                      Below 18 Years
+                                    </label>
+                                  </div>
+                                  {radioValue === "b18" && (
+                                    <span class="b18-circle">
+                                      <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
+                                    </span>
+                                  )}
+                                  <div class="age-btns-a18">
+                                    <label tw="p-2 cursor-pointer rounded block bg-black text-white text-center font-semibold text-sm">
+                                      <input
+                                        type="radio"
+                                        name="age"
+                                        tw="invisible w-0"
+                                        value="a18"
+                                        onClick={() => setRadioValue("a18")}
+                                      />
+                                      Above 18 Years
+                                    </label>
+                                  </div>
+                                  {radioValue === "a18" && (
+                                    <span class="a18-circle">
+                                      <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
+                                    </span>
+                                  )}
+                                </div>
+                                {formik.errors.name ? (
                                   <ErrorMessage>
-                                    {firebaseErrors.others}
+                                    {formik.errors.name}
                                   </ErrorMessage>
                                 ) : null}
-                                <Form onSubmit={formik.handleSubmit}>
-                                  <div tw="relative">
-                                    <div class="age-btns-b18">
-                                      <label tw="cursor-pointer rounded block p-2 bg-gray-300 text-gray-900 text-center font-semibold text-sm">
-                                        <input
-                                          type="radio"
-                                          name="age"
-                                          tw="invisible w-0"
-                                          value="b18"
-                                          onClick={() => setRadioValue("b18")}
-                                        />
-                                        Below 18 Years
-                                      </label>
-                                    </div>
-                                    {radioValue === "b18" && (
-                                      <span class="b18-circle">
-                                        <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
-                                      </span>
-                                    )}
-                                    <div class="age-btns-a18">
-                                      <label tw="p-2 cursor-pointer rounded block bg-black text-white text-center font-semibold text-sm">
-                                        <input
-                                          type="radio"
-                                          name="age"
-                                          tw="invisible w-0"
-                                          value="a18"
-                                          onClick={() => setRadioValue("a18")}
-                                        />
-                                        Above 18 Years
-                                      </label>
-                                    </div>
-                                    {radioValue === "a18" && (
-                                      <span class="a18-circle">
-                                        <CircleCheckIcon tw="h-5 w-5 p-1 -mt-3 mx-auto bg-green-700 rounded-full text-white" />
-                                      </span>
-                                    )}
-                                  </div>
-                                  {formik.errors.name ? (
-                                    <ErrorMessage>
-                                      {formik.errors.name}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  <Input
-                                    type="text"
-                                    placeholder="Name"
-                                    name="name"
-                                    autoComplete="name"
-                                    onChange={formik.handleChange}
-                                    value={formik.values.name}
-                                  />
-                                  {formik.errors.email ? (
-                                    <ErrorMessage>
-                                      {formik.errors.email}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  {firebaseErrors.email ? (
-                                    <ErrorMessage>
-                                      {firebaseErrors.email}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  <Input
-                                    type="email"
-                                    placeholder="Email"
-                                    name="email"
-                                    autoComplete="email"
-                                    onChange={formik.handleChange}
-                                    value={formik.values.email}
-                                  />
-                                  {formik.errors.username ? (
-                                    <ErrorMessage>
-                                      {formik.errors.username}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  <Input
-                                    type="text"
-                                    placeholder="Username"
-                                    name="username"
-                                    onChange={formik.handleChange}
-                                    value={formik.values.username}
-                                  />
-                                  {formik.errors.password ? (
-                                    <ErrorMessage>
-                                      {formik.errors.password}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  {firebaseErrors.password ? (
-                                    <ErrorMessage>
-                                      {firebaseErrors.password}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  <Input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    autoComplete="new-password"
-                                    onChange={formik.handleChange}
-                                    value={formik.values.password}
-                                  />
-                                  <SubmitButton
-                                    type="submit"
-                                    onClick={() => (formik.values.signup = 1)}
-                                  >
-                                    <span className="text">Create Account</span>
-                                  </SubmitButton>
-                                </Form>
-                              </div>
-                            </FormContainer>
-                          </div>
-                        </div>
-                        <div tw="mt-4 -mb-2 text-center text-xs">
-                          By creating an account you are agree to our{" "}
-                          <a href="/terms-and-conditions">
-                            <u>Terms</u>
-                          </a>{" "}
-                          and <a href="/policy"><u>Privacy</u></a>
+                                <Input
+                                  type="text"
+                                  placeholder="Name"
+                                  name="name"
+                                  autoComplete="name"
+                                  onChange={formik.handleChange}
+                                  value={formik.values.name}
+                                />
+                                {formik.errors.email ? (
+                                  <ErrorMessage>
+                                    {formik.errors.email}
+                                  </ErrorMessage>
+                                ) : null}
+                                {firebaseErrors.email ? (
+                                  <ErrorMessage>
+                                    {firebaseErrors.email}
+                                  </ErrorMessage>
+                                ) : null}
+                                <Input
+                                  type="email"
+                                  placeholder="Email"
+                                  name="email"
+                                  autoComplete="email"
+                                  onChange={formik.handleChange}
+                                  value={formik.values.email}
+                                />
+                                {formik.errors.username ? (
+                                  <ErrorMessage>
+                                    {formik.errors.username}
+                                  </ErrorMessage>
+                                ) : null}
+                                <Input
+                                  type="text"
+                                  placeholder="Username"
+                                  name="username"
+                                  onChange={formik.handleChange}
+                                  value={formik.values.username}
+                                />
+                                {formik.errors.password ? (
+                                  <ErrorMessage>
+                                    {formik.errors.password}
+                                  </ErrorMessage>
+                                ) : null}
+                                {firebaseErrors.password ? (
+                                  <ErrorMessage>
+                                    {firebaseErrors.password}
+                                  </ErrorMessage>
+                                ) : null}
+                                <Input
+                                  type="password"
+                                  name="password"
+                                  placeholder="Password"
+                                  autoComplete="new-password"
+                                  onChange={formik.handleChange}
+                                  value={formik.values.password}
+                                />
+                                <SubmitButton
+                                  type="submit"
+                                  onClick={() => (formik.values.signup = 1)}
+                                >
+                                  <span className="text">Create Account</span>
+                                </SubmitButton>
+                              </Form>
+                            </div>
+                          </FormContainer>
                         </div>
                       </div>
+                      <div tw="mt-4 -mb-2 text-center text-xs">
+                        By creating an account you are agree to our{" "}
+                        <a href="/terms-and-conditions">
+                          <u>Terms</u>
+                        </a>{" "}
+                        and{" "}
+                        <a href="/policy">
+                          <u>Privacy</u>
+                        </a>
+                      </div>
                     </div>
-                  </ModalContent>
-                </ModalContainer>
+                  </div>
+                </ModalContent>
+              </ModalContainer>
               <OutModal></OutModal>
             </>
           ) : null}
           {loginModal ? (
             <>
               <ModalContainer>
-                  <ModalContent ref={wrapperRef}>
-                    <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                      {/*header*/}
-                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
-                        
-                        <button
-                          onClick={() => setLoginModal(false)}
-                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
-                        >
-                          <CloseIcon tw="cursor-pointer text-black h-10 w-8 text-2xl block outline-none focus:outline-none" />
-                        </button>
-                      </div>
-                      {/*body*/}
-                      <div tw="relative p-6 flex-auto">
-                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
-                          <div tw="w-full">
-                            <FormContainer>
-                              {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
+                <ModalContent ref={wrapperRef}>
+                  <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                    {/*header*/}
+                    <div tw="flex items-start justify-between py-3 px-5 rounded-t">
+                      <button
+                        onClick={() => setLoginModal(false)}
+                        tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
+                      >
+                        <CloseIcon tw="cursor-pointer text-black h-10 w-8 text-2xl block outline-none focus:outline-none" />
+                      </button>
+                    </div>
+                    {/*body*/}
+                    <div tw="relative p-6 flex-auto">
+                      <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
+                        <div tw="w-full">
+                          <FormContainer>
+                            {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
                               <SocialButtonsContainer>
                                 {LoginsocialButtons.map(
                                   (socialButton, index) => (
@@ -676,65 +682,66 @@ const NotFound = ({
                                 </DividerText>
                               </DividerTextContainer>
                             )} */}
-                              <div tw="w-full">
-                              <a href="/" class="login-logo"><img src={logo} alt="logo" /></a>
+                            <div tw="w-full">
+                              <a href="/" class="login-logo">
+                                <img src={logo} alt="logo" />
+                              </a>
                               <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
-                          Log In to Your Account
-                        </h3>
-                                {firebaseErrors.others ? (
+                                Log In to Your Account
+                              </h3>
+                              {firebaseErrors.others ? (
+                                <ErrorMessage>
+                                  {firebaseErrors.others}
+                                </ErrorMessage>
+                              ) : null}
+                              <Form onSubmit={Loginformik.handleSubmit}>
+                                {Loginformik.errors.loginUsername ? (
                                   <ErrorMessage>
-                                    {firebaseErrors.others}
+                                    {Loginformik.errors.loginUsername}
                                   </ErrorMessage>
                                 ) : null}
-                                <Form onSubmit={Loginformik.handleSubmit}>
-                                  {Loginformik.errors.loginUsername ? (
-                                    <ErrorMessage>
-                                      {Loginformik.errors.loginUsername}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  {firebaseErrors.username ? (
-                                    <ErrorMessage>
-                                      {firebaseErrors.username}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  <Input
-                                    type="text"
-                                    placeholder="Username"
-                                    name="username"
-                                    value={Loginformik.values.username}
-                                    onChange={Loginformik.handleChange}
-                                  />
-                                  {Loginformik.errors.loginPassword ? (
-                                    <ErrorMessage>
-                                      {Loginformik.errors.loginPassword}
-                                    </ErrorMessage>
-                                  ) : null}
-                                  <Input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    autoComplete="new-password"
-                                    value={Loginformik.values.password}
-                                    onChange={Loginformik.handleChange}
-                                  />
-                                  <SubmitButton
-                                    type="submit"
-                                    onClick={() =>
-                                      (Loginformik.values.signup = 0)
-                                    }
-                                  >
-                                    <span className="text">Log In</span>
-                                  </SubmitButton>
-                                </Form>
-                              </div>
-                            </FormContainer>
-                          </div>
+                                {firebaseErrors.username ? (
+                                  <ErrorMessage>
+                                    {firebaseErrors.username}
+                                  </ErrorMessage>
+                                ) : null}
+                                <Input
+                                  type="text"
+                                  placeholder="Username"
+                                  name="username"
+                                  value={Loginformik.values.username}
+                                  onChange={Loginformik.handleChange}
+                                />
+                                {Loginformik.errors.loginPassword ? (
+                                  <ErrorMessage>
+                                    {Loginformik.errors.loginPassword}
+                                  </ErrorMessage>
+                                ) : null}
+                                <Input
+                                  type="password"
+                                  name="password"
+                                  placeholder="Password"
+                                  autoComplete="new-password"
+                                  value={Loginformik.values.password}
+                                  onChange={Loginformik.handleChange}
+                                />
+                                <SubmitButton
+                                  type="submit"
+                                  onClick={() =>
+                                    (Loginformik.values.signup = 0)
+                                  }
+                                >
+                                  <span className="text">Log In</span>
+                                </SubmitButton>
+                              </Form>
+                            </div>
+                          </FormContainer>
                         </div>
-                        
                       </div>
                     </div>
-                  </ModalContent>
-                </ModalContainer>
+                  </div>
+                </ModalContent>
+              </ModalContainer>
               <OutModal></OutModal>
             </>
           ) : null}

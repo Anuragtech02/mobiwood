@@ -228,7 +228,7 @@ const About = ({
       console.log("LOGGED IN: ", u.displayName);
     }
   };
-  
+
   // Formik
 
   const formik = useFormik({
@@ -256,6 +256,7 @@ const About = ({
                   username: values.username,
                   account_creation_datetime: user.metadata.creationTime,
                   last_login_datetime: user.metadata.creationTime,
+                  likedVideos: [],
                 };
                 firestore
                   .collection("user")
@@ -420,13 +421,10 @@ const About = ({
                   )
                   .then(function () {
                     asyncLocalStorage.setItem("username", values.username);
-                    firestore
-                      .collection("user")
-                      .doc(details.data().uid)
-                      .update(
-                        { last_login_datetime: new Date() },
-                        //{ merge: true }
-                      );
+                    firestore.collection("user").doc(details.data().uid).update(
+                      { last_login_datetime: new Date() }
+                      //{ merge: true }
+                    );
                     navigate("/contest");
                     setLoginModal(false);
                     setSignupModal(false);
@@ -447,46 +445,49 @@ const About = ({
   });
 
   return (
-		  <div className="leftNav">
-    <Sidebar
-      sidebar={SideLinks}
-	  
-      open={sidebarOpen}
-      onSetOpen={onSetSidebarOpen}
-      styles={
-        isBrowser
-          ? { sidebar: { background: "#111", zIndex: 50  } }
-          : { sidebar: { background: "#111", zIndex: 50 } }
-      }
-      docked={isBrowser ? sidebarOpen : false}
-    >
+    <div className="leftNav">
       <Sidebar
-        sidebar={SideLinksShort}
-        open={isBrowser ? !sidebarOpen : false}
+        sidebar={SideLinks}
+        open={sidebarOpen}
         onSetOpen={onSetSidebarOpen}
-        styles={{ sidebar: { background: "#111", zIndex: 30 } }}
-        docked={isBrowser ? !sidebarOpen : false}
+        styles={
+          isBrowser
+            ? { sidebar: { background: "#111", zIndex: 50 } }
+            : { sidebar: { background: "#111", zIndex: 50 } }
+        }
+        docked={isBrowser ? sidebarOpen : false}
       >
-        <AnimationRevealPage disabled>
-          <Nav
-            onSetSidebarOpen={onSetSidebarOpen}
-            onClickLogin={onClickLogin}
-            onClickSignup={onClickSignup}
-          />
-          <OutNav>
-            <Container>
-              <ContainerHeading tw="pl-8 pt-8 text-3xl">Support</ContainerHeading>
-              <Page tw="block pl-6 mt-4 px-5">
-                <div class="underconstruction" tw="w-full pl-2">
-                  <p>In case you have a query you can freely contact us at <a href="mailto:support@mobiwood.net" tw="font-bold">support@mobiwood.net</a></p>
+        <Sidebar
+          sidebar={SideLinksShort}
+          open={isBrowser ? !sidebarOpen : false}
+          onSetOpen={onSetSidebarOpen}
+          styles={{ sidebar: { background: "#111", zIndex: 30 } }}
+          docked={isBrowser ? !sidebarOpen : false}
+        >
+          <AnimationRevealPage disabled>
+            <Nav
+              onSetSidebarOpen={onSetSidebarOpen}
+              onClickLogin={onClickLogin}
+              onClickSignup={onClickSignup}
+            />
+            <OutNav>
+              <Container>
+                <ContainerHeading tw="pl-8 pt-8 text-3xl">
+                  Support
+                </ContainerHeading>
+                <Page tw="block pl-6 mt-4 px-5">
+                  <div class="underconstruction" tw="w-full pl-2">
+                    <p>
+                      In case you have a query you can freely contact us at{" "}
+                      <a href="mailto:support@mobiwood.net" tw="font-bold">
+                        support@mobiwood.net
+                      </a>
+                    </p>
+                  </div>
+                </Page>
+              </Container>
 
-
-
-				</div>
-              </Page>
-            </Container>
-
-            {/* <BottomNavigation>
+              {/* <BottomNavigation>
           <a href="/contest">
             <NavLink>Contest</NavLink>
           </a>
@@ -498,12 +499,12 @@ const About = ({
           </a>
           <NavLink>Profile</NavLink>
         </BottomNavigation> */}
-          </OutNav>
-          <Footer />
+            </OutNav>
+            <Footer />
 
-          {signupModal ? (
-            <>
-              <ModalContainer>
+            {signupModal ? (
+              <>
+                <ModalContainer>
                   <ModalContent ref={wrapperRef}>
                     <div tw="border-0 shadow-lg  relative flex flex-col w-full bg-white outline-none focus:outline-none h-screen table">
                       {/*header*/}
@@ -519,10 +520,13 @@ const About = ({
                       <div tw="relative p-6 pt-0 flex-auto">
                         <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
-                            
-                          <a href="/" class="create-account-logo"><img src={logo} alt="logo" /></a>
-                          <h3 tw="text-xl font-semibold mb-4 text-center">Create New Account</h3>
-                        
+                            <a href="/" class="create-account-logo">
+                              <img src={logo} alt="logo" />
+                            </a>
+                            <h3 tw="text-xl font-semibold mb-4 text-center">
+                              Create New Account
+                            </h3>
+
                             <FormContainer>
                               {}
                               <div tw="w-full ">
@@ -645,23 +649,25 @@ const About = ({
                           <a href="/terms-and-conditions">
                             <u>Terms</u>
                           </a>{" "}
-                          and <a href="/policy"><u>Privacy</u></a>
+                          and{" "}
+                          <a href="/policy">
+                            <u>Privacy</u>
+                          </a>
                         </div>
                       </div>
                     </div>
                   </ModalContent>
                 </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-          {loginModal ? (
-            <>
-              <ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {loginModal ? (
+              <>
+                <ModalContainer>
                   <ModalContent ref={wrapperRef}>
                     <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
                       {/*header*/}
                       <div tw="flex items-start justify-between py-3 px-5 rounded-t">
-                        
                         <button
                           onClick={() => setLoginModal(false)}
                           tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
@@ -708,10 +714,12 @@ const About = ({
                               </DividerTextContainer>
                             )} */}
                               <div tw="w-full">
-                              <a href="/" class="login-logo"><img src={logo} alt="logo" /></a>
-                              <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
-                          Log In to Your Account
-                        </h3>
+                                <a href="/" class="login-logo">
+                                  <img src={logo} alt="logo" />
+                                </a>
+                                <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
+                                  Log In to Your Account
+                                </h3>
                                 {firebaseErrors.others ? (
                                   <ErrorMessage>
                                     {firebaseErrors.others}
@@ -761,18 +769,18 @@ const About = ({
                             </FormContainer>
                           </div>
                         </div>
-                        
                       </div>
                     </div>
                   </ModalContent>
                 </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-        </AnimationRevealPage>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+          </AnimationRevealPage>
+        </Sidebar>
       </Sidebar>
-    </Sidebar>
-  </div>);
+    </div>
+  );
 };
 
 export default About;

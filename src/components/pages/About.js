@@ -123,7 +123,6 @@ const validate = (values) => {
   return errors;
 };
 
-
 // Main Function
 
 const About = ({
@@ -276,6 +275,7 @@ const About = ({
                   username: values.username,
                   account_creation_datetime: user.metadata.creationTime,
                   last_login_datetime: user.metadata.creationTime,
+                  likedVideos: [],
                 };
                 firestore
                   .collection("user")
@@ -484,9 +484,9 @@ const About = ({
             </OutNav>
             <Footer />
 
-          {signupModal ? (
-            <>
-              <ModalContainer>
+            {signupModal ? (
+              <>
+                <ModalContainer>
                   <ModalContent ref={wrapperRef}>
                     <div tw="border-0 shadow-lg  relative flex flex-col w-full bg-white outline-none focus:outline-none h-screen table">
                       {/*header*/}
@@ -502,10 +502,13 @@ const About = ({
                       <div tw="relative p-6 pt-0 flex-auto">
                         <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
-                            
-                          <a href="/" class="create-account-logo"><img src={logo} alt="logo" /></a>
-                          <h3 tw="text-xl font-semibold mb-4 text-center">Create New Account</h3>
-                        
+                            <a href="/" class="create-account-logo">
+                              <img src={logo} alt="logo" />
+                            </a>
+                            <h3 tw="text-xl font-semibold mb-4 text-center">
+                              Create New Account
+                            </h3>
+
                             <FormContainer>
                               {}
                               <div tw="w-full ">
@@ -628,23 +631,25 @@ const About = ({
                           <a href="/terms-and-conditions">
                             <u>Terms</u>
                           </a>{" "}
-                          and <a href="/policy"><u>Privacy</u></a>
+                          and{" "}
+                          <a href="/policy">
+                            <u>Privacy</u>
+                          </a>
                         </div>
                       </div>
                     </div>
                   </ModalContent>
                 </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
-          {loginModal ? (
-            <>
-              <ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {loginModal ? (
+              <>
+                <ModalContainer>
                   <ModalContent ref={wrapperRef}>
                     <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
                       {/*header*/}
                       <div tw="flex items-start justify-between py-3 px-5 rounded-t">
-                        
                         <button
                           onClick={() => setLoginModal(false)}
                           tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
@@ -691,10 +696,12 @@ const About = ({
                               </DividerTextContainer>
                             )} */}
                               <div tw="w-full">
-                              <a href="/" class="login-logo"><img src={logo} alt="logo" /></a>
-                              <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
-                          Log In to Your Account
-                        </h3>
+                                <a href="/" class="login-logo">
+                                  <img src={logo} alt="logo" />
+                                </a>
+                                <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
+                                  Log In to Your Account
+                                </h3>
                                 {firebaseErrors.others ? (
                                   <ErrorMessage>
                                     {firebaseErrors.others}
@@ -744,14 +751,13 @@ const About = ({
                             </FormContainer>
                           </div>
                         </div>
-                        
                       </div>
                     </div>
                   </ModalContent>
                 </ModalContainer>
-              <OutModal></OutModal>
-            </>
-          ) : null}
+                <OutModal></OutModal>
+              </>
+            ) : null}
           </AnimationRevealPage>
         </Sidebar>
       </Sidebar>
