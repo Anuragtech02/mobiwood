@@ -222,6 +222,12 @@ export default (props) => {
     // console.log({ cardDetails, userDetails });
   };
 
+  const handleClickLikeMobile = () => {
+    if (!auth().currentUser && vw < 700) {
+      alert("Please Login to Like");
+    }
+  };
+
   return (
     <Container>
       <HeadingInfoContainer>
@@ -338,7 +344,10 @@ export default (props) => {
                               : "Like"
                           }
                         >
-                          <div className="icon-container">
+                          <div
+                            onClick={handleClickLikeMobile}
+                            className="icon-container"
+                          >
                             <IconButton
                               disabled={disabled}
                               onClick={handleClickLike}
