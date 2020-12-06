@@ -73,6 +73,8 @@ export default (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [shareFlag, setShareFlag] = useState(false);
   const [videosLimited, setVideosLimited] = useState(props.videosLimited);
+  const [followBtnText, setFollowBtnText] = useState("Follow");
+  const [isFollowing, setIsFollowing] = useState("following");
 
   const handleClickShare = (event) => {
     setAnchorEl(event.currentTarget);
@@ -82,9 +84,15 @@ export default (props) => {
     updateShareOnDB();
   };
 
-  const { likedVideos, updateLikes } = useContext(UserContext);
+  const {
+    likedVideos,
+    updateLikes,
+    following,
+    updateFollowers,
+    updateFollowing,
+  } = useContext(UserContext);
   const { id } = useContext(VideosContext);
-  const { userDetails } = useContext(AuthContext);
+  const { userDetails, uid } = useContext(AuthContext);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -135,6 +143,15 @@ export default (props) => {
     post.views = post.views ? post.views + 1 : 1;
 
     post.shares ? setShares(post.shares) : setShares(0);
+    // console.log(following, following.includes(post.userid));
+
+    if (following && following.includes(post.userid)) {
+      setIsFollowing("following");
+      setFollowBtnText("Unfollow");
+    } else {
+      setIsFollowing("not-following");
+      setFollowBtnText("Follow");
+    }
 
     // console.log(post);
     firestore
@@ -188,6 +205,21 @@ export default (props) => {
       .update({
         shares: cardDetails.shares + 1,
       });
+  };
+
+  const handleClickFollow = () => {
+    if (following && following.includes(cardDetails.userid)) {
+      updateFollowers("unfollow", cardDetails.userid);
+      updateFollowing("unfollow", cardDetails.userid);
+      setFollowBtnText("Follow");
+      setIsFollowing("not-following");
+    } else {
+      updateFollowers("follow", cardDetails.userid);
+      updateFollowing("follow", cardDetails.userid);
+      setFollowBtnText("Unfollow");
+      setIsFollowing("following");
+    }
+    // console.log({ cardDetails, userDetails });
   };
 
   return (
@@ -268,7 +300,7 @@ export default (props) => {
                             url={cardDetails.videoUrl}
                             controls={true}
                             playing={true}
-                            width={vw < 730 ? vw - 60 : 640}
+                            width="100%"
                             height={vw < 730 ? ((vw - 60) * 36) / 64 : 360}
                           />
                         ) : null}
@@ -277,9 +309,20 @@ export default (props) => {
                         <a href="#" class="author-link">
                           {author}
                         </a>{" "}
-                        <a href="#" class="video-follow-btn">
-                          Follow
-                        </a>
+                        {auth().currentUser ? (
+                          <button
+                            onClick={handleClickFollow}
+                            href="#"
+                            disabled={cardDetails.userid === uid}
+                            class={`video-follow-btn ${
+                              cardDetails.userid === uid
+                                ? "disabled-follow-btn"
+                                : ""
+                            } ${isFollowing}`}
+                          >
+                            {followBtnText}
+                          </button>
+                        ) : null}
                       </div>
                     </div>
                     <div tw="flex mt-2 pl-2">

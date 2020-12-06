@@ -180,7 +180,7 @@ const UserDashboard = ({
     setSidebarOpen(!sidebarOpen);
   }
 
-  const { myVideos } = useContext(UserContext);
+  const { myVideos, followers, following } = useContext(UserContext);
   // const [myVideos, setMyVideos] = useState([]);
 
   // useEffect(() => {
@@ -446,16 +446,21 @@ const UserDashboard = ({
                           }
                         />
                         <OtherInfo>
-                          <ProfileName>Christina Justin</ProfileName>
+                          <ProfileName>
+                            {auth.currentUser.displayName}
+                          </ProfileName>
                           <Location>
                             <span tw="mr-5">
-                              <strong>0</strong> Posts
+                              <strong>
+                                {myVideos.length ? myVideos.length : 0}
+                              </strong>{" "}
+                              Post <span>{myVideos.length > 1 ? "s" : ""}</span>
                             </span>{" "}
                             <span tw="mr-5">
-                              <strong>0</strong> Followers
+                              <strong>{followers.length}</strong> Followers
                             </span>{" "}
                             <span>
-                              <strong>0</strong> Following
+                              <strong>{following.length}</strong> Following
                             </span>
                           </Location>
                         </OtherInfo>

@@ -4,6 +4,10 @@
   /* background-size: cover; */
   object-fit: cover;
 }
+.video-player {
+  top: 50%;
+  transform: translate(0, -50%);
+}
 .video-actions,
 .icon-container {
   display: flex;
@@ -32,6 +36,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.disabled-follow-btn,
+.following {
+  background: grey !important;
+}
+.not-following {
+  background: red !important;
+}
+@media screen and (max-width: 800px) {
+  .video-player {
+    width: 90vw !important;
+  }
 }
 @media screen and (max-width: 400px) {
   .video-player {
