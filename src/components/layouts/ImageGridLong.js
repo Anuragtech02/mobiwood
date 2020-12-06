@@ -64,6 +64,8 @@ export default (props) => {
   const [shares, setShares] = useState(0);
   const [shareFlag, setShareFlag] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [followBtnText, setFollowBtnText] = useState("Follow");
+  const [isFollowing, setIsFollowing] = useState("following");
 
   const handleClickShare = (event) => {
     setAnchorEl(event.currentTarget);
@@ -73,8 +75,15 @@ export default (props) => {
     updateShareOnDB();
   };
 
-  const { likedVideos, updateLikes } = useContext(UserContext);
-  const { userDetails } = useContext(AuthContext);
+  const {
+    likedVideos,
+    updateLikes,
+    following,
+    updateFollowers,
+    updateFollowing,
+  } = useContext(UserContext);
+
+  const { userDetails, uid } = useContext(AuthContext);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -154,6 +163,15 @@ export default (props) => {
     post.views = post.views ? post.views + 1 : 1;
 
     post.shares ? setShares(post.shares) : setShares(0);
+    // console.log(following, following.includes(post.userid));
+
+    if (following && following.includes(post.userid)) {
+      setIsFollowing("following");
+      setFollowBtnText("Unfollow");
+    } else {
+      setIsFollowing("not-following");
+      setFollowBtnText("Follow");
+    }
 
     // console.log(post);
     firestore
@@ -209,6 +227,21 @@ export default (props) => {
       });
   };
 
+  const handleClickFollow = () => {
+    if (following && following.includes(cardDetails.userid)) {
+      updateFollowers("unfollow", cardDetails.userid);
+      updateFollowing("unfollow", cardDetails.userid);
+      setFollowBtnText("Follow");
+      setIsFollowing("not-following");
+    } else {
+      updateFollowers("follow", cardDetails.userid);
+      updateFollowing("follow", cardDetails.userid);
+      setFollowBtnText("Unfollow");
+      setIsFollowing("following");
+    }
+    // console.log({ cardDetails, userDetails });
+  };
+
   return (
     <Container>
       <HeadingInfoContainer>
@@ -252,7 +285,7 @@ export default (props) => {
               <ModalContent
                 ref={wrapperRef}
                 onClick={(e) => e.stopPropagation()}
-                className="video-player"
+                className="video-player video-player-long"
               >
                 <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   {/*header*/}
@@ -299,9 +332,20 @@ export default (props) => {
                         <a href="#" class="author-link">
                           {author}
                         </a>{" "}
-                        <a href="#" class="video-follow-btn">
-                          Follow
-                        </a>
+                        {auth().currentUser ? (
+                          <button
+                            onClick={handleClickFollow}
+                            href="#"
+                            disabled={cardDetails.userid === uid}
+                            class={`video-follow-btn ${
+                              cardDetails.userid === uid
+                                ? "disabled-follow-btn"
+                                : ""
+                            } ${isFollowing}`}
+                          >
+                            {followBtnText}
+                          </button>
+                        ) : null}
                       </div>
                     </div>
                     <div tw="flex mt-2 pl-2">

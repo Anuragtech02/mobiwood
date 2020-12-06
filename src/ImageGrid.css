@@ -5,8 +5,12 @@
   object-fit: cover;
 }
 .video-player {
-  top: 50%;
-  transform: translate(0, -50%);
+  top: 50% !important;
+  transform: translate(0, -50%) !important;
+}
+.video-player-long {
+  top: auto !important;
+  transform: translate(0, 0) !important;
 }
 .video-actions,
 .icon-container {
