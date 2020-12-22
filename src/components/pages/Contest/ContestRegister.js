@@ -20,6 +20,8 @@ import facebookIconImageSrc from "../../../images/facebook-icon.png";
 import { ReactComponent as CircleCheckIcon } from "feather-icons/dist/icons/check.svg";
 import "../../css/master.css";
 import { v4 as uuidv4 } from "uuid";
+import logo from "../../../images/logo_tm.png";
+import { Button, CircularProgress } from "@material-ui/core";
 
 const Container = tw.div`relative bg-purple-100 text-gray-900 font-medium flex flex-col justify-center mt-0 pb-5 overflow-hidden`;
 const ContainerHeading = tw.div`px-4 sm:px-10 pt-4 text-2xl font-normal`;
@@ -550,6 +552,31 @@ const ContestRegister = ({
     }
   });
 
+  const [forgotPassModal, setForgotPassModal] = useState(false);
+  const onClickForgotPass = () => {
+    setForgotPassModal(true);
+    setLoginModal(false);
+  };
+  const [progressBar, setProgressBar] = useState(false);
+  const [regEmail, setRegEmail] = useState("");
+  const [sentMessage, setSentMessage] = useState("");
+  const handleForgotPassSubmit = (e) => {
+    e.preventDefault();
+    setProgressBar(true);
+    return auth
+      .sendPasswordResetEmail(regEmail)
+      .then((res) => {
+        setSentMessage(
+          "An email with password reset link has been sent to the email."
+        );
+        setProgressBar(false);
+      })
+      .catch((e) => {
+        sentMessage(e.message);
+        setProgressBar(false);
+      });
+  };
+
   return (
     <div className="leftNav">
       <Sidebar
@@ -949,58 +976,28 @@ const ContestRegister = ({
               <>
                 <ModalContainer>
                   <ModalContent ref={wrapperRef}>
-                    <div tw="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                    <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
                       {/*header*/}
-                      <div tw="flex items-start justify-between py-3 px-5 border-b border-solid border-gray-300 rounded-t">
-                        <h3 tw="text-xl font-semibold">
-                          Log In to Your Account
-                        </h3>
+                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
                         <button
                           onClick={() => setLoginModal(false)}
-                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none"
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
                         >
-                          <CloseIcon tw="cursor-pointer text-black h-5 w-6 text-xl block outline-none focus:outline-none" />
+                          <CloseIcon tw="cursor-pointer text-black h-10 w-8 text-2xl block outline-none focus:outline-none" />
                         </button>
                       </div>
                       {/*body*/}
                       <div tw="relative p-6 flex-auto">
-                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
                             <FormContainer>
-                              {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
-                            <SocialButtonsContainer>
-                              {LoginsocialButtons.map(
-                                (socialButton, index) => (
-                                  <SocialButton
-                                    key={index}
-                                    onClick={socialButton.onclick}
-                                    style={{
-                                      backgroundColor: socialButton.bg,
-                                    }}
-                                  >
-                                    <span className="iconContainer">
-                                      <img
-                                        src={socialButton.iconImageSrc}
-                                        className="icon"
-                                        alt=""
-                                      />
-                                    </span>
-                                    <span className="text">
-                                      {socialButton.text}
-                                    </span>
-                                  </SocialButton>
-                                )
-                              )}
-                            </SocialButtonsContainer>
-                          </div>
-                          {isMobile && (
-                            <DividerTextContainer>
-                              <DividerText>
-                                Or Log In Using Username
-                              </DividerText>
-                            </DividerTextContainer>
-                          )} */}
                               <div tw="w-full">
+                                <a href="/" class="login-logo">
+                                  <img src={logo} alt="logo" />
+                                </a>
+                                <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
+                                  Log In to Your Account
+                                </h3>
                                 {firebaseErrors.others ? (
                                   <ErrorMessage>
                                     {firebaseErrors.others}
@@ -1045,17 +1042,92 @@ const ContestRegister = ({
                                   >
                                     <span className="text">Log In</span>
                                   </SubmitButton>
+                                  <div className="align-center-items">
+                                    <Button
+                                      variant="text"
+                                      onClick={onClickForgotPass}
+                                      style={{
+                                        textTransform: "capitalize",
+                                        border: "none",
+                                        outline: "none",
+                                      }}
+                                    >
+                                      Forgot Password
+                                    </Button>
+                                  </div>
                                 </Form>
                               </div>
                             </FormContainer>
                           </div>
                         </div>
-                        <div tw="mt-4 -mb-2 text-center text-xs">
-                          By logging in you agree to our{" "}
-                          <a href="/terms-and-conditions">
-                            Terms and Conditions
-                          </a>{" "}
-                          and <a href="/policy">Privacy Policy</a>
+                      </div>
+                    </div>
+                  </ModalContent>
+                </ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {forgotPassModal ? (
+              <>
+                <ModalContainer>
+                  <ModalContent ref={wrapperRef}>
+                    <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
+                        <button
+                          onClick={() => setForgotPassModal(false)}
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
+                        >
+                          <CloseIcon tw="cursor-pointer text-black h-10 w-8 text-2xl block outline-none focus:outline-none" />
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div tw="relative p-6 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
+                          <div tw="w-full">
+                            <FormContainer>
+                              <div tw="w-full">
+                                <a href="/" class="login-logo">
+                                  <img src={logo} alt="logo" />
+                                </a>
+                                <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
+                                  Enter your registered Email
+                                </h3>
+                                <Form onSubmit={handleForgotPassSubmit}>
+                                  <Input
+                                    type="email"
+                                    name="email"
+                                    required
+                                    placeholder="Email"
+                                    value={regEmail}
+                                    onChange={(e) =>
+                                      setRegEmail(e.target.value)
+                                    }
+                                  />
+                                  <SubmitButton type="submit">
+                                    <span className="text">Submit</span>
+                                  </SubmitButton>
+                                  <div
+                                    className="align-center-items"
+                                    style={{
+                                      textAlign: "center",
+                                      fontSize: "0.9rem",
+                                      color: "green",
+                                    }}
+                                  >
+                                    {sentMessage.length ? (
+                                      <h5>{sentMessage}</h5>
+                                    ) : null}
+                                  </div>
+                                  {progressBar && (
+                                    <div className="align-center-items">
+                                      <CircularProgress variant="indeterminate" />
+                                    </div>
+                                  )}
+                                </Form>
+                              </div>
+                            </FormContainer>
+                          </div>
                         </div>
                       </div>
                     </div>

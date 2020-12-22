@@ -21,6 +21,7 @@ import facebookIconImageSrc from "../../images/facebook-icon.png";
 import { ReactComponent as CircleCheckIcon } from "feather-icons/dist/icons/check.svg";
 import "../css/master.css";
 import Styles from "../css/master.css";
+import { Button, CircularProgress } from "@material-ui/core";
 
 const GridContent = tw.div` mx-auto pb-4`;
 const ThreeColumn = tw.div`flex items-center flex-row flex-wrap`;
@@ -444,6 +445,31 @@ const About = ({
     },
   });
 
+  const [forgotPassModal, setForgotPassModal] = useState(false);
+  const onClickForgotPass = () => {
+    setForgotPassModal(true);
+    setLoginModal(false);
+  };
+  const [progressBar, setProgressBar] = useState(false);
+  const [regEmail, setRegEmail] = useState("");
+  const [sentMessage, setSentMessage] = useState("");
+  const handleForgotPassSubmit = (e) => {
+    e.preventDefault();
+    setProgressBar(true);
+    return auth
+      .sendPasswordResetEmail(regEmail)
+      .then((res) => {
+        setSentMessage(
+          "An email with password reset link has been sent to the email."
+        );
+        setProgressBar(false);
+      })
+      .catch((e) => {
+        sentMessage(e.message);
+        setProgressBar(false);
+      });
+  };
+
   return (
     <div className="leftNav">
       <Sidebar
@@ -847,39 +873,6 @@ const About = ({
                         <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
                           <div tw="w-full">
                             <FormContainer>
-                              {/* <div tw="w-full sm:w-1/2 sm:pr-4 mb-1">
-                              <SocialButtonsContainer>
-                                {LoginsocialButtons.map(
-                                  (socialButton, index) => (
-                                    <SocialButton
-                                      key={index}
-                                      onClick={socialButton.onclick}
-                                      style={{
-                                        backgroundColor: socialButton.bg,
-                                      }}
-                                    >
-                                      <span className="iconContainer">
-                                        <img
-                                          src={socialButton.iconImageSrc}
-                                          className="icon"
-                                          alt=""
-                                        />
-                                      </span>
-                                      <span className="text">
-                                        {socialButton.text}
-                                      </span>
-                                    </SocialButton>
-                                  )
-                                )}
-                              </SocialButtonsContainer>
-                            </div>
-                            {isMobile && (
-                              <DividerTextContainer>
-                                <DividerText>
-                                  Or Log In Using Username
-                                </DividerText>
-                              </DividerTextContainer>
-                            )} */}
                               <div tw="w-full">
                                 <a href="/" class="login-logo">
                                   <img src={logo} alt="logo" />
@@ -931,6 +924,88 @@ const About = ({
                                   >
                                     <span className="text">Log In</span>
                                   </SubmitButton>
+                                  <div className="align-center-items">
+                                    <Button
+                                      variant="text"
+                                      onClick={onClickForgotPass}
+                                      style={{
+                                        textTransform: "capitalize",
+                                        border: "none",
+                                        outline: "none",
+                                      }}
+                                    >
+                                      Forgot Password
+                                    </Button>
+                                  </div>
+                                </Form>
+                              </div>
+                            </FormContainer>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ModalContent>
+                </ModalContainer>
+                <OutModal></OutModal>
+              </>
+            ) : null}
+            {forgotPassModal ? (
+              <>
+                <ModalContainer>
+                  <ModalContent ref={wrapperRef}>
+                    <div tw="border-0 shadow-lg  h-screen relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div tw="flex items-start justify-between py-3 px-5 rounded-t">
+                        <button
+                          onClick={() => setForgotPassModal(false)}
+                          tw="p-1 ml-auto bg-transparent opacity-75 border-0 text-black float-right text-2xl leading-none font-semibold outline-none focus:outline-none"
+                        >
+                          <CloseIcon tw="cursor-pointer text-black h-10 w-8 text-2xl block outline-none focus:outline-none" />
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div tw="relative p-6 flex-auto">
+                        <div tw="text-gray-600 max-w-lg text-lg leading-relaxed m-auto">
+                          <div tw="w-full">
+                            <FormContainer>
+                              <div tw="w-full">
+                                <a href="/" class="login-logo">
+                                  <img src={logo} alt="logo" />
+                                </a>
+                                <h3 tw="text-xl font-semibold text-center mb-4 pt-4">
+                                  Enter your registered Email
+                                </h3>
+                                <Form onSubmit={handleForgotPassSubmit}>
+                                  <Input
+                                    type="email"
+                                    name="email"
+                                    required
+                                    placeholder="Email"
+                                    value={regEmail}
+                                    onChange={(e) =>
+                                      setRegEmail(e.target.value)
+                                    }
+                                  />
+                                  <SubmitButton type="submit">
+                                    <span className="text">Submit</span>
+                                  </SubmitButton>
+                                  <div
+                                    className="align-center-items"
+                                    style={{
+                                      textAlign: "center",
+                                      fontSize: "0.9rem",
+                                      color: "green",
+                                    }}
+                                  >
+                                    {sentMessage.length ? (
+                                      <h5>{sentMessage}</h5>
+                                    ) : null}
+                                  </div>
+                                  {progressBar && (
+                                    <div className="align-center-items">
+                                      <CircularProgress variant="indeterminate" />
+                                    </div>
+                                  )}
                                 </Form>
                               </div>
                             </FormContainer>
