@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -8,6 +8,7 @@ import Nav from "../../layouts/NewNav";
 import Footer from "../../layouts/Footer";
 import { firestore, auth } from "../../../firebase.config";
 import { useFormik } from "formik";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const Container = tw.div`relative bg-purple-100 text-gray-900 font-medium flex flex-col justify-center mt-0 pb-5`;
 const ContainerHeading = tw.div`px-4 sm:px-10 pt-4 text-2xl font-normal`;
@@ -79,6 +80,8 @@ const UnderAgeContest = () => {
     },
   };
 
+  const { userDetails } = useContext(AuthContext);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -97,6 +100,8 @@ const UnderAgeContest = () => {
       data.parentNumber = values.number;
       data.parentDob = values.dob;
       data.parentGender = values.gender;
+      data.displayName = userDetails.name;
+      data.username = userDetails.username;
       firestore
         .collection("user")
         .doc(auth.currentUser.uid)

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -11,6 +11,7 @@ import { auth, firestore, storage } from "../../../firebase.config";
 import Sidebar from "react-sidebar";
 import { SideLinks, SideLinksShort } from "../../layouts/SideLinks";
 import { isBrowser, isMobile, isTablet } from "react-device-detect"; //eslint-disable-line
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const Container = tw.div`relative bg-purple-100 text-gray-900 font-medium flex flex-col justify-center mt-0 pb-5`;
 const ContainerHeading = tw.div`px-4 sm:px-10 pt-4 text-2xl font-semibold`;
@@ -82,6 +83,8 @@ const UploadPage = () => {
     return errors;
   };
 
+  const { userDetails } = useContext(AuthContext);
+
   const formik = useFormik({
     initialValues: {
       talent: "default",
@@ -131,6 +134,8 @@ const UploadPage = () => {
                 values.talent === "others" ? values.otherTalent : "none",
               uploadTime: new Date(),
               thumbnail: null,
+              displayName: userDetails.name,
+              username: userDetails.username,
             };
             firestore
               .collection("user")
@@ -257,16 +262,21 @@ const UploadPage = () => {
                         The video can be of a maximum duration of 90 seconds.
                       </LI>
                       <LI>
-                        The video must have original content and must not include any copywrite content.
+                        The video must have original content and must not
+                        include any copywrite content.
                       </LI>
                       <LI>
-                        The video must be self-shot or indicate the participant&apos;s presence.
+                        The video must be self-shot or indicate the
+                        participant&apos;s presence.
                       </LI>
                       <LI>
-                        The video must be centered only on humans and any other living or non-living thing can just be used as supporting assets.
+                        The video must be centered only on humans and any other
+                        living or non-living thing can just be used as
+                        supporting assets.
                       </LI>
                       <LI>
-                        Previously shot videos can be used after removing any other platform&apos;s watermark (if exists)
+                        Previously shot videos can be used after removing any
+                        other platform&apos;s watermark (if exists)
                       </LI>
                       <LI>Any harm to animals is strictly prohibited</LI>
                       <LI>Environmental harm is strictly prohibited.</LI>
@@ -440,13 +450,13 @@ const UploadPage = () => {
                         ) : null}
                       </InputContainer>
                       <div tw=" mt-4">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={handleCheckBox}
-                        tw=""
-                      />
-                      <span tw="m-2">Are you applying as a group?</span>
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={handleCheckBox}
+                          tw=""
+                        />
+                        <span tw="m-2">Are you applying as a group?</span>
                       </div>
                       <span tw="font-normal text-xs">
                         By registering, you agree to our{" "}
@@ -455,7 +465,7 @@ const UploadPage = () => {
                         </span>
                         and{" "}
                         <span tw="text-blue-500 hover:text-black hover:underline transition duration-500">
-                        <a href="/privacy">Privacy Policy</a>
+                          <a href="/privacy">Privacy Policy</a>
                         </span>
                       </span>
                       <SubmitButton type="submit">
