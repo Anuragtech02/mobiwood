@@ -21,8 +21,17 @@ import {
   Button,
   Menu,
   MenuItem,
-  Link,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Snackbar,
 } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import { UserContext } from "../../contexts/UserContext";
 import { VideosContext } from "../../contexts/VideosContext";
 import AuthContext from "../../contexts/AuthContext";
@@ -34,6 +43,9 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
 } from "react-share";
+
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
 
 import {
   FacebookIcon,
@@ -227,6 +239,50 @@ export default (props) => {
       alert("Please Login to Like");
     }
   };
+  const [reportModal, setReportModal] = useState(false);
+  const [reportValue, setReportValue] = useState("Spam/Misleading");
+  const [reportAlert, setReportAlert] = useState(false);
+
+  const onClickReport = () => {
+    setReportModal(true);
+  };
+
+  const handleCloseReport = async (newValue, post) => {
+    setReportModal(false);
+    if (newValue) {
+      setReportValue(newValue);
+      const videoId = id[videosLimited.indexOf(post)];
+      let newReports = 0;
+      await firestore
+        .collection("report")
+        .doc(videoId)
+        .get()
+        .then(async (res) => {
+          const data = res.data();
+          if (data.reports) {
+            newReports = data.reports + 1;
+          }
+          await firestore
+            .collection("report")
+            .doc(videoId)
+            .set({
+              ...post,
+              reports: newReports || 1,
+            })
+            .then(() => setReportAlert(true));
+        });
+    }
+  };
+
+  const handleCloseReportAlert = () => {
+    setReportAlert(false);
+  };
+
+  const classes = useStyles();
+
+  const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  };
 
   return (
     <Container>
@@ -264,7 +320,7 @@ export default (props) => {
         </ThreeColumn>
         {showModal ? (
           <>
-            <ModalContainer onClick={() => setShowModal(false)}>
+            <ModalContainer>
               <ModalContent
                 ref={wrapperRef}
                 onClick={(e) => e.stopPropagation()}
@@ -388,7 +444,7 @@ export default (props) => {
                           </span>
                         </div>{" "}
                         <div class="report-video-link">
-                          <Button className="icon-btn">
+                          <Button onClick={onClickReport} className="icon-btn">
                             <Report tw="w-4 mr-1" />{" "}
                             <span class="reporttxt">Report</span>
                           </Button>
@@ -408,6 +464,17 @@ export default (props) => {
                   shareUrl={cardDetails.videoUrl}
                 />
               ) : null}
+              <ReportDialog
+                classes={{
+                  paper: classes.paper,
+                }}
+                id="report-menu"
+                keepMounted
+                open={reportModal}
+                onClose={handleCloseReport}
+                value={reportValue}
+                post={cardDetails}
+              />
             </ModalContainer>
             <OutModal></OutModal>
           </>
@@ -424,6 +491,15 @@ export default (props) => {
           </Button>
         </div>
       </Content>
+      <Snackbar
+        open={reportAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseReportAlert}
+      >
+        <Alert onClose={handleCloseReportAlert} severity="success">
+          The video has been reported, our team will review it within 24 hours!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
@@ -540,3 +616,100 @@ const ShareModal = ({
     </Menu>
   );
 };
+
+const options = [
+  "Spam/Misleading",
+  "Abusive",
+  "Harmful",
+  "Illegal",
+  "Inappropriate",
+  "Copyright Infringement",
+];
+
+const ReportDialog = (props) => {
+  const { onClose, post, value: valueProp, open, ...other } = props;
+  const [value, setValue] = React.useState(valueProp);
+  const radioGroupRef = React.useRef(null);
+
+  useEffect(() => {
+    if (!open) {
+      setValue(valueProp);
+    }
+  }, [valueProp, open]);
+
+  const handleEntering = () => {
+    if (radioGroupRef.current != null) {
+      radioGroupRef.current.focus();
+    }
+  };
+
+  const handleCancel = () => {
+    onClose();
+  };
+
+  const handleOk = () => {
+    onClose(value, post);
+  };
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
+      maxWidth="xs"
+      onEntering={handleEntering}
+      aria-labelledby="confirmation-dialog-title"
+      open={open}
+      {...other}
+    >
+      <DialogTitle id="confirmation-dialog-title">Report Content</DialogTitle>
+      <DialogContent dividers>
+        <RadioGroup
+          ref={radioGroupRef}
+          aria-label="ringtone"
+          name="ringtone"
+          value={value}
+          onChange={handleChange}
+        >
+          {options.map((option) => (
+            <FormControlLabel
+              value={option}
+              key={option}
+              control={<Radio />}
+              label={option}
+            />
+          ))}
+        </RadioGroup>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleCancel} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleOk} color="primary">
+          Ok
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+ReportDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  value: PropTypes.string.isRequired,
+};
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+  paper: {
+    width: "80%",
+    maxHeight: 435,
+  },
+}));
