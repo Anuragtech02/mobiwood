@@ -11,7 +11,7 @@ import { auth, firestore, storage } from "../../../firebase.config";
 import Sidebar from "react-sidebar";
 import { SideLinks, SideLinksShort } from "../../layouts/SideLinks";
 import { isBrowser, isMobile, isTablet } from "react-device-detect"; //eslint-disable-line
-import { AuthContext } from "../../../contexts/AuthContext";
+import AuthContext from "../../../contexts/AuthContext";
 
 const Container = tw.div`relative bg-purple-100 text-gray-900 font-medium flex flex-col justify-center mt-0 pb-5`;
 const ContainerHeading = tw.div`px-4 sm:px-10 pt-4 text-2xl font-semibold`;
