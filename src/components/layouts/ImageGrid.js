@@ -258,7 +258,7 @@ export default (props) => {
         .get()
         .then(async (res) => {
           const data = res.data();
-          if (data.reports) {
+          if (data && data.reports) {
             newReports = data.reports + 1;
           }
           await firestore
@@ -267,6 +267,7 @@ export default (props) => {
             .set({
               ...post,
               reports: newReports || 1,
+              reportType: newValue,
             })
             .then(() => setReportAlert(true));
         });
