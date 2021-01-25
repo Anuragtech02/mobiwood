@@ -148,35 +148,46 @@ export default (props) => {
 
   function handleCardClick(post) {
     const videoId = id[videosLimited.indexOf(post)];
-    setCardDetails(post);
-    post.likes ? setLikes(post.likes) : setLikes(0);
-    setViews(post.views ? post.views + 1 : 1);
-    post.views = post.views ? post.views + 1 : 1;
+    firestore
+      .collection("contest")
+      .doc(videoId)
+      .get()
+      .then((res) => {
+        // console.log({ rev: res.data() });
+        const prevData = res.data();
+        console.log(prevData);
+        if (prevData) {
+          setCardDetails(prevData);
+          prevData.likes ? setLikes(prevData.likes) : setLikes(0);
+          setViews(prevData.views ? prevData.views + 1 : 1);
+          post.views = prevData.views ? prevData.views + 1 : 1;
 
-    post.shares ? setShares(post.shares) : setShares(0);
-    // console.log(following, following.includes(post.userid));
+          prevData.shares ? setShares(prevData.shares) : setShares(0);
+          // console.log(following, following.includes(prevData.userid));
 
-    if (following && following.includes(post.userid)) {
-      setIsFollowing("following");
-      setFollowBtnText("Unfollow");
-    } else {
-      setIsFollowing("not-following");
-      setFollowBtnText("Follow");
-    }
+          if (following && following.includes(prevData.userid)) {
+            setIsFollowing("following");
+            setFollowBtnText("Unfollow");
+          } else {
+            setIsFollowing("not-following");
+            setFollowBtnText("Follow");
+          }
+        }
+        firestore
+          .collection("user")
+          .doc(post.userid)
+          .get()
+          .then((vals) => {
+            setAuthor(vals.data().name);
+          })
+          .then(() => {
+            firestore.collection("contest").doc(videoId).update({
+              views: post.views,
+            });
+          });
+      });
 
     // console.log(post);
-    firestore
-      .collection("user")
-      .doc(post.userid)
-      .get()
-      .then((vals) => {
-        setAuthor(vals.data().name);
-      })
-      .then(() => {
-        firestore.collection("contest").doc(videoId).update({
-          views: post.views,
-        });
-      });
     if (auth().currentUser) {
       likedVideos.indexOf(videoId) !== -1
         ? setLikeBtn("clicked")
